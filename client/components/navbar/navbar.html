@@ -1,0 +1,29 @@
+<div class="navbar navbar-default navbar-static-top">
+<div class="container-fluid">
+    <div class="navbar-header">
+      <a href="/" class="navbar-brand">Accueil</a>
+      <button class="navbar-toggle" type="button" ng-click="$ctrl.isCollapsed = !$ctrl.isCollapsed">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div uib-collapse="$ctrl.isCollapsed" class="navbar-collapse collapse" id="navbar-main">
+      <ul class="nav navbar-nav">
+      <li ng-show="$ctrl.isLoggedIn()">
+      <p class="navbar-text"> {{getCurrentUser().uid}} </p>
+
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+	      <li ng-hide="$ctrl.isLoggedIn()"><a ui-sref-active="active" ui-sref="signup" rel="tooltip" title="Inscription" alt="Obtenir un compte"> Inscription</a></li>
+	<li ng-hide="$ctrl.isLoggedIn()"> <a ui-sref-active="active" ui-sref="login" rel="tooltip" title="Se Connecter"> <span class="glyphicon glyphicon-log-in"></span></a>
+
+        <li ng-show="$ctrl.isLoggedIn()"><p class="navbar-text">Hello {{ $ctrl.getCurrentUser().uid }}</p> </li>
+        <li ng-show="$ctrl.isLoggedIn()" ui-sref-active="active"><a ui-sref="settings"><span class="glyphicon glyphicon-cog"></span></a></li>
+	 <li ng-show="$ctrl.isLoggedIn()"><a ui-sref="logout" rel="tooltip" title="Quitter" alt="Quitter" ><span class="glyphicon glyphicon-log-out"></span></a></li>
+      </ul>
+    </div>
+  </div>
+</div>

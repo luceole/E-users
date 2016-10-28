@@ -1,0 +1,44 @@
+'use strict';
+
+import angular from 'angular';
+
+export default class SignupController {
+
+  /*@ngInject*/
+  constructor(Auth, $state) {
+    this.Auth = Auth;
+    this.$state = $state;
+
+  }
+
+  register(form) {
+    this.submitted = true;
+    console.log(form.$valid);
+    if(form.$valid) {
+      return this.Auth.createUser({
+        uid: this.user.uid,
+        surname: this.user.surname,
+        name: this.user.name,
+        email: this.user.email,
+        password: this.user.password,
+        structure: this.user.structure,
+        isactif: false
+      })
+        .then(() => {
+          // Account created, redirect to home
+          this.$state.go('main');
+        })
+        .catch(err => {
+          err = err.data;
+	  console.log(err.errors);
+
+          this.errors = {};
+          // Update validity of form fields that match the mongoose errors
+          angular.forEach(err.errors, (error, field) => {
+            form[field].$setValidity('mongoose', false);
+            this.errors[field] = error.message;
+          });
+        });
+    }
+  }
+}

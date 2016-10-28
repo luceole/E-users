@@ -1,0 +1,99 @@
+<div ng-hide="$ctrl.isLoggedIn()" ng-include="'components/banniere/banniere.html'"></div>
+<div class="container" ng-if="!$ctrl.isLoggedIn()">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-10">
+        <h3>Connexion</h3>
+        <form class="form" name="form" ng-submit="$ctrl.Formlogin(form)" novalidate>
+          <div class="form-group">
+            <label>Identifiant</label>
+
+            <input  name="uid" class="form-control" ng-model="$ctrl.user.uid" required style="width:350px">
+          </div>
+
+          <div class="form-group">
+            <label>Mot de Passe</label>
+
+            <input type="password" name="password" class="form-control" ng-model="$ctrl.user.password" required  style="width:350px">
+          </div>
+
+          <div class="form-group has-error">
+            <p class="help-block" ng-show="(form.uid.$error.required || form.password.$error.required) && $ctrl.submitted">
+            Entrez votre identifiant et votre mot de passe..
+            </p>
+            <p class="help-block">{{ $ctrl.msg }}</p>
+          </div>
+          <span>
+            <button class="btn btn-inverse btn-lg btn-login" type="submit">
+              Connexion
+            </button>
+          </span>
+        </form>
+        <h3>Informations:</h3> Pour profiter des services en ligne vous devez avoir un compte.
+        <br>
+        <p>
+          Tout le monde peut créer un compte, mais pour éviter le spam les demandes sont soumises à modération.
+          <br>
+          <br>
+          <span class="alert alert-info"><a href="/signup"> Pour créer votre compte : Inscrivez vous.</a></span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="container" ng-if="$ctrl.isLoggedIn()" ng-init="CalInit()">
+  <div class="row">
+    <div class="col-lg-12">
+      <p>Bonjour {{ $ctrl.getCurrentUser().surname }}  {{ $ctrl.getCurrentUser().name }}</p>
+      <div class="alert alert-warning" ng-if="!$ctrl.getCurrentUser().isactif"> Votre compte est en attende de validation par le modérateur </div>
+  </div>
+      <div class="alert alert-success" ng-if="$ctrl.getCurrentUser().isactif">
+        <h3>Informations:</h3>
+        <span ng-if="getCurrentUser().memberOf.length > 0">Vous êtes inscrit dans les groupes : </span>
+        <ul>
+          <li ng-repeat=" grp in getCurrentUser().memberOf">
+            {{grp.info}}
+            <button ng-click="openNote(grp)">Informations </button>
+            <button ng-click="openPad(grp)">PAD</button>
+
+          </li>
+        </ul>
+      </div>
+      <div ng-if="getCurrentUser().isactif">Agenda de vos groupes
+        <button ng-click="refreshEvents()">Recharger </button>
+        <div ui-calendar="uiConfig.calendar" id="calendar" class="span8 calendar" ng-model="eventSources" calendar="myCalendar" calendar-watch-event="watchColor"></div>
+
+        <div init-toolbar="">
+
+        </div>
+
+        <div class="alert alert-success" align="center" ng-if="alert.msg"> {{alert.msg}}</div>
+      </div>
+      <div class="alert alert-warning" ng-if="vm.getCurrentUser().isactif"> Votre compte est en attende de validation par le modérateur </div>
+    </div>
+  </div>
+
+  <script type="text/ng-template" id="modalNote.html">
+    <h3 class="modal-title"> Note du groupe {{info}}
+         <button class="glyphicon glyphicon-remove pull-right" ng-click="cancel()">
+        </button></h3>
+    <div class="modal-body">
+      <div ng-show="isAdmin_grp()">
+        <div ckeditor="options" ng-model="content">
+        </div>
+        <div class="modal-footer">
+          <div class="alert alert-success" align="center" ng-if="msg"> {{msg}}
+            <button class="glyphicon glyphicon-save" ng-click="save()">
+            </button>
+          </div>
+        </div>
+      </div>
+      <div ng-show="!isAdmin_grp()">
+        <div ng-bind-html="content"> </div>
+      </div>
+
+    </div>
+  </script>
+</div>
