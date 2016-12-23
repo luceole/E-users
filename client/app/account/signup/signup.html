@@ -82,15 +82,14 @@
 
 </div>
 
-<div class="form-group" ng-class="{ 'has-success': registerForm.password.$valid && vm.submitted, 'has-error': registerForm.password.$invalid && vm.submitted }">
+<div class="form-group">
 <input type="password" id="Password" name="Password" class="form-control" ng-model="vm.user.password"
        placeholder="Mot de Passe"
        ng-minlength="8"
        required
-       mongoose-error
        style="width:350px"/>
        <p class="text-danger"
-        ng-show="(registerForm.Password.$error.minlength || registerForm.Password.$error.required) && vm.submitted">
+         ng-show="(registerForm.Password.$error.minlength ||registerForm.Password.$error.required) && (registerForm.Password.$dirty || vm.submitted)">
         8 Charactères Minimum
        </p>
    <p class="help-block" ng-show="registerForm.Password.$error.mongoose">
@@ -110,7 +109,6 @@
            Mot de passe différent
           </p>
         </div>
-
 		&nbsp<p>
           <button class="btn  btn-default btn-lg btn-login"   type="submit">
             Inscription
