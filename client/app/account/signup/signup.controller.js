@@ -1,19 +1,25 @@
 'use strict';
-
 import angular from 'angular';
-
 export default class SignupController {
-
   /*@ngInject*/
   constructor(Auth, $state) {
     this.Auth = Auth;
     this.$state = $state;
+  }
 
+  myInit(form,field){
+  form[field].$setValidity('mongoose', true);
+  if (!this.user.uid) this.user.uid=this.user.email;
+  }
+
+  myReset(form,field){
+    console.log(form)
+    form[field].$setValidity('mongoose', true);
   }
 
   register(form) {
     this.submitted = true;
-    console.log(form.$valid);
+    console.log("form "+form.$valid)
     if(form.$valid) {
       return this.Auth.createUser({
         uid: this.user.uid,
@@ -30,10 +36,9 @@ export default class SignupController {
         })
         .catch(err => {
           err = err.data;
-	  console.log(err.errors);
-
+	        console.log(err.errors);
           this.errors = {};
-          // Update validity of form fields that match the mongoose errors
+         // Update validity of form fields that match the mongoose errors
           angular.forEach(err.errors, (error, field) => {
             form[field].$setValidity('mongoose', false);
             this.errors[field] = error.message;

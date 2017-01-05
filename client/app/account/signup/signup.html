@@ -51,6 +51,7 @@
 <input type="email" name="email" class="form-control" ng-model="vm.user.email"
        placeholder="Votre courriel"
        required
+       ng-focus="vm.myReset(registerForm,'email')";
        mongoose-error  style="width:350px"/>
        <p class="help-block" ng-show="registerForm.email.$error.email && vm.submitted">
        Adresse electronique invalide.
@@ -66,14 +67,14 @@
                                     'has-error': registerForm.uid.$invalid && vm.submitted }">
 
 <input type="uid" name="uid" class="form-control" ng-model="vm.user.uid"
-       ng-focus="myInit()";
-       placeholder="Votre identifiant de connexion"
+       ng-focus="vm.myInit(registerForm,'uid')";
+       placeholder="Votre identifiant de connexion (courriel ou autre)"
        required
        mongoose-error  style="width:350px"/>
        <p class="help-block" ng-show="registerForm.uid.$error.uid && vm.submitted">
        Identifiant non valide.
        </p>
-       <p class="help-block" ng-show="registerForm.email.$error.required && submitted">
+       <p class="help-block" ng-show="registerForm.email.$error.required && vm.submitted">
        Choisissez votre login (courriel ou autre).
        </p>
        <p class="help-block" ng-show="registerForm.uid.$error.mongoose">
@@ -113,6 +114,7 @@
           <button class="btn  btn-default btn-lg btn-login"   type="submit">
             Inscription
           </button>
+
       </div>
       </form>
     </div>
