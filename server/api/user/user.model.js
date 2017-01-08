@@ -2,6 +2,7 @@
 /*eslint no-invalid-this:0*/
 import crypto from 'crypto';
 mongoose.Promise = require('bluebird');
+var mongoosePaginate = require('mongoose-paginate');
 import mongoose, {Schema} from 'mongoose';
 
 const authTypes = ['github', 'twitter', 'facebook', 'google'];
@@ -301,4 +302,5 @@ UserSchema.methods = {
   }
 };
 
+UserSchema.plugin(mongoosePaginate);
 export default mongoose.model('User', UserSchema);

@@ -18,6 +18,12 @@ export function UserResource($resource) {
         controller: 'updateme'
       }
     },
+    update: {
+      method: 'PUT',
+      params: {
+        controller: 'update'
+      }
+    },
     get: {
       method: 'GET',
       params: {

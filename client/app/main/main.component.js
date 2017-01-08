@@ -6,6 +6,8 @@ export class MainController {
 
   /*@ngInject*/
   constructor($http, $scope, $state, socket,Auth) {
+    
+
     this.$http = $http;
     this.socket = socket;
     this.isLoggedIn = Auth.isLoggedInSync;
@@ -62,7 +64,7 @@ Formlogin(form) {
 }
 }
 
-export default angular.module('fullrefApp.main', [uiRouter])
+export default angular.module('newfullstackApp.main', [uiRouter])
   .config(routing)
   .component('main', {
     template: require('./main.html'),

@@ -8,6 +8,8 @@ var router = new Router();
 
 router.get('/', auth.hasRole('admin'), controller.index);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
+router.put('/:id/update', auth.hasRole('admin'), controller.update);
+router.get('/demandes', auth.hasRole('admin'), controller.demandes);
 router.get('/me', auth.isAuthenticated(), controller.me);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 router.get('/:id', auth.isAuthenticated(), controller.show);

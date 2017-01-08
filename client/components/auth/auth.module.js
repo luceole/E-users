@@ -16,12 +16,13 @@ import {
 import {
   UserResource
 } from './user.service';
-
+import {
+  DemandeResource
+} from './demande.service';
 import uiRouter from 'angular-ui-router';
 
 function addInterceptor($httpProvider) {
   'ngInject';
-
   $httpProvider.interceptors.push('authInterceptor');
 }
 
@@ -30,5 +31,6 @@ export default angular.module('newfullstackApp.auth', [constants, util, ngCookie
   .run(routerDecorator)
   .factory('Auth', AuthService)
   .factory('User', UserResource)
+  .factory('Demande', DemandeResource)
   .config(['$httpProvider', addInterceptor])
   .name;

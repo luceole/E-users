@@ -3,6 +3,7 @@
 import User from './user.model';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
+var _ = require('lodash');
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
@@ -23,12 +24,33 @@ function handleError(res, statusCode) {
  * restriction: 'admin'
  */
 export function index(req, res) {
+  console.log("Serveur User")
   return User.find({}, '-salt -password').exec()
     .then(users => {
+
       res.status(200).json(users);
     })
     .catch(handleError(res));
 }
+
+exports.demandes = function (req, res) {
+var query = {isdemande: true };
+var page =  req.query.page;
+//console.log("Serveur Demandes page=>"+page);
+ var options={
+  select: 'uid name surname creationDate email structure isactif',
+  page: page,
+  limit: 12,
+  sort : "email"
+};
+
+return User.paginate(query, options, function(err,result) {
+    //console.log(result);
+    if (err) return res.send(500, err);
+    res.json(200, {docs:result.docs,total:result.total});
+});
+}
+
 
 /**
  * Creates a new user
@@ -75,7 +97,39 @@ export function destroy(req, res) {
     .catch(handleError(res));
 }
 
-// Updates ME 
+/**
+ *  Update a user
+ *
+ */
+// Updates an existing user. (prop isactif)
+exports.update = function (req, res) {
+  if (req.body._id) {
+    delete req.body._id;
+  }
+  User.findById(req.params.id, function (err, user) {
+    //if (err) { return handleError(res, err); }
+    if (err) {
+      return err;
+    }
+    if (!user) {
+      return res.send(404);
+    }
+    console.log("--------- USER ---------------");
+    console.log(req.body)
+    var updated = new User(_.merge(user, req.body));
+    console.log("--------- USER Updated ---------------");
+    console.log(updated)
+    updated.isactif = req.body.isactif;
+    updated.isdemande = false;
+    user.save(function (err) {
+      //if (err) { return handleError(res, err); }
+      return res.json(200, user);
+    });
+});
+}
+
+
+// Updates ME
 exports.updateMe = function (req, res) {
   if (req.body._id) {
     delete req.body._id;
