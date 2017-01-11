@@ -1,13 +1,48 @@
 <div class="container">
+  <p>Gestion des utilisateurs (acces réservé admin)</p>
+  <form>
+    <input ng-model="search.$" placeholder="Recherche globale">
+    <input ng-model="search.email" placeholder="Recherche sur le Mel"> Utilisateurs Non Actif
+    <input type="checkbox" ng-model="search.isactif" ng-true-value=false ng-false-value="">
+  </form>
+  <p class="text-warning" ng-if="users.length==0">  Chargement ...</p>
 
-  <p>Listes des Utilisateurs.</p>
-  <ul class="list-group user-list">
-    <li class="list-group-item" ng-repeat="user in admin.users">
-	    <div class="user-info">
-	        <strong>{{user.name}}</strong><br>
-	        <span class="text-muted">{{user.email}}</span>
-	    </div>
-        <a ng-click="admin.delete(user)" class="trash"><span class="fa fa-trash fa-2x"></span></a>
-    </li>
-  </ul>
+  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="app/utilisateurs/dirPagination.tpl.html"></dir-pagination-controls>
+  <br>
+  <table class="table table-striped ">
+    <tr dir-paginate="user in users | orderBy:'name' | filter:search:strict | itemsPerPage :'12' ">
+      <td>
+        <button class="btn btn-warning btn-xs" type="button" ng-if="!user.isactif" ng-click="active(user)">
+          <span class="glyphicon glyphicon-star"></span>Activer
+        </button>
+        <button type="button" class="btn btn-success btn-xs" ng-if="user.isactif" ng-click="deactive(user)" rel="tooltip" title="Suspendre cet utilisateur">Déactiver</button>
+
+        <span>
+          <a href ng-click="edit(user)" rel="tooltip" title="Modifier" class="trash">
+            <div class="glyphicon glyphicon-pencil pull-right"></div>
+          </a>
+        </span>
+
+      </td>
+      <td>
+        {{user.uid}}
+      </td>
+      <td>
+        <strong>{{user.name}}</strong>
+        <strong>{{user.surname}}</strong>
+      </td>
+      <td>
+        <strong> {{user.structure}} </strong>
+      </td>
+      <td>
+        <span class="text-muted "><a href=mailto:{{user.email}} rel="tooltip" title="Envoyer un courriel"> {{user.email}}  </a> </span>
+        <span ng-show="user.uid!='admin'">
+          <a href ng-click="delete(user)" rel="tooltip" title="Effacer" class="trash">
+            <div class="glyphicon glyphicon-trash pull-right"></div>
+          </a>
+        </span>
+      </td>
+    </tr>
+  </table>
+
 </div>

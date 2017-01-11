@@ -114,11 +114,9 @@ exports.update = function (req, res) {
     if (!user) {
       return res.send(404);
     }
-    console.log("--------- USER ---------------");
-    console.log(req.body)
+  //  console.log("--------- USER ---------------");
+  //  console.log(req.body)
     var updated = new User(_.merge(user, req.body));
-    console.log("--------- USER Updated ---------------");
-    console.log(updated)
     updated.isactif = req.body.isactif;
     updated.isdemande = false;
     user.save(function (err) {

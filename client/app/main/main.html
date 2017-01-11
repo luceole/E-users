@@ -61,16 +61,6 @@
           </li>
         </ul>
       </div>
-      <div ng-if="getCurrentUser().isactif">Agenda de vos groupes
-        <button ng-click="refreshEvents()">Recharger </button>
-        <div ui-calendar="uiConfig.calendar" id="calendar" class="span8 calendar" ng-model="eventSources" calendar="myCalendar" calendar-watch-event="watchColor"></div>
-
-        <div init-toolbar="">
-
-        </div>
-
-        <div class="alert alert-success" align="center" ng-if="alert.msg"> {{alert.msg}}</div>
-      </div>
       <div class="alert alert-warning" ng-if="vm.getCurrentUser().isactif"> Votre compte est en attende de validation par le modérateur </div>
     </div>
   </div>

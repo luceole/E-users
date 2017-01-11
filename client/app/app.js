@@ -24,6 +24,7 @@ import account from './account';
 import admin from './admin';
 import groupes from './groupes/groupes.component';
 import demandes from './demandes/demandes.component';
+import users from './users/users.component';
 import navbar from '../components/navbar/navbar.component';
 import footer from '../components/footer/footer.component';
 import main from './main/main.component';
@@ -36,7 +37,7 @@ import './app.scss';
 
 angular.module('newfullstackApp', [ngCookies, ngResource, ngSanitize,'btford.socket-io', ngValidationMatch, uiRouter,
     uiBootstrap,
-_Auth, account, groupes, admin, navbar, footer, main, constants, socket, util, demandes
+_Auth, account, groupes, admin, navbar, footer, main, constants, socket, util, demandes,users
   ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {
