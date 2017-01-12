@@ -12,7 +12,7 @@
   <table class="table table-striped ">
     <tr dir-paginate="user in usersCtrl.users | orderBy:'name' | filter:usersCtrl.search:strict | itemsPerPage :'12' ">
       <td>
-        <button class="btn btn-warning btn-xs" type="button" ng-if="!user.isactif" ng-click="usersCtrl.active(user)">
+        <button class="btn btn-warning btn-xs" type="button" ng-if="!user.isactif" ng-click="usersCtrl.active(user) rel="tooltip" title="Autoriser cet utilisateur"">
           <span class="glyphicon glyphicon-star"></span>Activer
         </button>
         <button type="button" class="btn btn-success btn-xs" ng-if="user.isactif" ng-click="usersCtrl.deactive(user)" rel="tooltip" title="Suspendre cet utilisateur">

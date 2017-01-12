@@ -51,6 +51,9 @@ deactive(user) {
    };
 
 delete(user) {
+  if (!confirm(" Efface l'utilisateur "+user.uid+" : Etes vous sur ?")) {
+    return;
+  }
      user.$remove();
      this.users.splice(this.users.indexOf(user), 1);
    }
@@ -60,6 +63,7 @@ edit(usr) {
            templateUrl: 'modalEdit.html',
            controller: UsersModalComponent,
            controllerAs: 'ModalEditCtrl',
+           backdrop  : 'static',
            resolve: {
            usr : function() {
             return usr
