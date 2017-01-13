@@ -9,13 +9,22 @@ export class UsersModalComponent {
   constructor(User,$uibModalInstance,usr ) {
     'ngInject';
     this.User = User;
-    this.user=usr;
+    this.user= new User(usr);
+    this.Save_user=usr;
     this.$uibModalInstance = $uibModalInstance;
   }
   ok() {
      console.log("OK 1 ");
      this.user.isdemande = false;
-     this.User.update(this.user._id, this.user, () => {});
+     this.User.update(this.user._id, this.user, () => {
+          this.Save_user.structure=this.user.structure;
+          this.Save_user.name = this.user.name;
+          this.Save_user.surname = this.user.surname;
+          this.Save_user.email = this.user.email;
+          this.Save_user.structure = this.user.structure;
+          this.Save_user.role = this.user.role;
+          this.Save_user.isactif=this.user.isactif;
+     });
      this.$uibModalInstance.close('ok');
    };
   cancel() {
@@ -59,6 +68,7 @@ delete(user) {
    }
 
 edit(usr) {
+
          var ModalInstance = this.$uibModal.open({
            templateUrl: 'modalEdit.html',
            controller: UsersModalComponent,
@@ -73,6 +83,7 @@ edit(usr) {
          ModalInstance.result.then(function () {
      console.log("ok2")
    }, function () {
+
      console.log('Modal dismissed at: ' + new Date());
    });
 }
