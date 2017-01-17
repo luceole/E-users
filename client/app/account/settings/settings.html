@@ -1,35 +1,32 @@
 <div class="container">
-<div class="row">
-<div class="col-sm-2"></div>
-<div class="col-sm-10">
-<uib-tabset>
-<uib-tab heading="Profil">
-<h3> Modification de votre compte : {{vm.user.uid}} </h3>
-<form class="form" name="modifForm" ng-submit="vm.edit(modifForm)" novalidate>
+  <div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-10">
+      <uib-tabset>
+        <uib-tab heading="Profil">
+          <h3> Modification de votre compte : {{vm.user.uid}} </h3>
+          <form class="form" name="modifForm" ng-submit="vm.edit(modifForm)" novalidate>
 
-<div class="form-group" ng-class="{ 'has-success': modifForm.name.$valid && vm.submitted,
+            <div class="form-group" ng-class="{ 'has-success': modifForm.name.$valid && vm.submitted,
                                     'has-error': modifForm.name.$invalid && vm.submitted }">
-Nom
-<input type="text" name="name" class="form-control" ng-model="vm.user.name"
-      required   style="width:350px"/>
-      <p class="help-block" ng-show="modifForm.name.$error.required && vm.submitted">
-      Nom Obligatoire
-      </p>
-      </div>
-<div class="form-group" ng-class="{ 'has-success': modifForm.surname.$valid && vm.submitted,
+              Nom
+              <input type="text" name="name" class="form-control" ng-model="vm.user.name" required style="width:350px" />
+              <p class="help-block" ng-show="modifForm.name.$error.required && vm.submitted">
+                Nom Obligatoire
+              </p>
+    </div>
+    <div class="form-group" ng-class="{ 'has-success': modifForm.surname.$valid && vm.submitted,
                                     'has-error': modifForm.surname.$invalid && vm.submitted }">
 
-Prénom
-<input type="text" name="surname" class="form-control" ng-model="vm.user.surname"
-       placeholder="Votre prénom"
-       required  style="width:350px"/>
-       <p class="help-block" ng-show="modifForm.surname.$error.required && vm.submitted">
-       Prénom  Obligatoire
-       </p>
-       </div>
-<div class="form-group" ng-class="{ 'has-success': modifForm.structure.$valid && vm.submitted,
+      Prénom
+      <input type="text" name="surname" class="form-control" ng-model="vm.user.surname" placeholder="Votre prénom" required style="width:350px" />
+      <p class="help-block" ng-show="modifForm.surname.$error.required && vm.submitted">
+        Prénom Obligatoire
+      </p>
+  </div>
+  <div class="form-group" ng-class="{ 'has-success': modifForm.structure.$valid && vm.submitted,
                                     'has-error': modifForm.structure.$invalid && vm.submitted }">
-<span >Structure de rattachement :
+    <span>Structure de rattachement :
 <select ng-model="vm.user.structure" ng-init="vm.user.structure">
          <option value="Education"> Education </option>
          <option value="Ecologie"> Ecologie </option>
@@ -41,44 +38,42 @@ Prénom
          <option value="Autre"> Autre </option>
 </select>
 </span>
-        <p class="help-block" ng-show="modifForm.structure.$error.required && vm.submitted">
-        Structure de rattachement  Obligatoire
-        </p>
- </div>
+    <p class="help-block" ng-show="modifForm.structure.$error.required && vm.submitted">
+      Structure de rattachement Obligatoire
+    </p>
+</div>
 
 <div class="form-group" ng-class="{ 'has-success': modifForm.email.$valid && vm.submitted,
                                     'has-error': modifForm.email.$invalid && vm.submitted }">
-Courriel
-<input type="email"  name="email" class="form-control" ng-model="vm.user.email"
-       placeholder="Votre courriel"
-       required
-       mongoose-error  style="width:350px"/>
-       <p class="help-block" ng-show="modifForm.email.$error.email ">
-       Adresse electronique invalide.
-      </p>
-      <p class="help-block" ng-show="modifForm.email.$error.required && vm.submitted">
-       Quel est votre adresse electronique?
-       </p>
-       <p class="help-block" ng-show="modifForm.email.$error.mongoose">
-            {{ errors.email }}
-          </p>
-</div>
+  Courriel
+  <input type="email" name="email" class="form-control" ng-model="vm.user.email" placeholder="Votre courriel" required mongoose-error style="width:350px" />
+  <p class="help-block" ng-show="modifForm.email.$error.email ">
+    Adresse electronique invalide.
+  </p>
+  <p class="help-block" ng-show="modifForm.email.$error.required && vm.submitted">
+    Quel est votre adresse electronique?
+  </p>
+  <p class="help-block" ng-show="modifForm.email.$error.mongoose">
+    {{ errors.email }}
+  </p>
+  </div>
 
 
 
-        <div>&nbsp<p>
-          <button class="btn  btn-default btn-lg btn-primary"   ng-disabled="modifForm.$invalid || passwdForm.$pending" type="submit">
+  <div>&nbsp
+    <p>
+      <button class="btn  btn-default btn-lg btn-primary" ng-disabled="modifForm.$invalid || passwdForm.$pending" type="submit">
             Modifier
           </button>
       <p class="help-block"> {{vm.editMessage }} </p>
-      </div>
-      </form>
-
-</uib-tab>
-<uib-tab heading="Mot de passe">
-<div ng-include="'app/account/settings/mdp.html'"></div>
-</uib-tab>
-</uib-tabset>
-    </div>
   </div>
-</div>
+  </form>
+
+  </uib-tab>
+  <uib-tab heading="Mot de passe">
+    <div ng-include="'app/account/settings/mdp.html'"></div>
+  </uib-tab>
+  </uib-tabset>
+  </div>
+  </div>
+  </div>

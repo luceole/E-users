@@ -5,7 +5,7 @@
     <input ng-model="usersCtrl.search.email" placeholder="Recherche sur le Mel"> Utilisateurs Non Actif
     <input type="checkbox" ng-model="usersCtrl.search.isactif" ng-true-value=false ng-false-value="">
   </form>
-  <p class="text-warning" ng-if="usersCtrl.users.length==0">  Chargement ...</p>
+  <p class="text-warning" ng-if="usersCtrl.users.length==0"> Chargement ...</p>
 
   <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="app/users/dirPagination.tpl.html"></dir-pagination-controls>
   <br>
@@ -49,10 +49,10 @@
 
 
   <script type="text/ng-template" id="modalEdit.html">
-      <div class="modal-header">
-        <h3 class="modal-title">Modification de {{user.uid}}</h3>
-        </div>
-<div class="modal-body">
+    <div class="modal-header">
+      <h3 class="modal-title">Modification de {{user.uid}}</h3>
+    </div>
+    <div class="modal-body">
       <form class="form" name="editerForm" ng-submit="editer(editerForm)" novalidate>
 
         <div class="form-group" ng-class="{ 'has-success': editerForm.name.$valid && submitted,
@@ -62,19 +62,19 @@
           <p class="help-block" ng-show="editerForm.name.$error.required && submitted">
             Nom Obligatoire
           </p>
-          </div>
-        <div class="form-group" ng-class="{ 'has-success': editerForm.surname.$valid && submitted,
+    </div>
+    <div class="form-group" ng-class="{ 'has-success': editerForm.surname.$valid && submitted,
                                     'has-error': editerForm.surname.$invalid && submitted }">
 
-          Prénom
-          <input type="text" name="surname" class="form-control" ng-model="ModalEditCtrl.user.surname" placeholder="Votre prénom" required style="width:350px" />
-          <p class="help-block" ng-show="editerForm.surname.$error.required && submitted">
-            Prénom Obligatoire
-          </p>
-          </div>
-        <div class="form-group" ng-class="{ 'has-success': editerForm.structure.$valid && submitted,
+      Prénom
+      <input type="text" name="surname" class="form-control" ng-model="ModalEditCtrl.user.surname" placeholder="Votre prénom" required style="width:350px" />
+      <p class="help-block" ng-show="editerForm.surname.$error.required && submitted">
+        Prénom Obligatoire
+      </p>
+</div>
+<div class="form-group" ng-class="{ 'has-success': editerForm.structure.$valid && submitted,
                                     'has-error': editerForm.structure.$invalid && submitted }">
-          <span>Structure de rattachement :
+  <span>Structure de rattachement :
             <select ng-model="ModalEditCtrl.user.structure">
               <option value="Education"> Education </option>
               <option value="Ecologie"> Ecologie </option>
@@ -86,40 +86,37 @@
               <option value="Autre"> Autre </option>
               </select>
             </span>
-            <p class="help-block" ng-show="editerForm.structure.$error.required && submitted">
-            Structure de rattachement Obligatoire
-            </p>
-          </div>
+  <p class="help-block" ng-show="editerForm.structure.$error.required && submitted">
+    Structure de rattachement Obligatoire
+  </p>
+  </div>
 
-        <div class="form-group" ng-class="{ 'has-success': editerForm.email.$valid && submitted,
+  <div class="form-group" ng-class="{ 'has-success': editerForm.email.$valid && submitted,
                                     'has-error': editerForm.email.$invalid && submitted }">
-          Courriel
-          <input type="email" name="email" class="form-control" ng-model="ModalEditCtrl.user.email" placeholder="Votre courriel" required mongoose-error style="width:350px" />
-          <p class="help-block" ng-show="editerForm.email.$error.email && submitted">
-            Adresse electronique invalide.
-          </p>
-          <p class="help-block" ng-show="editerForm.email.$error.required && submitted">
-            Quel est votre adresse electronique?
-          </p>
-          <p class="help-block" ng-show="editerForm.email.$error.mongoose">
-            {{ errors.email }}
-          </p>
-        </div>
+    Courriel
+    <input type="email" name="email" class="form-control" ng-model="ModalEditCtrl.user.email" placeholder="Votre courriel" required mongoose-error style="width:350px" />
+    <p class="help-block" ng-show="editerForm.email.$error.email && submitted">
+      Adresse electronique invalide.
+    </p>
+    <p class="help-block" ng-show="editerForm.email.$error.required && submitted">
+      Quel est votre adresse electronique?
+    </p>
+    <p class="help-block" ng-show="editerForm.email.$error.mongoose">
+      {{ errors.email }}
+    </p>
+    </div>
 
-        <label for="isa"> Utilisateur Activé:</label>
-         <input type="checkbox" id="isa" ng-model="ModalEditCtrl.user.isactif" >
-
-        Role :
-        <select ng-model="ModalEditCtrl.user.role">
+    <label for="isa"> Utilisateur Activé:</label>
+    <input type="checkbox" id="isa" ng-model="ModalEditCtrl.user.isactif"> Role :
+    <select ng-model="ModalEditCtrl.user.role">
         <option value="user"> Utilisateur </option>
         <option value="admin_grp"> Administrateur de groupe </option>
         <option value="admin"> Administrateur Principal </option>
-        </select><br>
-    Groupes : {{ModalEditCtrl.user.memberOf}}
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ModalEditCtrl.ok(editerForm)">OK</button>
-    <button class="btn btn-warning" ng-click="ModalEditCtrl.cancel()">Cancel</button>
-</div>
-</script>
-</div>
+        </select><br> Groupes : {{ModalEditCtrl.user.memberOf}}
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" ng-click="ModalEditCtrl.ok(editerForm)">OK</button>
+      <button class="btn btn-warning" ng-click="ModalEditCtrl.cancel()">Cancel</button>
+    </div>
+    </script>
+    </div>

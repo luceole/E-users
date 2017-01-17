@@ -33,22 +33,27 @@ export function index(req, res) {
     .catch(handleError(res));
 }
 
-exports.demandes = function (req, res) {
-var query = {isdemande: true };
-var page =  req.query.page;
-//console.log("Serveur Demandes page=>"+page);
- var options={
-  select: 'uid name surname creationDate email structure isactif',
-  page: page,
-  limit: 12,
-  sort : "email"
-};
+exports.demandes = function(req, res) {
+  var query = {
+    isdemande: true
+  };
+  var page = req.query.page;
+  //console.log("Serveur Demandes page=>"+page);
+  var options = {
+    select: 'uid name surname creationDate email structure isactif',
+    page: page,
+    limit: 12,
+    sort: "email"
+  };
 
-return User.paginate(query, options, function(err,result) {
+  return User.paginate(query, options, function(err, result) {
     //console.log(result);
     if (err) return res.send(500, err);
-    res.json(200, {docs:result.docs,total:result.total});
-});
+    res.json(200, {
+      docs: result.docs,
+      total: result.total
+    });
+  });
 }
 
 
@@ -61,10 +66,14 @@ export function create(req, res) {
   newUser.role = 'user';
   newUser.save()
     .then(function(user) {
-      var token = jwt.sign({ _id: user._id }, config.secrets.session, {
+      var token = jwt.sign({
+        _id: user._id
+      }, config.secrets.session, {
         expiresIn: 60 * 60 * 5
       });
-      res.json({ token });
+      res.json({
+        token
+      });
     })
     .catch(validationError(res));
 }
@@ -77,7 +86,7 @@ export function show(req, res, next) {
 
   return User.findById(userId).exec()
     .then(user => {
-      if(!user) {
+      if (!user) {
         return res.status(404).end();
       }
       res.json(user.profile);
@@ -102,11 +111,11 @@ export function destroy(req, res) {
  *
  */
 // Updates an existing user. (prop isactif)
-exports.update = function (req, res) {
+exports.update = function(req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
-  User.findById(req.params.id, function (err, user) {
+  User.findById(req.params.id, function(err, user) {
     //if (err) { return handleError(res, err); }
     if (err) {
       return err;
@@ -114,26 +123,26 @@ exports.update = function (req, res) {
     if (!user) {
       return res.send(404);
     }
-  //  console.log("--------- USER ---------------");
-  //  console.log(req.body)
+    //  console.log("--------- USER ---------------");
+    //  console.log(req.body)
     var updated = new User(_.merge(user, req.body));
     updated.isactif = req.body.isactif;
     updated.isdemande = false;
-    user.save(function (err) {
+    user.save(function(err) {
       //if (err) { return handleError(res, err); }
       return res.json(200, user);
     });
-});
+  });
 }
 
 
 // Updates ME
-exports.updateMe = function (req, res) {
+exports.updateMe = function(req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
   console.log("server updateMe ");
-  User.findById(req.params.id, function (err, user) {
+  User.findById(req.params.id, function(err, user) {
     if (err) {
       return handleError(res, err);
     }
@@ -145,7 +154,7 @@ exports.updateMe = function (req, res) {
     user.surname = newUser.surname;
     user.structure = newUser.structure;
     user.email = newUser.email;
-    user.save(function (err) {
+    user.save(function(err) {
       //if (err) { return handleError(res, err); }
       return res.json(200, user);
     });
@@ -162,7 +171,7 @@ export function changePassword(req, res) {
 
   return User.findById(userId).exec()
     .then(user => {
-      if(user.authenticate(oldPass)) {
+      if (user.authenticate(oldPass)) {
         user.password = newPass;
         return user.save()
           .then(() => {
@@ -181,9 +190,11 @@ export function changePassword(req, res) {
 export function me(req, res, next) {
   var userId = req.user._id;
 
-  return User.findOne({ _id: userId }, '-salt -password').exec()
+  return User.findOne({
+      _id: userId
+    }, '-salt -password').exec()
     .then(user => { // don't ever give out the password or salt
-      if(!user) {
+      if (!user) {
         return res.status(401).end();
       }
       res.json(user);

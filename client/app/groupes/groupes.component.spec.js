@@ -2,7 +2,7 @@
 
 describe('Component: GroupesComponent', function() {
   // load the controller's module
-  beforeEach(module('newfullstackApp.groupes'));
+  beforeEach(module('E-userApp.groupes'));
 
   var GroupesComponent;
 

@@ -10,7 +10,7 @@ export function OauthButtonsController($window) {
   };
 }
 
-export default angular.module('newfullstackApp.oauthButtons', [])
+export default angular.module('E-userApp.oauthButtons', [])
   .directive('oauthButtons', function() {
     return {
       template: require('./oauth-buttons.html'),

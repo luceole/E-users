@@ -12,7 +12,7 @@ export class GroupesComponent {
   }
 }
 
-export default angular.module('newfullstackApp.groupes', [uiRouter])
+export default angular.module('E-userApp.groupes', [uiRouter])
   .config(routes)
   .component('groupes', {
     template: require('./groupes.html'),

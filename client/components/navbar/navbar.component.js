@@ -12,16 +12,9 @@ export class NavbarComponent {
     this.isAdmin = Auth.isAdminSync;
     this.getCurrentUser = Auth.getCurrentUserSync;
     this.status = {
-                  isopen: false
-                  };
+      isopen: false
+    };
   }
-
-// toggleDropdown($event) {
-// $event.preventDefault();
-// $event.stopPropagation();
-// this.status.isopen = !this.status.isopen;
-// }
-
 };
 
 export default angular.module('directives.navbar', [])

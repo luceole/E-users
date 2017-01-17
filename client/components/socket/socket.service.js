@@ -80,6 +80,6 @@ function Socket(socketFactory) {
   };
 }
 
-export default angular.module('newfullstackApp.socket', [])
+export default angular.module('E-userApp.socket', [])
   .factory('socket', Socket)
   .name;

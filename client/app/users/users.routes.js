@@ -6,6 +6,6 @@ export default function($stateProvider) {
     .state('users', {
       url: '/users',
       template: '<users></users>',
-  
+
     });
 }

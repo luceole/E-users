@@ -4,7 +4,7 @@ import angular from 'angular';
 import routes from './admin.routes';
 import AdminController from './admin.controller';
 
-export default angular.module('newfullstackApp.admin', ['newfullstackApp.auth', 'ui.router'])
+export default angular.module('E-userApp.admin', ['E-userApp.auth', 'ui.router'])
   .config(routes)
   .controller('AdminController', AdminController)
   .name;

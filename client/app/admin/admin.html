@@ -5,7 +5,7 @@
     <input ng-model="search.email" placeholder="Recherche sur le Mel"> Utilisateurs Non Actif
     <input type="checkbox" ng-model="search.isactif" ng-true-value=false ng-false-value="">
   </form>
-  <p class="text-warning" ng-if="users.length==0">  Chargement ...</p>
+  <p class="text-warning" ng-if="users.length==0"> Chargement ...</p>
 
   <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="app/utilisateurs/dirPagination.tpl.html"></dir-pagination-controls>
   <br>

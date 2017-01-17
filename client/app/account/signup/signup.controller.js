@@ -7,38 +7,36 @@ export default class SignupController {
     this.$state = $state;
   }
 
-  myInit(form,field){
-  form[field].$setValidity('mongoose', true);
-  if (!this.user.uid) this.user.uid=this.user.email;
+  myInit(form, field) {
+    form[field].$setValidity('mongoose', true);
+    if (!this.user.uid) this.user.uid = this.user.email;
   }
 
-  myReset(form,field){
-    console.log(form)
+  myReset(form, field) {
     form[field].$setValidity('mongoose', true);
   }
 
   register(form) {
     this.submitted = true;
-    console.log("form "+form.$valid)
-    if(form.$valid) {
+    if (form.$valid) {
       return this.Auth.createUser({
-        uid: this.user.uid,
-        surname: this.user.surname,
-        name: this.user.name,
-        email: this.user.email,
-        password: this.user.password,
-        structure: this.user.structure,
-        isactif: false
-      })
+          uid: this.user.uid,
+          surname: this.user.surname,
+          name: this.user.name,
+          email: this.user.email,
+          password: this.user.password,
+          structure: this.user.structure,
+          isactif: false
+        }):
         .then(() => {
           // Account created, redirect to home
           this.$state.go('main');
         })
         .catch(err => {
           err = err.data;
-	        console.log(err.errors);
+          console.log(err.errors);
           this.errors = {};
-         // Update validity of form fields that match the mongoose errors
+          // Update validity of form fields that match the mongoose errors
           angular.forEach(err.errors, (error, field) => {
             form[field].$setValidity('mongoose', false);
             this.errors[field] = error.message;

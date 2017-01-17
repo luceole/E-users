@@ -1,4 +1,6 @@
-.trash { color:rgb(209, 91, 71); }
+.trash {
+	color: rgb(209, 91, 71);
+}
 
 .user-list {
 	li {
@@ -6,11 +8,15 @@
 		border: none;
 		border-bottom: 1px lightgray solid;
 		margin-bottom: 0;
-		&:last-child { border-bottom: none; }
+
+		&:last-child {
+			border-bottom: none;
+		}
 
 		.user-info {
 			flex-grow: 1;
 		}
+
 		.trash {
 			display: flex;
 			align-items: center;

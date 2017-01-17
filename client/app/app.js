@@ -35,9 +35,9 @@ import socket from '../components/socket/socket.service';
 
 import './app.scss';
 
-angular.module('newfullstackApp', [ngCookies, ngResource, ngSanitize,'btford.socket-io', ngValidationMatch, uiRouter,
+angular.module('E-userApp', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', ngValidationMatch, uiRouter,
     uiBootstrap,
-_Auth, account, groupes, admin, navbar, footer, main, constants, socket, util, demandes,users
+    _Auth, account, groupes, admin, navbar, footer, main, constants, socket, util, demandes, users
   ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {
@@ -46,7 +46,7 @@ _Auth, account, groupes, admin, navbar, footer, main, constants, socket, util, d
 
     $rootScope.$on('$stateChangeStart', function(event, next) {
       Auth.isLoggedIn(function(loggedIn) {
-        if(next.authenticate && !loggedIn) {
+        if (next.authenticate && !loggedIn) {
           $location.path('/login');
         }
       });
@@ -55,7 +55,7 @@ _Auth, account, groupes, admin, navbar, footer, main, constants, socket, util, d
 
 angular.element(document)
   .ready(() => {
-    angular.bootstrap(document, ['newfullstackApp'], {
+    angular.bootstrap(document, ['E-userApp'], {
       strictDi: true
     });
   });

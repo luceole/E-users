@@ -7,17 +7,15 @@
       <span> Appliquer </span>
     </button>
   </form>
-      <p class="text-warning" ng-if="demandesCtrl.demandes.docs.length==0">  Pas de demande</p>
+  <p class="text-warning" ng-if="demandesCtrl.demandes.docs.length==0"> Pas de demande</p>
   <br>
-  <dir-pagination-controls boundary-links="true" on-page-change="demandesCtrl.pageChanged(newPageNumber)"
-  template-url="./app/demandes/dirPagination.tpl.html"></dir-pagination-controls>
+  <dir-pagination-controls boundary-links="true" on-page-change="demandesCtrl.pageChanged(newPageNumber)" template-url="./app/demandes/dirPagination.tpl.html"></dir-pagination-controls>
 
   <table class="table table-condensed table-striped">
     <tbody>
- <tr dir-paginate="user in demandesCtrl.users | itemsPerPage: demandesCtrl.usersPerPage"
-     total-items="demandesCtrl.totalUsers" current-page="demandesCtrl.pagination.current">
+      <tr dir-paginate="user in demandesCtrl.users | itemsPerPage: demandesCtrl.usersPerPage" total-items="demandesCtrl.totalUsers" current-page="demandesCtrl.pagination.current">
 
-     NB Demande : {{demandesCtrl.demandes.total}}
+        NB Demande : {{demandesCtrl.demandes.total}}
         <td>
           <input type="checkbox" ng-model="user.isactif">
         </td>
@@ -30,9 +28,9 @@
         <td>
           {{user.email}}
         </td>
-          <td>
-            {{user.structure}}
-          </td>
+        <td>
+          {{user.structure}}
+        </td>
       </tr>
     </tbody>
   </table>

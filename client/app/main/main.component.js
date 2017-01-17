@@ -5,8 +5,8 @@ import routing from './main.routes';
 export class MainController {
 
   /*@ngInject*/
-  constructor($http, $scope, $state, socket,Auth) {
-    
+  constructor($http, $scope, $state, socket, Auth) {
+
 
     this.$http = $http;
     this.socket = socket;
@@ -30,7 +30,7 @@ export class MainController {
   }
 
   addThing() {
-    if(this.newThing) {
+    if (this.newThing) {
       this.$http.post('/api/things', {
         name: this.newThing
       });
@@ -42,29 +42,29 @@ export class MainController {
     this.$http.delete('/api/things/' + thing._id);
   }
 
-Formlogin(form) {
-  this.submitted = true;
-  this.msg="";
+  Formlogin(form) {
+    this.submitted = true;
+    this.msg = "";
 
-  if(form.$valid) {
-    this.Auth.login({
-      uid: this.user.uid,
-      password: this.user.password
-    })
-      .then(() => {
-        // Logged in, redirect to home
-        this.$state.go('main');
-      })
-      .catch(err => {
-        console.log(err);
-        this.msg = err.message;
-        this.$state.go('main');
-      });
+    if (form.$valid) {
+      this.Auth.login({
+          uid: this.user.uid,
+          password: this.user.password
+        })
+        .then(() => {
+          // Logged in, redirect to home
+          this.$state.go('main');
+        })
+        .catch(err => {
+          console.log(err);
+          this.msg = err.message;
+          this.$state.go('main');
+        });
+    }
   }
 }
-}
 
-export default angular.module('newfullstackApp.main', [uiRouter])
+export default angular.module('E-userApp.main', [uiRouter])
   .config(routing)
   .component('main', {
     template: require('./main.html'),

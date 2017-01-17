@@ -12,12 +12,12 @@ export default function(app) {
   app.use('/api/messages', require('./api/message'));
   app.use('/api/things', require('./api/thing'));
   app.use('/api/users', require('./api/user'));
-//  app.use('/api/demandes', require('./api/demande'));
+  //  app.use('/api/demandes', require('./api/demande'));
   app.use('/auth', require('./auth').default);
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')
-   .get(errors[404]);
+    .get(errors[404]);
 
   // All other routes should redirect to the index.html
   app.route('/*')

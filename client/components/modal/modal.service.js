@@ -73,6 +73,6 @@ export function Modal($rootScope, $uibModal) {
   };
 }
 
-export default angular.module('newfullstackApp')
+export default angular.module('E-userApp')
   .factory('Modal', Modal)
   .name;

@@ -17,7 +17,7 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
     return userRoles.indexOf(userRole) >= userRoles.indexOf(role);
   };
 
-  if($cookies.get('token') && $location.path() !== '/logout') {
+  if ($cookies.get('token') && $location.path() !== '/logout') {
     currentUser = User.get();
   }
 
@@ -34,9 +34,9 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
       password
     }, callback) {
       return $http.post('/auth/local', {
-        uid,
-        password
-      })
+          uid,
+          password
+        })
         .then(res => {
           $cookies.put('token', res.data.token);
           currentUser = User.get();
@@ -70,24 +70,26 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
      */
     createUser(user, callback) {
       return User.save(user, function(data) {
-        $cookies.put('token', data.token);
-        currentUser = User.get();
-        return safeCb(callback)(null, user);
-      }, function(err) {
-        Auth.logout();
-        return safeCb(callback)(err);
-      })
+          $cookies.put('token', data.token);
+          currentUser = User.get();
+          return safeCb(callback)(null, user);
+        }, function(err) {
+          Auth.logout();
+          return safeCb(callback)(err);
+        })
         .$promise;
     },
     updateMe(id, user, callback) {
-          return User.updateMe({id: id}, user, function (data) {
-              return safeCb(callback)(null, user);
-            },
-            function (err) {
-              return cb(err);
-            })
-            .$promise;
-        },
+      return User.updateMe({
+            id: id
+          }, user, function(data) {
+            return safeCb(callback)(null, user);
+          },
+          function(err) {
+            return cb(err);
+          })
+        .$promise;
+    },
     /**
      * Change password
      *
@@ -98,15 +100,15 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
      */
     changePassword(oldPassword, newPassword, callback) {
       return User.changePassword({
-        id: currentUser._id
-      }, {
-        oldPassword,
-        newPassword
-      }, function() {
-        return safeCb(callback)(null);
-      }, function(err) {
-        return safeCb(callback)(err);
-      })
+          id: currentUser._id
+        }, {
+          oldPassword,
+          newPassword
+        }, function() {
+          return safeCb(callback)(null);
+        }, function(err) {
+          return safeCb(callback)(err);
+        })
         .$promise;
     },
     /**
@@ -208,8 +210,8 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
     isAdminSync() {
       return Auth.hasRoleSync('admin');
     },
-    isActif: function () {
-	         return currentUser.isactif;
+    isActif: function() {
+      return currentUser.isactif;
     },
 
     /**

@@ -2,7 +2,7 @@
 
 describe('Component: DemandesComponent', function() {
   // load the controller's module
-  beforeEach(module('newfullstackApp.demandes'));
+  beforeEach(module('E-userApp.demandes'));
 
   var DemandesComponent;
 

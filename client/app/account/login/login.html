@@ -1,37 +1,37 @@
 <div ng-hide="$ctrl.isLoggedIn()" ng-include="'components/banniere/banniere.html'"></div>
 <div class="container">
   <div class="row">
-      <div class="col-lg-12">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-10">
-      <h3>Connexion</h3>
-      <form class="form" name="form" ng-submit="vm.login(form)" novalidate>
+    <div class="col-lg-12">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-10">
+        <h3>Connexion</h3>
+        <form class="form" name="form" ng-submit="vm.login(form)" novalidate>
 
-        <div class="form-group">
-          <label>Identifiant</label>
+          <div class="form-group">
+            <label>Identifiant</label>
 
-          <input  name="uid" class="form-control" ng-model="vm.user.uid" required style="width:350px">
-        </div>
+            <input name="uid" class="form-control" ng-model="vm.user.uid" required style="width:350px">
+          </div>
 
-        <div class="form-group">
-          <label>Mot de Passe</label>
+          <div class="form-group">
+            <label>Mot de Passe</label>
 
-          <input type="password" name="password" class="form-control" ng-model="vm.user.password" required  style="width:350px">
-        </div>
+            <input type="password" name="password" class="form-control" ng-model="vm.user.password" required style="width:350px">
+          </div>
 
-        <div class="form-group has-error">
-          <p class="help-block" ng-show="(form.uid.$error.required || form.password.$error.required) && vm.submitted">
-          Entrez votre identifiant et votre mot de passe..
-          </p>
-          <p class="help-block">{{ vm.msg }}</p>
-        </div>
-        <span>
+          <div class="form-group has-error">
+            <p class="help-block" ng-show="(form.uid.$error.required || form.password.$error.required) && vm.submitted">
+              Entrez votre identifiant et votre mot de passe..
+            </p>
+            <p class="help-block">{{ vm.msg }}</p>
+          </div>
+          <span>
           <button class="btn btn-inverse btn-lg btn-login" type="submit">
             Connexion
           </button>
         </span>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
-</div>
 </div>

@@ -10,14 +10,14 @@ export default class LoginController {
 
   login(form) {
     this.submitted = true;
-    this.msg="";
-     console.log(form.$valid);
+    this.msg = "";
+    console.log(form.$valid);
 
-    if(form.$valid) {
+    if (form.$valid) {
       this.Auth.login({
-        uid: this.user.uid,
-        password: this.user.password
-      })
+          uid: this.user.uid,
+          password: this.user.password
+        })
         .then(() => {
           // Logged in, redirect to home
           this.$state.go('main');
