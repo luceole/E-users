@@ -7,11 +7,13 @@
 
 module.exports = {
   DOMAIN: 'http://localhost:9000',
-  SESSION_SECRET: 'newfullstack-secret',
+  SESSION_SECRET: 'This-is-my-secret',
 
   GOOGLE_ID: 'app-id',
   GOOGLE_SECRET: 'secret',
 
   // Control debug level for modules using visionmedia/debug
   DEBUG: ''
+
+
 };

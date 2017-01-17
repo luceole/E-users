@@ -3,6 +3,8 @@
 import User from './user.model';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
+import email from 'emailjs/email';
+
 var _ = require('lodash');
 
 function validationError(res, statusCode) {
@@ -64,6 +66,25 @@ export function create(req, res) {
   var newUser = new User(req.body);
   newUser.provider = 'local';
   newUser.role = 'user';
+  /**
+   * Envoie du Mail OK
+   *  TODO => Faire  mecanisme de validation
+   */
+
+  var server = email.server.connect({
+    user: config.mail.user,
+    password: config.mail.password,
+    host: config.mail.host,
+    ssl: config.mail.ssl
+  });
+
+  server.send({
+     text:    "Bonjour, Ceci est un courriel de confirmation d'inscription",
+     from:    config.mail.sender,
+     to:      newUser.email,
+     subject: "Votre inscription"
+  }, function(err, message) { console.log(err || message); });
+
   newUser.save()
     .then(function(user) {
       var token = jwt.sign({
