@@ -1,4 +1,13 @@
-<div ng-hide="$ctrl.isLoggedIn()" ng-include="'components/banniere/banniere.html'"></div>
+<div ng-hide="$ctrl.isLoggedIn()">
+  <header class="hero-unit" id="banner">
+    <div class="container">
+      <h1>Libre Communauté </h1>
+      <p class="lead">ECO-système Libre de l’Éducation</p>
+      {{banTitre}}
+      <img src="assets/images/LogoPLLPt.png " alt="Pôle Logiciels Libres">
+    </div>
+  </header>
+</div>
 <div class="container" ng-if="!$ctrl.isLoggedIn()">
   <div class="row">
     <div class="col-lg-12">

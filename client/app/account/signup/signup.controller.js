@@ -27,7 +27,7 @@ export default class SignupController {
           password: this.user.password,
           structure: this.user.structure,
           isactif: false
-        }):
+        })
         .then(() => {
           // Account created, redirect to home
           this.$state.go('main');

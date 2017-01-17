@@ -39,6 +39,10 @@ export default class SettingsController {
     }
   };
 
+  myInit(form, field) {
+    form[field].$setValidity('mongoose', true);
+  }
+
   changePassword(form) {
     this.submitted = true;
     //  console.log(this.user.oldPassword, this.user.newPassword)
