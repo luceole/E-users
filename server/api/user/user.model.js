@@ -35,6 +35,8 @@ var UserSchema = new Schema({
   isactif: Boolean,
   isdemande: Boolean,
   hashedPassword: String,
+  urlToken: String,
+  mailValid: Boolean,
   firstdate: Date,
   creationDate: {
     type: Date,
@@ -214,15 +216,16 @@ UserSchema
  * Methods
  */
 UserSchema.methods = {
-  /**
-   * Authenticate - check if the passwords are the same
-   *
-   * @param {String} password
-   * @param {Function} callback
-   * @return {Boolean}
-   * @api public
-   */
-  authenticate(password, callback) {
+    /**
+     * Authenticate - check if the passwords are the same
+     *
+     * @param {String} password
+     * @param {Function} callback
+     * @return {Boolean}
+     * @api public
+     */
+    authenticate(password, callback) {
+
     if (!callback) {
       return this.password === this.encryptPassword(password);
     }

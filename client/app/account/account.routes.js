@@ -33,5 +33,15 @@ export default function routes($stateProvider) {
       controller: 'SettingsController',
       controllerAs: 'vm',
       authenticate: true
+    // })
+    // .state('validate', {
+    //   url: '/validate',
+    //   template: '',
+    //   controller($state, User) {
+    //     'ngInject';
+    //     var referrer = $state.params.referrer || $state.current.referrer || 'main';
+    //     User.validate();
+    //     $state.go('signup');
+    //   }
     });
 }

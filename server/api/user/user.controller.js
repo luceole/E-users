@@ -4,6 +4,8 @@ import User from './user.model';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
 import email from 'emailjs/email';
+import randtoken from 'rand-token';
+
 
 var _ = require('lodash');
 
@@ -66,6 +68,8 @@ export function create(req, res) {
   var newUser = new User(req.body);
   newUser.provider = 'local';
   newUser.role = 'user';
+  newUser.urlToken = randtoken.generate(8);
+  newUser.mailValid = false;
   /**
    * Envoie du Mail OK
    *  TODO => Faire  mecanisme de validation
@@ -79,11 +83,13 @@ export function create(req, res) {
   });
 
   server.send({
-     text:    "Bonjour, Ceci est un courriel de confirmation d'inscription",
-     from:    config.mail.sender,
-     to:      newUser.email,
-     subject: "Votre inscription"
-  }, function(err, message) { console.log(err || message); });
+    text: "Bonjour, Ceci est un courriel de confirmation d'inscription; confirmation : http://localhost:3000/api/users/validate/"+newUser.urlToken,
+    from: config.mail.sender,
+    to: newUser.email,
+    subject: "Votre inscription"
+  }, function(err, message) {
+    console.log(err || message);
+  });
 
   newUser.save()
     .then(function(user) {
@@ -98,134 +104,157 @@ export function create(req, res) {
     })
     .catch(validationError(res));
 }
-
 /**
- * Get a single user
- */
-export function show(req, res, next) {
-  var userId = req.params.id;
+ * Valid Mail of new User
+ **/
+export function validEmail(req, res) {
+//  console.log(req.params);
+  var urlToken = req.params[0];
+  User.findOne({
+      urlToken: urlToken
+    }, '-salt -hashedPassword', function(err, user) {
+      console.log("u=" + user.uid + " err=" + err);
+      if (!user) return res.send(404);
+      //   res.send('hello '+user.surname+'. Votre mail est validé.');
 
-  return User.findById(userId).exec()
-    .then(user => {
-      if (!user) {
-        return res.status(404).end();
-      }
-      res.json(user.profile);
+      user.mailValid=true;
+        user.save(function(err) {
+      res.set('Content-Type', 'text/html');
+      res.send(new Buffer('<p>hello ' + user.surname + '. <br>Votre mail est validé.<br></p> <a href="http://localhost:3000/">Connexion</a>'));
     })
-    .catch(err => next(err));
-}
+      });
 
-/**
- * Deletes a user
- * restriction: 'admin'
- */
-export function destroy(req, res) {
-  return User.findByIdAndRemove(req.params.id).exec()
-    .then(function() {
-      res.status(204).end();
-    })
-    .catch(handleError(res));
-}
 
-/**
- *  Update a user
- *
- */
-// Updates an existing user. (prop isactif)
-exports.update = function(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
   }
-  User.findById(req.params.id, function(err, user) {
-    //if (err) { return handleError(res, err); }
-    if (err) {
-      return err;
-    }
-    if (!user) {
-      return res.send(404);
-    }
-    //  console.log("--------- USER ---------------");
-    //  console.log(req.body)
-    var updated = new User(_.merge(user, req.body));
-    updated.isactif = req.body.isactif;
-    updated.isdemande = false;
-    user.save(function(err) {
-      //if (err) { return handleError(res, err); }
-      return res.json(200, user);
-    });
-  });
-}
 
 
-// Updates ME
-exports.updateMe = function(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
+  /**
+   * Get a single user
+   */
+  export function show(req, res, next) {
+    var userId = req.params.id;
+
+    return User.findById(userId).exec()
+      .then(user => {
+        if (!user) {
+          return res.status(404).end();
+        }
+        res.json(user.profile);
+      })
+      .catch(err => next(err));
   }
-  console.log("server updateMe ");
-  User.findById(req.params.id, function(err, user) {
-    if (err) {
-      return handleError(res, err);
+
+  /**
+   * Deletes a user
+   * restriction: 'admin'
+   */
+  export function destroy(req, res) {
+    return User.findByIdAndRemove(req.params.id).exec()
+      .then(function() {
+        res.status(204).end();
+      })
+      .catch(handleError(res));
+  }
+
+  /**
+   *  Update a user
+   *
+   */
+  // Updates an existing user. (prop isactif)
+  exports.update = function(req, res) {
+    if (req.body._id) {
+      delete req.body._id;
     }
-    if (!user) {
-      return res.send(404);
-    }
-    var newUser = new User(req.body);
-    user.name = newUser.name;
-    user.surname = newUser.surname;
-    user.structure = newUser.structure;
-    user.email = newUser.email;
-    user.save(function(err) {
+    User.findById(req.params.id, function(err, user) {
       //if (err) { return handleError(res, err); }
-      return res.json(200, user);
-    });
-  });
-};
-
-/**
- * Change a users password
- */
-export function changePassword(req, res) {
-  var userId = req.user._id;
-  var oldPass = String(req.body.oldPassword);
-  var newPass = String(req.body.newPassword);
-
-  return User.findById(userId).exec()
-    .then(user => {
-      if (user.authenticate(oldPass)) {
-        user.password = newPass;
-        return user.save()
-          .then(() => {
-            res.status(204).end();
-          })
-          .catch(validationError(res));
-      } else {
-        return res.status(403).end();
+      if (err) {
+        return err;
       }
-    });
-}
-
-/**
- * Get my info
- */
-export function me(req, res, next) {
-  var userId = req.user._id;
-
-  return User.findOne({
-      _id: userId
-    }, '-salt -password').exec()
-    .then(user => { // don't ever give out the password or salt
       if (!user) {
-        return res.status(401).end();
+        return res.send(404);
       }
-      res.json(user);
-    })
-    .catch(err => next(err));
-}
+      //  console.log("--------- USER ---------------");
+      //  console.log(req.body)
+      var updated = new User(_.merge(user, req.body));
+      updated.isactif = req.body.isactif;
+      updated.isdemande = false;
+      user.save(function(err) {
+        //if (err) { return handleError(res, err); }
+        return res.json(200, user);
+      });
+    });
+  }
 
-/**
- * Authentication callback
- */
-export function authCallback(req, res) {
-  res.redirect('/');
-}
+
+  // Updates ME
+  exports.updateMe = function(req, res) {
+    if (req.body._id) {
+      delete req.body._id;
+    }
+    console.log("server updateMe ");
+    User.findById(req.params.id, function(err, user) {
+      if (err) {
+        return handleError(res, err);
+      }
+      if (!user) {
+        return res.send(404);
+      }
+      var newUser = new User(req.body);
+      user.name = newUser.name;
+      user.surname = newUser.surname;
+      user.structure = newUser.structure;
+      user.email = newUser.email;
+      user.save(function(err) {
+        //if (err) { return handleError(res, err); }
+        return res.json(200, user);
+      });
+    });
+  };
+
+  /**
+   * Change a users password
+   */
+  export function changePassword(req, res) {
+    var userId = req.user._id;
+    var oldPass = String(req.body.oldPassword);
+    var newPass = String(req.body.newPassword);
+
+    return User.findById(userId).exec()
+      .then(user => {
+        if (user.authenticate(oldPass)) {
+          user.password = newPass;
+          return user.save()
+            .then(() => {
+              res.status(204).end();
+            })
+            .catch(validationError(res));
+        } else {
+          return res.status(403).end();
+        }
+      });
+  }
+
+  /**
+   * Get my info
+   */
+  export function me(req, res, next) {
+    var userId = req.user._id;
+
+    return User.findOne({
+        _id: userId
+      }, '-salt -password').exec()
+      .then(user => { // don't ever give out the password or salt
+        if (!user) {
+          return res.status(401).end();
+        }
+        res.json(user);
+      })
+      .catch(err => next(err));
+  }
+
+  /**
+   * Authentication callback
+   */
+  export function authCallback(req, res) {
+    res.redirect('/');
+  }

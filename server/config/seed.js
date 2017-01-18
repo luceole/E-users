@@ -48,6 +48,8 @@ User.find({}).remove()
         uid: 'test',
         surname: 'User',
         email: 'test@test.com',
+        urlToken: 'token',
+        mailValid: true,
         structure: 'Education',
         isactif: true,
         password: 'test'
@@ -58,6 +60,8 @@ User.find({}).remove()
         surname: 'Alfred',
         uid: 'admin',
         email: 'admin@admin.com',
+        urlToken: 'token',
+        mailValid: true,
         structure: 'MEN',
         isactif: true,
         password: 'admin'
@@ -76,6 +80,8 @@ User.find({}).remove()
         uid: 'eole' + i,
         surname: 'Luc',
         email: 'luc@test.com' + i,
+        urlToken: 'token' + i,
+        mailValid: false,
         structure: 'Education',
         isactif: false,
         isdemande: true,
