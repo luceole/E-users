@@ -68,6 +68,7 @@ UserSchema
       name: this.name,
       surname: this.surname,
       isactif: this.isactif,
+      mailValid: this.mailValid,
       email: this.email,
       structure: this.structure,
       role: this.role,

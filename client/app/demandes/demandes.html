@@ -20,6 +20,15 @@
           <input type="checkbox" ng-model="user.isactif">
         </td>
         <td>
+
+          <button class="btn btn-warning btn-xs" type="button" ng-if="!user.mailValid" rel="tooltip" title="Courriel Non Confirmé">
+            <span class="glyphicon glyphicon-envelope"></span>
+          </button>
+          <button class="btn btn-success btn-xs" type="button" ng-if="user.mailValid" rel="tooltip" title="Courriel Confirmé">
+              <span class="glyphicon glyphicon-envelope"></span>
+          </button>
+        </td>
+        <td>
           {{user.creationDate | date: "dd/MM/yyyy"}}
         </td>
         <td>

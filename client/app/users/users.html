@@ -19,12 +19,17 @@
           Déactiver
         </button>
 
+          <button class="btn btn-warning btn-xs" type="button" ng-if="!user.mailValid" rel="tooltip" title="Courriel Non Confirmé">
+            <span class="glyphicon glyphicon-envelope"></span>
+          </button>
+          <button class="btn btn-success btn-xs" type="button" ng-if="user.mailValid" rel="tooltip" title="Courriel Confirmé">
+              <span class="glyphicon glyphicon-envelope"></span>
+          </button>
         <span>
           <a href ng-click="usersCtrl.edit(user)" rel="tooltip" title="Modifier" class="trash">
             <div class="glyphicon glyphicon-pencil pull-right"></div>
           </a>
         </span>
-
       </td>
       <td>
         {{user.uid}}

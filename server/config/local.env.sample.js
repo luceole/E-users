@@ -13,7 +13,16 @@ module.exports = {
   GOOGLE_SECRET: 'secret',
 
   // Control debug level for modules using visionmedia/debug
-  DEBUG: ''
+  DEBUG: '',
 
+
+  mail: {
+  user: 'login SMTP',
+  password : 'Password SMTP',
+  sender: 'admin@votredomaine" ,
+  host: 'Host SMTP',
+  ssl: true,
+  url: 'http://localhost:3000/api/users/validate/'   
+}
 
 };

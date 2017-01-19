@@ -44,7 +44,7 @@ exports.demandes = function(req, res) {
   var page = req.query.page;
   //console.log("Serveur Demandes page=>"+page);
   var options = {
-    select: 'uid name surname creationDate email structure isactif',
+    select: 'uid name surname creationDate email structure isactif mailValid',
     page: page,
     limit: 12,
     sort: "email"
@@ -68,11 +68,11 @@ export function create(req, res) {
   var newUser = new User(req.body);
   newUser.provider = 'local';
   newUser.role = 'user';
-  newUser.urlToken = randtoken.generate(8);
+  newUser.urlToken = randtoken.generate(16);
   newUser.mailValid = false;
+    newUser.isdemande = true;
   /**
-   * Envoie du Mail OK
-   *  TODO => Faire  mecanisme de validation
+   * Envoie du Mail
    */
 
   var server = email.server.connect({
@@ -83,7 +83,7 @@ export function create(req, res) {
   });
 
   server.send({
-    text: "Bonjour, Ceci est un courriel de confirmation d'inscription; confirmation : http://localhost:3000/api/users/validate/"+newUser.urlToken,
+    text: "Bonjour, Ceci est un courriel de confirmation d'inscription; Pour activer votre compte cliquez sur le lien : "+config.mail.url+newUser.urlToken,
     from: config.mail.sender,
     to: newUser.email,
     subject: "Votre inscription"
@@ -113,7 +113,6 @@ export function validEmail(req, res) {
   User.findOne({
       urlToken: urlToken
     }, '-salt -hashedPassword', function(err, user) {
-      console.log("u=" + user.uid + " err=" + err);
       if (!user) return res.send(404);
       //   res.send('hello '+user.surname+'. Votre mail est validé.');
 
