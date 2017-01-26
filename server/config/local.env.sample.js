@@ -23,6 +23,11 @@ module.exports = {
   host: 'Host SMTP',
   ssl: true,
   url: 'http://localhost:3000/api/users/validate/'   
-}
+},
+
+  discourse_sso : {
+  secret: '1234567890',
+  url: 'http://lab13-eole.ac-dijon.fr/session/sso_login?'
+  }
 
 };

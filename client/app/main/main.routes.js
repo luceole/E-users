@@ -6,5 +6,9 @@ export default function routes($stateProvider) {
   $stateProvider.state('main', {
     url: '/',
     template: '<main></main>'
+  })
+  .state('discoursesso', {
+    url: '/discoursesso?sso&sig',
+        template: '<main></main>'
   });
 }

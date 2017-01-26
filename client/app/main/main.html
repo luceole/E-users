@@ -8,6 +8,9 @@
     </div>
   </header>
 </div>
+
+    <div  ng-show="$ctrl.sso" class="alert alert-info" ><center>  Authentification SSO pour le forum </center>
+  </div>
 <div class="container" ng-if="!$ctrl.isLoggedIn()">
   <div class="row">
     <div class="col-lg-12">
@@ -52,7 +55,7 @@
   </div>
 </div>
 
-<div class="container" ng-if="$ctrl.isLoggedIn()" ng-init="CalInit()">
+<div class="container" ng-if="$ctrl.isLoggedIn()&& !$ctrl.sso " ng-init="CalInit()">
   <div class="row">
     <div class="col-lg-12">
       <p>Bonjour {{ $ctrl.getCurrentUser().surname }} {{ $ctrl.getCurrentUser().name }}</p>
@@ -65,6 +68,7 @@
     </div>
     <div class="alert alert-success" ng-if="$ctrl.getCurrentUser().isactif">
       <h3>Informations:</h3>
+      {{$ctrl.MSG}}
       <span ng-if="getCurrentUser().memberOf.length > 0">Vous êtes inscrit dans les groupes : </span>
       <ul>
         <li ng-repeat=" grp in getCurrentUser().memberOf">

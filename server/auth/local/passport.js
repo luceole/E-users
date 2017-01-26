@@ -2,7 +2,6 @@ import passport from 'passport';
 import {Strategy as LocalStrategy} from 'passport-local';
 
 function localAuthenticate(User, uid, password, done) {
-  console.log(uid+ " "+password);
   User.findOne({
     uid: uid,
     mailValid: true

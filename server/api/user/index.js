@@ -13,6 +13,7 @@ router.put('/:id/update', auth.hasRole('admin'), controller.update);
 router.get('/demandes', auth.hasRole('admin'), controller.demandes);
 router.get('/me', auth.isAuthenticated(), controller.me);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
+router.put('/:id/discoursesso', auth.isAuthenticated(), controller.discourseSso);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.put('/:id/updateme', auth.isAuthenticated(), controller.updateMe);
 

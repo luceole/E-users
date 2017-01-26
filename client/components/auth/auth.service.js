@@ -86,7 +86,21 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
             return safeCb(callback)(null, user);
           },
           function(err) {
-            return cb(err);
+          return safeCb(callback)(err);
+          })
+        .$promise;
+    },
+    discourseSso(id, params, callback) {
+      var sso=params.sso;
+      var sig=params.sig;
+      return User.discourseSso({
+            id: id,
+          }, {sso,sig}, function(data) {
+             console.log("data "+data)
+            return safeCb(callback)(null,data);
+          },
+          function(err) {   console.log(err)
+            return safeCb(callback)(err);
           })
         .$promise;
     },

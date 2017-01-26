@@ -18,6 +18,12 @@ export function UserResource($resource) {
         controller: 'updateme'
       }
     },
+    discourseSso: {
+      method: 'PUT',
+      params: {
+        controller: 'discoursesso'
+      }
+    },
     validate: {
       method: 'get',
       params: {

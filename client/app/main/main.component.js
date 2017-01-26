@@ -5,16 +5,19 @@ import routing from './main.routes';
 export class MainController {
 
   /*@ngInject*/
-  constructor($http, $scope, $state, socket, Auth) {
+  constructor($http, $scope, $state, $stateParams, $window, socket, Auth) {
 
-
+    this.w = $window;
     this.$http = $http;
     this.socket = socket;
     this.isLoggedIn = Auth.isLoggedInSync;
     this.Auth = Auth;
     this.isAdmin = Auth.isAdminSync;
     this.getCurrentUser = Auth.getCurrentUserSync;
-    this.$state = $state
+    this.$state = $state;
+    this.$stateParams = $stateParams;
+    this.MSG=""
+    this.sso = (this.$state.current.name == "discoursesso");
 
     $scope.$on('$destroy', function() {
       socket.unsyncUpdates('thing');
@@ -27,6 +30,25 @@ export class MainController {
         this.awesomeThings = response.data;
         this.socket.syncUpdates('thing', this.awesomeThings);
       });
+    if (this.$state.current.name == "discoursesso") {
+      this.MSG=" ***  REDIRECTION Forum Discourse en cours .."
+
+      this.Auth.getCurrentUser()
+        .then((u) => {
+          if (u._id) {
+            var sso = this.$stateParams.sso;
+            var sig = this.$stateParams.sig;
+            this.Auth.discourseSso(u._id, {
+                sso,
+                sig
+              })
+              .then((rep) => {
+                this.w.location.href = rep.url;
+              })
+          }
+        })
+    }
+      this.MSG="";
   }
 
   addThing() {
@@ -46,14 +68,29 @@ export class MainController {
     this.submitted = true;
     this.msg = "";
 
+
+
     if (form.$valid) {
       this.Auth.login({
           uid: this.user.uid,
           password: this.user.password
         })
-        .then(() => {
-          // Logged in, redirect to home
-          this.$state.go('main');
+        .then((u) => {
+          if (this.$state.current.name == "discoursesso") {
+              this.MSG=" ***  REDIRECTION en cours .."
+            var sso = this.$stateParams.sso;
+            var sig = this.$stateParams.sig;
+            this.Auth.discourseSso(u._id, {
+                sso,
+                sig
+              })
+              .then((rep) => {
+                this.w.location.href = rep.url;
+              })
+          } else {
+            //Logged in , redirect to home
+            this.$state.go('main');
+          }
         })
         .catch(err => {
           console.log(err);
