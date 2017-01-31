@@ -46,7 +46,7 @@
 <div class="form-group" ng-class="{ 'has-success': modifForm.email.$valid && vm.submitted,
                                     'has-error': modifForm.email.$invalid && vm.submitted }">
   Courriel
-  <input type="email" name="email" class="form-control" ng-model="vm.user.email" placeholder="Votre courriel" required mongoose-error style="width:350px" />
+  <input type="email" name="email" class="form-control" ng-model="vm.user.email" ng-focus="vm.myInit(modifForm,'email')" placeholder="Votre courriel" required mongoose-error style="width:350px" />
   <p class="help-block" ng-show="modifForm.email.$error.email ">
     Adresse electronique invalide.
   </p>
@@ -54,7 +54,7 @@
     Quel est votre adresse electronique?
   </p>
   <p class="help-block" ng-show="modifForm.email.$error.mongoose">
-    {{ errors.email }}
+    {{ vm.errors.email }}
   </p>
   </div>
 

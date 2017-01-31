@@ -1,6 +1,7 @@
 'use strict';
 
 import User from './user.model';
+import jsonpatch from 'fast-json-patch';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
 import email from 'emailjs/email';
@@ -8,6 +9,8 @@ import randtoken from 'rand-token';
 import discourse_sso from 'discourse-sso';
 
 var _ = require('lodash');
+
+
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
@@ -23,12 +26,34 @@ function handleError(res, statusCode) {
   };
 }
 
+function patchUpdates(patches) {
+  return function(entity) {
+    try {
+      jsonpatch.apply(entity, patches, /*validate*/ true);
+    } catch (err) {
+      return Promise.reject(err);
+    }
+    return entity.save();
+  };
+}
+
+function handleEntityNotFound(res) {
+  return function(entity) {
+    if (!entity) {
+      res.status(404).end();
+      return null;
+    }
+    return entity;
+  };
+}
+
+
 /**
  * Get list of users
  * restriction: 'admin'
  */
 export function index(req, res) {
-  console.log("Serveur User")
+  //  console.log("Serveur User")
   return User.find({}, '-salt -password').exec()
     .then(users => {
 
@@ -72,7 +97,7 @@ export function create(req, res) {
   newUser.mailValid = false;
   newUser.isdemande = true;
   /**
-   * Envoie du Mail
+   * Envoie du Mail de confirmation
    */
 
   var server = email.server.connect({
@@ -164,24 +189,28 @@ exports.update = function(req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
-  User.findById(req.params.id, function(err, user) {
-    //if (err) { return handleError(res, err); }
-    if (err) {
-      return err;
-    }
-    if (!user) {
-      return res.send(404);
-    }
-    //  console.log("--------- USER ---------------");
-    //  console.log(req.body)
-    var updated = new User(_.merge(user, req.body));
-    updated.isactif = req.body.isactif;
-    updated.isdemande = false;
-    user.save(function(err) {
-      //if (err) { return handleError(res, err); }
-      return res.json(200, user);
+  console.log(req.body)
+  // return User.findById(req.params.id).exec()
+  //   .then(handleEntityNotFound(res))
+  //   .then(patchUpdates(req.body))
+  //   .then(respondWithResult(res))
+  //   .catch(handleError(res));
+
+  return User.findById(req.params.id).exec()
+    .then(user => {
+      var updated = _.merge(user, req.body);
+      updated.isdemande = false;
+      updated.isactif = req.body.isactif;
+      return updated.save()
+      .then(user => {
+          //console.log(user)
+          //res.status(200).json(user);
+          res.status(204).end();
+        })
+        .catch(validationError(res));
     });
-  });
+
+
 }
 
 
@@ -191,13 +220,13 @@ exports.discourseSso = function(req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
-  console.log("server discourseSso " + req.params.id);
+  //  console.log("server discourseSso " + req.params.id);
   User.findById(req.params.id, function(err, user) {
     if (err) {
       return handleError(res, err);
     }
     if (!user) {
-      console.log("user not find")
+      //  console.log("user not find")
       return res.send(404);
     }
 
@@ -218,7 +247,7 @@ exports.discourseSso = function(req, res) {
         "username": user.name
       };
       var q = sso.buildLoginString(userparams);
-      var url=config.discourse_sso.url+q;
+      var url = config.discourse_sso.url + q;
       var reponse = {
         sso: q,
         url: url
@@ -231,30 +260,48 @@ exports.discourseSso = function(req, res) {
 
 
 
-// Updates ME
-exports.updateMe = function(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
-  }
-  console.log("server updateMe ");
-  User.findById(req.params.id, function(err, user) {
-    if (err) {
-      return handleError(res, err);
-    }
-    if (!user) {
-      return res.send(404);
-    }
-    var newUser = new User(req.body);
-    user.name = newUser.name;
-    user.surname = newUser.surname;
-    user.structure = newUser.structure;
-    user.email = newUser.email;
-    user.save(function(err) {
-      //if (err) { return handleError(res, err); }
-      return res.json(200, user);
+// Self Update
+export function updateMe(req, res) {
+  var userId = req.user._id;
+  var newUser = new User(req.body);
+  var MailChange = false;
+
+  return User.findById(userId).exec()
+    .then(user => {
+      user.name = newUser.name;
+      user.surname = newUser.surname;
+      user.structure = newUser.structure;
+      if (user.email != newUser.email) {
+        MailChange = true;
+        newUser.urlToken = randtoken.generate(16);
+        user.email = newUser.email;
+        user.urlToken = newUser.urlToken;
+        user.mailValid = false;
+      }
+      return user.save()
+        .then(user => {
+          if (MailChange) {
+            var server = email.server.connect({
+              user: config.mail.user,
+              password: config.mail.password,
+              host: config.mail.host,
+              ssl: config.mail.ssl
+            });
+            server.send({
+                text: "Bonjour, Ceci est un courriel de confirmation suite à la modification de votre courriel; Pour ré-activer votre compte cliquez sur le lien : " + config.mail.url + newUser.urlToken,
+                from: config.mail.sender,
+                to: user.email,
+                subject: "Votre inscription"
+              },
+              function(err, message) {
+                console.log(err || message);
+              });
+          }
+          res.status(204).end();
+        })
+        .catch(validationError(res));
     });
-  });
-};
+}
 
 /**
  * Change a users password

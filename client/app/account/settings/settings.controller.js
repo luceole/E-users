@@ -7,7 +7,7 @@ export default class SettingsController {
     this.Auth = Auth;
     this.getCurrentUser = Auth.getCurrentUser;
     this.user = Auth.getCurrentUserSync();
-    this.errors = {};
+  //  this.errors = {};
     this.editMessage = '';
   }
 
@@ -15,7 +15,7 @@ export default class SettingsController {
     this.submitted = true;
     this.editMessage = '';
     if (form.$valid) {
-      this.Auth.updateMe(this.user._id, {
+      return this.Auth.updateMe(this.user._id, {
           name: this.user.name,
           surname: this.user.surname,
           structure: this.user.structure,
@@ -23,16 +23,14 @@ export default class SettingsController {
         })
         .then(() => {
           this.editMessage = 'Mise à jour prise en compte';
-          console.log("Maj is OK");
         })
         .catch((err) => {
           err = err.data;
           this.errors = {};
-
           // Update validity of form fields that match the mongoose errors
-          angular.forEach(err.errors, function(error, field) {
-            //form[field].$setValidity('mongoose', true);
-            //form[field].$setDirty();
+          angular.forEach(err.errors, (error, field) => {
+            form[field].$setValidity('mongoose', false);
+            form[field].$setDirty();
             this.errors[field] = error.message;
           });
         });
@@ -40,6 +38,7 @@ export default class SettingsController {
   };
 
   myInit(form, field) {
+    console.log(form)
     form[field].$setValidity('mongoose', true);
   }
 

@@ -19,10 +19,10 @@
           Déactiver
         </button>
 
-          <button class="btn btn-warning btn-xs" type="button" ng-if="!user.mailValid" rel="tooltip" title="Courriel Non Confirmé">
+          <button class="btn btn-warning btn-xs" type="button" ng-if="!user.mailValid" ng-click="usersCtrl.validmail(user)" rel="tooltip" title="Courriel Non Confirmé">
             <span class="glyphicon glyphicon-envelope"></span>
           </button>
-          <button class="btn btn-success btn-xs" type="button" ng-if="user.mailValid" rel="tooltip" title="Courriel Confirmé">
+          <button class="btn btn-success btn-xs" type="button" ng-if="user.mailValid"  ng-click="usersCtrl.invalidmail(user)" rel="tooltip" title="Courriel Confirmé">
               <span class="glyphicon glyphicon-envelope"></span>
           </button>
         <span>

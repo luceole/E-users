@@ -14,18 +14,25 @@ export class UsersModalComponent {
     this.$uibModalInstance = $uibModalInstance;
   }
   ok() {
-    console.log("OK 1 ");
+    //  console.log("OK 1 ");
     this.user.isdemande = false;
     this.User.update(this.user._id, this.user, () => {
-      this.Save_user.structure = this.user.structure;
-      this.Save_user.name = this.user.name;
-      this.Save_user.surname = this.user.surname;
-      this.Save_user.email = this.user.email;
-      this.Save_user.structure = this.user.structure;
-      this.Save_user.role = this.user.role;
-      this.Save_user.isactif = this.user.isactif;
-    });
-    this.$uibModalInstance.close('ok');
+        this.Save_user.structure = this.user.structure;
+        this.Save_user.name = this.user.name;
+        this.Save_user.surname = this.user.surname;
+        this.Save_user.email = this.user.email;
+        this.Save_user.structure = this.user.structure;
+        this.Save_user.role = this.user.role;
+        this.Save_user.isactif = this.user.isactif;
+        this.$uibModalInstance.close('ok');
+      },
+      err => {
+        alert("Adresse mail utiliséé avec un autre compte!");
+        console.log(err.data)
+      }
+
+    );
+    //this.$uibModalInstance.close('ok');  // Ferme san attendre le retour => Gestion des erreurs ???
   };
   cancel() {
     this.$uibModalInstance.dismiss('cancel');
@@ -47,10 +54,10 @@ export class UsersComponent {
     this.User.update(user._id, user, () => {});
   };
 
-  deactive(user) {
 
+  deactive(user) {
     if (user.role === "admin") {
-      if (!confirm("Déactivation ADMIN : Etes vous sur ?")) {
+      if (!confirm("Déactivation d'un utilisateur avec role  ADMIN A: Etes vous sur ?")) {
         return;
       }
     }
@@ -58,6 +65,21 @@ export class UsersComponent {
     user.isdemande = false;
     this.User.update(user._id, user, () => {});
   };
+
+  validmail(user) {
+    user.mailValid = true;
+    this.User.update(user._id, user, () => {});
+  }
+
+  invalidmail(user) {
+    if (user.role === "admin") {
+      if (!confirm("Utilsateur avec role  ADMIN : Etes vous sur ?")) {
+        return;
+      }
+    }
+    user.mailValid = false;
+    this.User.update(user._id, user, () => {});
+  }
 
   delete(user) {
     if (!confirm(" Efface l'utilisateur " + user.uid + " : Etes vous sur ?")) {
@@ -84,7 +106,6 @@ export class UsersComponent {
     ModalInstance.result.then(function() {
       console.log("ok2")
     }, function() {
-
       console.log('Modal dismissed at: ' + new Date());
     });
   }

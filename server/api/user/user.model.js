@@ -172,7 +172,7 @@ UserSchema
       .catch(function(err) {
         throw err;
       });
-  }, 'Cette adresse  utilisée avec un autre identifiant!');
+  }, 'Cette adresse est utilisée avec un autre identifiant!');
 
 
 var validatePresenceOf = function(value) {

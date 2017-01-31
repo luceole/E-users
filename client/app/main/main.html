@@ -9,8 +9,9 @@
   </header>
 </div>
 
-    <div  ng-show="$ctrl.sso" class="alert alert-info" ><center>  Authentification SSO pour le forum </center>
-  </div>
+<div ng-show="$ctrl.sso" class="alert alert-info">
+  <center> Authentification SSO pour le forum </center>
+</div>
 <div class="container" ng-if="!$ctrl.isLoggedIn()">
   <div class="row">
     <div class="col-lg-12">
@@ -37,7 +38,7 @@
             <p class="help-block">{{ $ctrl.msg }}</p>
           </div>
           <span>
-            <button class="btn btn-inverse btn-lg btn-login" type="submit">
+                  <button class="btn  btn-default btn-lg btn-login" type="submit">
               Connexion
             </button>
           </span>
@@ -50,7 +51,6 @@
           <br>
           <span class="alert alert-info"><a href="/signup"> Pour créer votre compte : Inscrivez vous.</a></span>
       </div>
-
     </div>
   </div>
 </div>
@@ -63,12 +63,11 @@
         Votre adresse electronique <b> {{$ctrl.getCurrentUser().email}} </b> n'a pas encore été confirmée.
         <br>Un message de confirmation vous a été envoyé.<br>Consultez votre boite au lettre.
         <br> La connexion à ce service ne sera possible qu'après validation de votre courriel.
-       </div>
+      </div>
       <div class="alert alert-warning" ng-if="!$ctrl.getCurrentUser().isactif"> Votre compte est en attende de validation par le modérateur. </div>
     </div>
     <div class="alert alert-success" ng-if="$ctrl.getCurrentUser().isactif">
-      <h3>Informations:</h3>
-      {{$ctrl.MSG}}
+      <h3>Informations:</h3> {{$ctrl.MSG}}
       <span ng-if="getCurrentUser().memberOf.length > 0">Vous êtes inscrit dans les groupes : </span>
       <ul>
         <li ng-repeat=" grp in getCurrentUser().memberOf">
