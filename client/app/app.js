@@ -21,7 +21,7 @@ import {
 
 import _Auth from '../components/auth/auth.module';
 import account from './account';
-import admin from './admin';
+//import admin from './admin';
 import groupes from './groupes/groupes.component';
 import demandes from './demandes/demandes.component';
 import users from './users/users.component';
@@ -32,18 +32,16 @@ import constants from './app.constants';
 import util from '../components/util/util.module';
 import socket from '../components/socket/socket.service';
 
-
 import './app.scss';
 
 angular.module('E-userApp', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', ngValidationMatch, uiRouter,
     uiBootstrap,
-    _Auth, account, groupes, admin, navbar, footer, main, constants, socket, util, demandes, users
+    _Auth, account, groupes, navbar, footer, main, constants, socket, util, demandes, users
   ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {
     'ngInject';
     // Redirect to login if route requires auth and you're not logged in
-
     $rootScope.$on('$stateChangeStart', function(event, next) {
       Auth.isLoggedIn(function(loggedIn) {
         if (next.authenticate && !loggedIn) {
