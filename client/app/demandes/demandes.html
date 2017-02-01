@@ -9,7 +9,7 @@
   </form>
   <p class="text-warning" ng-if="demandesCtrl.demandes.docs.length==0"> Pas de demande</p>
   <br>
-  <dir-pagination-controls boundary-links="true" on-page-change="demandesCtrl.pageChanged(newPageNumber)" template-url="./app/demandes/dirPagination.tpl.html"></dir-pagination-controls>
+  <dir-pagination-controls boundary-links="true" on-page-change="demandesCtrl.pageChanged(newPageNumber)" ></dir-pagination-controls>
 
   <table class="table table-condensed table-striped">
     <tbody>

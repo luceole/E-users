@@ -7,7 +7,7 @@
   </form>
   <p class="text-warning" ng-if="usersCtrl.users.length==0"> Chargement ...</p>
 
-  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="app/users/dirPagination.tpl.html"></dir-pagination-controls>
+  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" ></dir-pagination-controls>
   <br>
   <table class="table table-striped ">
     <tr dir-paginate="user in usersCtrl.users | orderBy:'name' | filter:usersCtrl.search:strict | itemsPerPage :'12' ">
