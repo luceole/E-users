@@ -22,7 +22,7 @@ module.exports = {
       || 'mongodb://localhost/dbu'
   },
  // Seed database on startup
-seedDB: true
+seedDB: false
 
 
 };

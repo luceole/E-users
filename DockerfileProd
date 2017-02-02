@@ -1,0 +1,5 @@
+# Conteneur E-User  en mode devel
+FROM node:4-onbuild
+ RUN apt-get update && apt-get upgrade -y && apt-get install -y  vi
+# replace this with your application's default port
+EXPOSE 8080

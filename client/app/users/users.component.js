@@ -6,10 +6,12 @@ import routes from './users.routes';
 import modal from 'angular-ui-bootstrap/src/modal';
 
 export class UsersModalComponent {
-  constructor(User, $uibModalInstance, usr) {
+  constructor(User, $uibModalInstance, socket, usr) {
     'ngInject';
     this.User = User;
     this.user = new User(usr);
+    this.socket = socket;
+
     this.Save_user = usr;
     this.$uibModalInstance = $uibModalInstance;
   }
@@ -39,14 +41,24 @@ export class UsersModalComponent {
   };
 } // UserModal
 
+//    PAGE Principale
+
 export class UsersComponent {
   /*@ngInject*/
-  constructor(User, $uibModal) {
+  constructor(User, socket, $uibModal) {
     'ngInject';
     this.$uibModal = $uibModal;
     this.User = User;
+    this.socket = socket;
     this.users = User.query();
+    this.socket.syncUpdates('user', this.users);
+    this.$onDestroy = function() {
+      console.log("destroy");
+      socket.unsyncUpdates('user');
+    };
   }
+
+
 
   active(user) {
     user.isactif = true;

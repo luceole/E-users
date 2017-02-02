@@ -139,12 +139,10 @@ export function validEmail(req, res) {
     urlToken: urlToken
   }, '-salt -hashedPassword', function(err, user) {
     if (!user) return res.send(404);
-    //   res.send('hello '+user.surname+'. Votre mail est validé.');
-
     user.mailValid = true;
     user.save(function(err) {
       res.set('Content-Type', 'text/html');
-      res.send(new Buffer('<p>hello ' + user.surname + '. <br>Votre mail est validé.<br></p> <a href="config.mail.site>Connexion</a>'));
+      res.send(new Buffer('<p>hello ' + user.surname + '. <br>Votre mail est validé.<br></p> <a href="' + config.mail.site + '">Connexion</a>'));
     })
   });
 
@@ -202,7 +200,7 @@ exports.update = function(req, res) {
       updated.isdemande = false;
       updated.isactif = req.body.isactif;
       return updated.save()
-      .then(user => {
+        .then(user => {
           //console.log(user)
           //res.status(200).json(user);
           res.status(204).end();
@@ -244,7 +242,9 @@ exports.discourseSso = function(req, res) {
         "external_id": user.uid,
         "email": user.email,
         // Optional
-        "username": user.name
+        "username": user.name,
+        "name": user.surname + " " + user.name,
+        "admin": (user.role == "admin")
       };
       var q = sso.buildLoginString(userparams);
       var url = config.discourse_sso.url + q;
