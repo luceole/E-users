@@ -11,12 +11,11 @@ export class UsersModalComponent {
     this.User = User;
     this.user = new User(usr);
     this.socket = socket;
-
     this.Save_user = usr;
     this.$uibModalInstance = $uibModalInstance;
   }
+
   ok() {
-    //  console.log("OK 1 ");
     this.user.isdemande = false;
     this.User.update(this.user._id, this.user, () => {
         this.Save_user.structure = this.user.structure;
@@ -32,10 +31,9 @@ export class UsersModalComponent {
         alert("Adresse mail utiliséé avec un autre compte!");
         console.log(err.data)
       }
-
     );
-    //this.$uibModalInstance.close('ok');  // Ferme san attendre le retour => Gestion des erreurs ???
   };
+
   cancel() {
     this.$uibModalInstance.dismiss('cancel');
   };
@@ -51,11 +49,11 @@ export class UsersComponent {
     this.User = User;
     this.socket = socket;
     this.users = User.query();
-    this.socket.syncUpdates('user', this.users);
-    this.$onDestroy = function() {
-      console.log("destroy");
-      socket.unsyncUpdates('user');
-    };
+    // this.socket.syncUpdates('user', this.users);
+    // this.$onDestroy = function() {
+    //   console.log("destroy");
+    //   socket.unsyncUpdates('user');
+    // };
   }
 
 
@@ -115,9 +113,7 @@ export class UsersComponent {
       }
     });
 
-    ModalInstance.result.then(function() {
-      console.log("ok2")
-    }, function() {
+    ModalInstance.result.then(function() {}, function() {
       console.log('Modal dismissed at: ' + new Date());
     });
   }

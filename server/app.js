@@ -11,6 +11,9 @@ mongoose.Promise = require('bluebird');
 import config from './config/environment';
 import http from 'http';
 
+import User from './api/user/user.model';
+
+
 // Connect to MongoDB
 mongoose.connect(config.mongo.uri, config.mongo.options);
 mongoose.connection.on('error', function(err) {
@@ -22,7 +25,6 @@ mongoose.connection.on('error', function(err) {
 if (config.seedDB) {
   require('./config/seed');
 }
-
 // Setup server
 var app = express();
 app.use(cors());
@@ -34,11 +36,15 @@ var socketio = require('socket.io')(server, {
 require('./config/socketio').default(socketio);
 require('./config/express').default(app);
 require('./routes').default(app);
-
+User.count({}, function(err, count){
+    console.log( "Number of User: ", count );
+});
 // Start server
 function startServer() {
   app.angularFullstack = server.listen(config.port, config.ip, function() {
     console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
+
+
   });
 }
 

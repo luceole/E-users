@@ -16,95 +16,95 @@ export class MainController {
     this.getCurrentUser = Auth.getCurrentUserSync;
     this.$state = $state;
     this.$stateParams = $stateParams;
-    this.MSG=""
+    this.MSG = ""
     this.sso = (this.$state.current.name == "discoursesso");
 
-    $scope.$on('$destroy', function() {
-      socket.unsyncUpdates('thing');
-    });
-  }
+    //   $scope.$on('$destroy', function() {
+    //     socket.unsyncUpdates('thing');
+    //   });
+ }
 
-  $onInit() {
-    this.$http.get('/api/things')
-      .then(response => {
-        this.awesomeThings = response.data;
-        this.socket.syncUpdates('thing', this.awesomeThings);
-      });
-    if (this.$state.current.name == "discoursesso") {
-      this.MSG=" ***  REDIRECTION Forum Discourse en cours .."
+    $onInit() {
+      // this.$http.get('/api/things')
+      //   .then(response => {
+      //     this.awesomeThings = response.data;
+      //     this.socket.syncUpdates('thing', this.awesomeThings);
+      //   });
+      if (this.$state.current.name == "discoursesso") {
+        this.MSG = " ***  REDIRECTION Forum Discourse en cours .."
 
-      this.Auth.getCurrentUser()
-        .then((u) => {
-          if (u._id) {
-            var sso = this.$stateParams.sso;
-            var sig = this.$stateParams.sig;
-            this.Auth.discourseSso(u._id, {
-                sso,
-                sig
-              })
-              .then((rep) => {
-                this.w.location.href = rep.url;
-              })
-          }
-        })
+        this.Auth.getCurrentUser()
+          .then((u) => {
+            if (u._id) {
+              var sso = this.$stateParams.sso;
+              var sig = this.$stateParams.sig;
+              this.Auth.discourseSso(u._id, {
+                  sso,
+                  sig
+                })
+                .then((rep) => {
+                  this.w.location.href = rep.url;
+                })
+            }
+          })
+      }
+        this.MSG = "Seul le forum est ouvert pour l'instant";
     }
-      this.MSG="";
-  }
 
-  addThing() {
-    if (this.newThing) {
-      this.$http.post('/api/things', {
-        name: this.newThing
-      });
-      this.newThing = '';
-    }
-  }
+    // addThing() {
+    //   if (this.newThing) {
+    //     this.$http.post('/api/things', {
+    //       name: this.newThing
+    //     });
+    //     this.newThing = '';
+    //   }
+    // }
+    //
+    // deleteThing(thing) {
+    //   this.$http.delete('/api/things/' + thing._id);
+    // }
 
-  deleteThing(thing) {
-    this.$http.delete('/api/things/' + thing._id);
-  }
-
-  Formlogin(form) {
-    this.submitted = true;
-    this.msg = "";
+    Formlogin(form) {
+      this.submitted = true;
+      this.msg = "";
 
 
 
-    if (form.$valid) {
-      this.Auth.login({
-          uid: this.user.uid,
-          password: this.user.password
-        })
-        .then((u) => {
-          if (this.$state.current.name == "discoursesso") {
-              this.MSG=" ***  REDIRECTION en cours .."
-            var sso = this.$stateParams.sso;
-            var sig = this.$stateParams.sig;
-            this.Auth.discourseSso(u._id, {
-                sso,
-                sig
-              })
-              .then((rep) => {
-                this.w.location.href = rep.url;
-              })
-          } else {
-            //Logged in , redirect to home
+      if (form.$valid) {
+        this.Auth.login({
+            uid: this.user.uid,
+            password: this.user.password
+          })
+          .then((u) => {
+            if (this.$state.current.name == "discoursesso") {
+              this.MSG = " ***  REDIRECTION en cours .."
+              var sso = this.$stateParams.sso;
+              var sig = this.$stateParams.sig;
+              this.Auth.discourseSso(u._id, {
+                  sso,
+                  sig
+                })
+                .then((rep) => {
+                  this.w.location.href = rep.url;
+                })
+            } else {
+              //Logged in , redirect to home
+              this.$state.go('main');
+            }
+          })
+          .catch(err => {
+            console.log(err);
+            this.msg = err.message;
             this.$state.go('main');
-          }
-        })
-        .catch(err => {
-          console.log(err);
-          this.msg = err.message;
-          this.$state.go('main');
-        });
+          });
+      }
     }
   }
-}
 
-export default angular.module('E-userApp.main', [uiRouter])
-  .config(routing)
-  .component('main', {
-    template: require('./main.html'),
-    controller: MainController
-  })
-  .name;
+  export default angular.module('E-userApp.main', [uiRouter])
+    .config(routing)
+    .component('main', {
+      template: require('./main.html'),
+      controller: MainController
+    })
+    .name;

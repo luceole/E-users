@@ -155,7 +155,6 @@ export function validEmail(req, res) {
  */
 export function show(req, res, next) {
   var userId = req.params.id;
-
   return User.findById(userId).exec()
     .then(user => {
       if (!user) {
