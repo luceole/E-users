@@ -90,6 +90,18 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
           })
         .$promise;
     },
+
+    updateUser: function (id, user, callback) {
+      return User.update({
+          id: id
+        }, user,
+        function (data) {
+          return safeCb(callback)(null, user);
+        },
+        function (err) {
+            return safeCb(callback)(null, user);
+        }).$promise;
+    },
     discourseSso(id, params, callback) {
       var sso=params.sso;
       var sig=params.sig;

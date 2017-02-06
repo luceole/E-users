@@ -58,16 +58,19 @@ export class DemandesComponent {
       console.log(" " + u.isactif + " " + u.uid)
       if (u.isactif) {
         u.isdemande = false;
-        this.User.update(u._id, u, () => {});
+
+        this.Auth.updateUser(u._id, u, () => {
+          this.Demande.get(this.pagination.current)
+            .$promise
+            .then(result => {
+              this.users = result.docs;
+              this.demandes = result;
+              this.totalUsers = result.total;
+            });
+        });
       }
     });
-    this.Demande.get(this.pagination.current)
-      .$promise
-      .then(result => {
-        this.users = result.docs;
-        this.demandes = result;
-        this.totalUsers = result.total;
-      });
+
   };
 
   checkAll() {
