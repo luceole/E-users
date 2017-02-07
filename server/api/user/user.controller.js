@@ -316,7 +316,7 @@ export function changePassword(req, res) {
         user.password = newPass;
         return user.save()
           .then(() => {
-            res.status(204).end();
+            return res.status(204).end();
           })
           .catch(validationError(res));
       } else {
@@ -338,7 +338,7 @@ export function me(req, res, next) {
       if (!user) {
         return res.status(401).end();
       }
-      res.json(user);
+      return res.json(user);
     })
     .catch(err => next(err));
 }

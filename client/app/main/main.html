@@ -69,7 +69,7 @@
       <div class="alert alert-warning" ng-if="!$ctrl.getCurrentUser().isactif"> Votre compte est en attende de validation par le modérateur. </div>
     </div>
     <div class="alert alert-success" ng-if="$ctrl.getCurrentUser().isactif">
-      <h3>Informations:</h3> {{$ctrl.MSG}}
+      <h3>Informations:</h3> {{$ctrl.MSG}}<br><a href="https://forum.libre-communaute.fr">https://forum.libre-communaute.fr</a>
       <span ng-if="getCurrentUser().memberOf.length > 0">Vous êtes inscrit dans les groupes : </span>
       <ul>
         <li ng-repeat=" grp in getCurrentUser().memberOf">

@@ -1,5 +1,8 @@
-# Conteneur E-User  en mode devel
-FROM node:4-onbuild
- RUN apt-get update && apt-get upgrade -y && apt-get install -y  vi
+# Conteneur E-User  en mode Production
+FROM generatorangularfullstack/angular-fullstack-dist 
 # replace this with your application's default port
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY .  /usr/src/app
+
 EXPOSE 8080
