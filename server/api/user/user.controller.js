@@ -218,6 +218,7 @@ exports.discourseSso = function(req, res) {
     delete req.body._id;
   }
   //  console.log("server discourseSso " + req.params.id);
+
   User.findById(req.params.id, function(err, user) {
     if (err) {
       return handleError(res, err);
@@ -225,6 +226,9 @@ exports.discourseSso = function(req, res) {
     if (!user) {
       //  console.log("user not find")
       return res.send(404);
+    }
+    if (!user.isactif) {
+    return res.send(404);
     }
 
     var sso = new discourse_sso(config.discourse_sso.secret); // Mettre en config :-)
