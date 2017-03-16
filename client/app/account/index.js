@@ -8,16 +8,17 @@ import routing from './account.routes';
 import login from './login';
 import settings from './settings';
 import signup from './signup';
+import lostpwd from './lostpwd';
 import oauthButtons from '../../components/oauth-buttons';
 
-export default angular.module('E-userApp.account', [uiRouter, login, settings, signup,
+export default angular.module('E-userApp.account', [uiRouter, login, settings, signup, lostpwd,
     oauthButtons
   ])
   .config(routing)
-  .run(function($rootScope) {
+  .run(function ($rootScope) {
     'ngInject';
 
-    $rootScope.$on('$stateChangeStart', function(event, next, nextParams, current) {
+    $rootScope.$on('$stateChangeStart', function (event, next, nextParams, current) {
       if (next.name === 'logout' && current && current.name && !current.authenticate) {
         next.referrer = current.name;
       }

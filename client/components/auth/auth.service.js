@@ -137,6 +137,16 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
         })
         .$promise;
     },
+    lostPassword(email, callback) {
+      return User.lostPassword({email
+        }, function() {
+          return safeCb(callback)(null);
+        }, function(err) {
+          return safeCb(callback)(err);
+        })
+        .$promise;
+    },
+
     /**
      * Gets all available info on a user
      *

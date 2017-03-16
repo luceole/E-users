@@ -7,33 +7,33 @@
       <img src="assets/images/LogoPLLPt.png " alt="Pôle Logiciels Libres">
     </div>
   </header>
-<div class="container">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="col-sm-2"></div>
-      <div class="col-sm-10">
-        <h3> Inscription </h3>
-        <form class="form" name="registerForm" ng-submit="vm.register(registerForm)" novalidate>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
+          <h3> Création de votre compte</h3>
+          <form class="form" name="registerForm" ng-submit="vm.register(registerForm)" novalidate>
 
-          <div class="form-group" ng-class="{ 'has-success': registerForm.name.$valid && vm.submitted,
+            <div class="form-group" ng-class="{ 'has-success': registerForm.name.$valid && vm.submitted,
                                     'has-error': registerForm.name.$invalid && vm.submitted }">
 
-            <input type="text" name="name" class="form-control" ng-model="vm.user.name" placeholder="Votre nom" required style="width:350px" />
-            <p class="help-block" ng-show="registerForm.name.$error.required && vm.submitted">
-              Nom Obligatoire
-            </p>
-      </div>
-      <div class="form-group" ng-class="{ 'has-success': registerForm.surname.$valid && vm.submitted,
+              <input type="text" name="name" class="form-control" ng-model="vm.user.name" placeholder="Votre nom" required style="width:350px" />
+              <p class="help-block" ng-show="registerForm.name.$error.required && vm.submitted">
+                Nom Obligatoire
+              </p>
+            </div>
+            <div class="form-group" ng-class="{ 'has-success': registerForm.surname.$valid && vm.submitted,
                                     'has-error': registerForm.surname.$invalid && vm.submitted }">
 
-        <input type="text" name="surname" class="form-control" ng-model="vm.user.surname" placeholder="Votre prénom" required style="width:350px" />
-        <p class="help-block" ng-show="registerForm.surname.$error.required && vm.submitted">
-          Prénom Obligatoire
-        </p>
-    </div>
-    <div class="form-group" ng-class="{ 'has-success': registerForm.structure.$valid && vm.submitted,
+              <input type="text" name="surname" class="form-control" ng-model="vm.user.surname" placeholder="Votre prénom" required style="width:350px" />
+              <p class="help-block" ng-show="registerForm.surname.$error.required && vm.submitted">
+                Prénom Obligatoire
+              </p>
+            </div>
+            <div class="form-group" ng-class="{ 'has-success': registerForm.structure.$valid && vm.submitted,
                                     'has-error': registerForm.structure.$invalid && vm.submitted }">
-      <span>Structure de rattachement :
+              <span>Structure de rattachement :
 <select ng-model="vm.user.structure" ng-init="vm.user.structure='Education'">
          <option value="Education"> Education </option>
          <option value="Ecologie"> Ecologie </option>
@@ -45,66 +45,67 @@
          <option value="Autre"> Autre </option>
 </select>
 </span>
-      <p class="help-block" ng-show="registerForm.structure.$error.required && vm.submitted">
-        Structure de rattachement Obligatoire
-      </p>
-  </div>
+              <p class="help-block" ng-show="registerForm.structure.$error.required && vm.submitted">
+                Structure de rattachement Obligatoire
+              </p>
+            </div>
 
-  <div class="form-group" ng-class="{ 'has-success': registerForm.email.$valid && vm.submitted,
+            <div class="form-group" ng-class="{ 'has-success': registerForm.email.$valid && vm.submitted,
                                     'has-error': registerForm.email.$invalid && vm.submitted }">
-    <input type="email" name="email" class="form-control" ng-model="vm.user.email" placeholder="Votre courriel" required ng-focus="vm.myReset(registerForm,'email')" ; mongoose-error style="width:350px" />
-    <p class="help-block" ng-show="registerForm.email.$error.email && vm.submitted">
-      Adresse electronique invalide.
-    </p>
-    <p class="help-block" ng-show="registerForm.email.$error.required && vm.submitted">
-      Quel est votre adresse electronique?
-    </p>
-    <p class="help-block" ng-show="registerForm.email.$error.mongoose">
-      {{ vm.errors.email }}
-    </p>
-</div>
-<div class="form-group" ng-class="{ 'has-success': registerForm.uid.$valid && vm.submitted,
+              <input type="email" name="email" class="form-control" ng-model="vm.user.email" placeholder="Votre courriel" required ng-focus="vm.myReset(registerForm,'email')" ; mongoose-error style="width:350px" />
+              <p class="help-block" ng-show="registerForm.email.$error.email && vm.submitted">
+                Adresse electronique invalide.
+              </p>
+              <p class="help-block" ng-show="registerForm.email.$error.required && vm.submitted">
+                Quel est votre adresse electronique?
+              </p>
+              <p class="help-block" ng-show="registerForm.email.$error.mongoose">
+                {{ vm.errors.email }}
+              </p>
+            </div>
+            <div class="form-group" ng-class="{ 'has-success': registerForm.uid.$valid && vm.submitted,
                                     'has-error': registerForm.uid.$invalid && vm.submitted }">
 
-  <input type="uid" name="uid" class="form-control" ng-model="vm.user.uid" ng-focus="vm.myInit(registerForm,'uid')" ; placeholder="Votre identifiant de connexion (courriel ou autre)" required mongoose-error style="width:350px" />
-  <p class="help-block" ng-show="registerForm.uid.$error.uid && vm.submitted">
-    Identifiant non valide.
-  </p>
-  <p class="help-block" ng-show="registerForm.email.$error.required && vm.submitted">
-    Choisissez votre login (courriel ou autre).
-  </p>
-  <p class="help-block" ng-show="registerForm.uid.$error.mongoose">
-    {{ vm.errors.uid }}
-  </p>
+              <input type="uid" name="uid" class="form-control" ng-model="vm.user.uid" ng-focus="vm.myInit(registerForm,'uid')" ; placeholder="Votre identifiant de connexion (courriel ou autre)" required mongoose-error style="width:350px" />
+              <p class="help-block" ng-show="registerForm.uid.$error.uid && vm.submitted">
+                Identifiant non valide.
+              </p>
+              <p class="help-block" ng-show="registerForm.email.$error.required && vm.submitted">
+                Choisissez votre login (courriel ou autre).
+              </p>
+              <p class="help-block" ng-show="registerForm.uid.$error.mongoose">
+                {{ vm.errors.uid }}
+              </p>
 
-  </div>
+            </div>
 
-  <div class="form-group">
-    <input type="password" id="Password" name="Password" class="form-control" ng-model="vm.user.password" placeholder="Mot de Passe" ng-minlength="8" required style="width:350px" />
-    <p class="text-danger" ng-show="(registerForm.Password.$error.minlength ||registerForm.Password.$error.required) && (registerForm.Password.$dirty || vm.submitted)">
-      8 Charactères Minimum
-    </p>
-    <p class="help-block" ng-show="registerForm.Password.$error.mongoose">
-      {{ vm.errors.password }}
-    </p><br>
-    <div>
-      <div class="form-group" ng-class="{ 'has-success': registerForm.confirmPassword.$valid && vm.submitted,
+            <div class="form-group">
+              <input type="password" id="Password" name="Password" class="form-control" ng-model="vm.user.password" placeholder="Mot de Passe" ng-minlength="8" required style="width:350px" />
+              <p class="text-danger" ng-show="(registerForm.Password.$error.minlength ||registerForm.Password.$error.required) && (registerForm.Password.$dirty || vm.submitted)">
+                8 Charactères Minimum
+              </p>
+              <p class="help-block" ng-show="registerForm.Password.$error.mongoose">
+                {{ vm.errors.password }}
+              </p>
+              <br>
+              <div>
+                <div class="form-group" ng-class="{ 'has-success': registerForm.confirmPassword.$valid && vm.submitted,
                                             'has-error': registerForm.confirmPassword.$invalid && vm.submitted }">
-        <input type="password" name="confirmPassword" class="form-control" ng-model="vm.user.confirmPassword" placeholder="Confirmez le mot de Passe" match="vm.user.password" required style="width:350px" />
-        <p class="text-danger" ng-show="registerForm.confirmPassword.$error.match">
-          Mot de passe différent
-        </p>
-    </div>
-    &nbsp
-    <p>
-      <button class="btn  btn-default btn-lg btn-login" type="submit">
-            Inscription
-          </button>
+                  <input type="password" name="confirmPassword" class="form-control" ng-model="vm.user.confirmPassword" placeholder="Confirmez le mot de Passe" match="vm.user.password" required style="width:350px" />
+                  <p class="text-danger" ng-show="registerForm.confirmPassword.$error.match">
+                    Mot de passe différent
+                  </p>
+                </div>
+                &nbsp
+                <p>
+                  <button class="btn  btn-default btn-lg btn-login" type="submit">
+                    Inscription
+                  </button>
 
-  </div>
-  </form>
-  </div>
-  </div>
-  </div>
-  </div>
+              </div>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>

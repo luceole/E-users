@@ -9,6 +9,12 @@ import randtoken from 'rand-token';
 import discourse_sso from 'discourse-sso';
 
 var _ = require('lodash');
+// var server = email.server.connect({
+//   user: config.mail.user,
+//   password: config.mail.password,
+//   host: config.mail.host,
+//   ssl: config.mail.ssl
+// });
 
 
 
@@ -47,7 +53,26 @@ function handleEntityNotFound(res) {
   };
 }
 
+function sendM(user) {
 
+  var server = email.server.connect({
+    user: config.mail.user,
+    password: config.mail.password,
+    host: config.mail.host,
+    ssl: config.mail.ssl
+  });
+
+
+  server.send({
+    text: "Bonjour, Pour changer votre mot de passe  cliquez sur le lien : " + config.mail.url + "/api/users/initpwd/" + user.pwdToken,
+    from: config.mail.sender,
+    to: user.email,
+    subject: "Perte de votre mot de passe"
+  }, function(err, message) {
+    console.log(err || message);
+  });
+
+}
 /**
  * Get list of users
  * restriction: 'admin'
@@ -99,16 +124,14 @@ export function create(req, res) {
   /**
    * Envoie du Mail de confirmation
    */
-
   var server = email.server.connect({
     user: config.mail.user,
     password: config.mail.password,
     host: config.mail.host,
     ssl: config.mail.ssl
   });
-
   server.send({
-    text: "Bonjour, Ceci est un courriel de confirmation d'inscription; Pour activer votre compte cliquez sur le lien : " + config.mail.url + newUser.urlToken,
+    text: "Bonjour, Ceci est un courriel de confirmation d'inscription; Pour activer votre compte cliquez sur le lien : " + config.mail.url + "/api/users/validate/" + newUser.urlToken,
     from: config.mail.sender,
     to: newUser.email,
     subject: "Votre inscription"
@@ -144,6 +167,43 @@ export function validEmail(req, res) {
       res.set('Content-Type', 'text/html');
       res.send(new Buffer('<p>hello ' + user.surname + '. <br>Votre mail est validé.<br></p> <a href="' + config.mail.site + '">Connexion</a>'));
     })
+  });
+}
+
+/**
+ * Lost Password
+ **/
+export function lostPassword(req, res) {
+
+  var email = req.query.email;
+  console.log("Lost PWD =>" + email);
+  return User.findOne({
+      email: email
+    }).exec()
+    .then(user => {
+      if (!user) return res.sendStatus(404);
+
+      user.pwdToken = randtoken.generate(16)
+
+      user.save()
+        .then(user => {
+        sendM(user);
+        return res.sendStatus(204);
+        })
+        .catch(validationError(res));
+    })
+}
+
+
+export function initPassword(req, res) {
+  //  console.log(req.params);
+  var pwdToken = req.params[0];
+  User.findOne({
+    pwdToken: pwdToken
+  }, '-salt -hashedPassword', function(err, user) {
+    if (!user) return res.send(404);
+    console.log("ReInit PASSWD")
+
   });
 
 
@@ -228,7 +288,7 @@ exports.discourseSso = function(req, res) {
       return res.send(404);
     }
     if (!user.isactif) {
-    return res.send(404);
+      return res.send(404);
     }
 
     var sso = new discourse_sso(config.discourse_sso.secret); // Mettre en config :-)

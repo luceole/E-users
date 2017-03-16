@@ -1,12 +1,18 @@
 'use strict';
 
-import {Router} from 'express';
+import {
+  Router
+}
+from 'express';
 import * as controller from './user.controller';
 import * as auth from '../../auth/auth.service';
 
 var router = new Router();
 
-router.get('/validate/*',controller.validEmail);
+router.get('/validate/*', controller.validEmail);
+router.get('/initpwd/*', controller.initPassword);
+router.get('/lostpwd/', controller.lostPassword);
+//router.get('//*', controller.validEmail);
 router.get('/', auth.hasRole('admin'), controller.index);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.put('/:id/update', auth.hasRole('admin'), controller.update);

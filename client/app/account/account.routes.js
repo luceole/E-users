@@ -27,21 +27,27 @@ export default function routes($stateProvider) {
       controller: 'SignupController',
       controllerAs: 'vm'
     })
+    .state('lostpwd', {
+      url: '/lostpwd',
+      template: require('./lostpwd/lostpwd.html'),
+      controller: 'LostpwdController',
+      controllerAs: 'vm'
+    })
     .state('settings', {
       url: '/settings',
       template: require('./settings/settings.html'),
       controller: 'SettingsController',
       controllerAs: 'vm',
       authenticate: true
-    // })
-    // .state('validate', {
-    //   url: '/validate',
-    //   template: '',
-    //   controller($state, User) {
-    //     'ngInject';
-    //     var referrer = $state.params.referrer || $state.current.referrer || 'main';
-    //     User.validate();
-    //     $state.go('signup');
-    //   }
+        // })
+        // .state('validate', {
+        //   url: '/validate',
+        //   template: '',
+        //   controller($state, User) {
+        //     'ngInject';
+        //     var referrer = $state.params.referrer || $state.current.referrer || 'main';
+        //     User.validate();
+        //     $state.go('signup');
+        //   }
     });
 }

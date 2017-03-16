@@ -1,8 +1,10 @@
 # Conteneur E-User  en mode Production
-FROM generatorangularfullstack/angular-fullstack-dist 
-# replace this with your application's default port
+FROM mhart/alpine-node:4
+RUN apk add --no-cache make gcc g++  python
+RUN npm install -g node-gyp
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY .  /usr/src/app
-
-EXPOSE 8080
+ENV NODE_ENV production
+RUN npm install
+CMD [ "npm", "start" ]

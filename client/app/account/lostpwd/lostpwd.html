@@ -1,0 +1,42 @@
+<div ng-hide="$ctrl.isLoggedIn()">
+  <header class="hero-unit" id="banner">
+    <div class="container">
+      <h1>Libre Communauté </h1>
+      <p class="lead">ECO-système Libre de l’Éducation</p>
+      {{banTitre}}
+      <img src="assets/images/LogoPLLPt.png " alt="Pôle Logiciels Libres">
+    </div>
+  </header>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
+          <h3> Reinitialisation de votre mot de passe </h3>
+          <form class="form" name="lostpwdForm" ng-submit="vm.register(lostpwdForm)" novalidate>
+            <div class="form-group" ng-class="{ 'has-success': lostpwdForm.email.$valid && vm.submitted,
+                                    'has-error': registerForm.email.$invalid  && vm.submitted}">
+              <input type="email" name="email" class="form-control" ng-model="vm.email" placeholder="Votre courriel" required; mongoose-error style="width:350px" />
+              <p class="help-block" ng-show="lostpwdForm.email.$error.email && vm.submitted">
+                Adresse electronique invalide.
+              </p>
+              <p class="help-block" ng-show="lostpwdForm.email.$error.required && vm.submitted">
+                Quel est votre adresse electronique?
+              </p>
+              <p class="help-block" ng-show="lostpwdForm.email.$error.mongoose">
+                {{ vm.errors.email }}
+              </p>
+
+          &nbsp
+            <p>
+              <button class="btn  btn-default btn-lg btn-login" type="submit">
+                Envoyez
+              </button>
+
+        </form>
+          <br><p>    </div>
+          <span class="alert alert-info" ng-show="vm.submitted ">{{vm.message}}</span>
+
+    </div>
+  </div>
+</div>

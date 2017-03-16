@@ -36,6 +36,12 @@ export function UserResource($resource) {
         controller: 'update'
       }
     },
+    lostPassword: {
+      method: 'GET',
+      params: {
+        controller: 'lostpwd'
+      }
+    },
     get: {
       method: 'GET',
       params: {

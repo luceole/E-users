@@ -35,6 +35,7 @@ var UserSchema = new Schema({
   isactif: Boolean,
   isdemande: Boolean,
   hashedPassword: String,
+  pwdToken: String,
   urlToken: String,
   mailValid: Boolean,
   firstdate: Date,

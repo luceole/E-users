@@ -46,9 +46,8 @@
         <h3>Informations:</h3> Pour profiter des services en ligne vous devez avoir un compte.
         <br>
         <p>
-          Tout le monde peut créer un compte, mais pour éviter le spam les demandes sont soumises à modération.
-          <br>
-          {{$ctrl.MSG}}
+          Pour éviter le spam les demandes d'inscription sont soumises à modération.
+          <br> {{$ctrl.MSG}}
           <br>
           <br>
           <span class="alert alert-info"><a href="/signup"> Pour créer votre compte : Inscrivez vous.</a></span>
@@ -63,13 +62,15 @@
       <p>Bonjour {{ $ctrl.getCurrentUser().surname }} {{ $ctrl.getCurrentUser().name }}</p>
       <div class="alert alert-warning" ng-if="!$ctrl.getCurrentUser().mailValid">
         Votre adresse electronique <b> {{$ctrl.getCurrentUser().email}} </b> n'a pas encore été confirmée.
-        <br>Un message de confirmation vous a été envoyé.<br>Consultez votre boite au lettre.
+        <br>Un message de confirmation vous a été envoyé.
+        <br>Consultez votre boite au lettre.
         <br> La connexion à ce service ne sera possible qu'après validation de votre courriel.
       </div>
       <div class="alert alert-warning" ng-if="!$ctrl.getCurrentUser().isactif"> Votre compte est en attende de validation par le modérateur. </div>
     </div>
     <div class="alert alert-success" ng-if="$ctrl.getCurrentUser().isactif">
-      <h3>Informations:</h3> {{$ctrl.MSG}}<br><a href="https://forum.libre-communaute.fr">https://forum.libre-communaute.fr</a>
+      <h3>Informations:</h3> {{$ctrl.MSG}}
+      <br><a href="https://forum.libre-communaute.fr">https://forum.libre-communaute.fr</a>
       <span ng-if="getCurrentUser().memberOf.length > 0">Vous êtes inscrit dans les groupes : </span>
       <ul>
         <li ng-repeat=" grp in getCurrentUser().memberOf">
@@ -80,7 +81,7 @@
         </li>
       </ul>
     </div>
-    <div class="alert alert-warning" ng-if="vm.getCurrentUser().isactif"> Votre compte est en attende de validation par le modérateur </div>
+    <div class="alert alert-warning" ng-if="vm.getCurrentUser().isactif"> Votre compte est en attente de validation par le modérateur </div>
   </div>
 </div>
 
@@ -95,7 +96,7 @@
       <div class="modal-footer">
         <div class="alert alert-success" align="center" ng-if="msg"> {{msg}}
           <button class="glyphicon glyphicon-save" ng-click="save()">
-            </button>
+          </button>
         </div>
       </div>
     </div>
