@@ -9,9 +9,10 @@ import login from './login';
 import settings from './settings';
 import signup from './signup';
 import lostpwd from './lostpwd';
+import resetpwd from './resetpwd';
 import oauthButtons from '../../components/oauth-buttons';
 
-export default angular.module('E-userApp.account', [uiRouter, login, settings, signup, lostpwd,
+export default angular.module('E-userApp.account', [uiRouter, login, settings, signup, lostpwd,resetpwd,
     oauthButtons
   ])
   .config(routing)

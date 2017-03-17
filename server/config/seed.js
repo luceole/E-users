@@ -15,7 +15,7 @@ if (config.env !== 'production') {
           name: 'Test',
           uid: 'test',
           surname: 'User',
-          email: 'test@test.com',
+          email: 'luc.bourdot@ac-dijon.fr',
           urlToken: 'token',
           mailValid: true,
           structure: 'Education',

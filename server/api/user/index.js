@@ -10,7 +10,7 @@ import * as auth from '../../auth/auth.service';
 var router = new Router();
 
 router.get('/validate/*', controller.validEmail);
-router.get('/initpwd/*', controller.initPassword);
+router.put('/resetpwd/', controller.resetPassword);
 router.get('/lostpwd/', controller.lostPassword);
 //router.get('//*', controller.validEmail);
 router.get('/', auth.hasRole('admin'), controller.index);

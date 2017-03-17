@@ -27,7 +27,7 @@ export function UserResource($resource) {
     validate: {
       method: 'get',
       params: {
-      //  controller: 'validate'
+        //  controller: 'validate'
       }
     },
     update: {
@@ -40,6 +40,12 @@ export function UserResource($resource) {
       method: 'GET',
       params: {
         controller: 'lostpwd'
+      }
+    },
+    changeResetedPassword: {
+      method: 'PUT',
+      params: {
+        controller: 'resetpwd'
       }
     },
     get: {

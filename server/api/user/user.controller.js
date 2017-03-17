@@ -62,9 +62,8 @@ function sendM(user) {
     ssl: config.mail.ssl
   });
 
-
   server.send({
-    text: "Bonjour, Pour changer votre mot de passe  cliquez sur le lien : " + config.mail.url + "/api/users/initpwd/" + user.pwdToken,
+    text: "Bonjour, Pour changer votre mot de passe  cliquez sur le lien : " + config.mail.site + "/resetpwd/" + user.pwdToken,
     from: config.mail.sender,
     to: user.email,
     subject: "Perte de votre mot de passe"
@@ -177,36 +176,52 @@ export function lostPassword(req, res) {
 
   var email = req.query.email;
   console.log("Lost PWD =>" + email);
+  if (!email) return res.sendStatus(404);
   return User.findOne({
       email: email
     }).exec()
     .then(user => {
       if (!user) return res.sendStatus(404);
-
       user.pwdToken = randtoken.generate(16)
-
+      console.log(user)
       user.save()
         .then(user => {
-        sendM(user);
-        return res.sendStatus(204);
+          sendM(user);
+          return res.sendStatus(204);
         })
         .catch(validationError(res));
     })
 }
 
 
-export function initPassword(req, res) {
-  //  console.log(req.params);
-  var pwdToken = req.params[0];
+export function resetPassword(req, res) {
+
+  var pwdToken = req.body.pwdToken;
+  console.log(pwdToken)
+  if (!pwdToken) return res.sendStatus(404);
+  var newPass = String(req.body.newPassword);
   User.findOne({
-    pwdToken: pwdToken
-  }, '-salt -hashedPassword', function(err, user) {
-    if (!user) return res.send(404);
-    console.log("ReInit PASSWD")
-
-  });
-
-
+      pwdToken: pwdToken
+    }).exec()
+    .then(user => {
+      if (!user) return res.sendStatus(404);
+      console.log("ReInit PASSWD" + user.name)
+      user.password = newPass;
+      console.log("ReInit PASSWD" + user.password)
+      user.pwdToken = '';
+      return user.save()
+        .then(() => {
+          var token = jwt.sign({
+            _id: user._id
+          }, config.secrets.session, {
+            expiresIn: 60 * 60 * 5
+          });
+          res.json({
+            token
+          });
+          return res.status(200).end();
+        })
+    });
 }
 
 
@@ -266,8 +281,6 @@ exports.update = function(req, res) {
         })
         .catch(validationError(res));
     });
-
-
 }
 
 

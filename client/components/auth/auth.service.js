@@ -86,32 +86,36 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
             return safeCb(callback)(null, user);
           },
           function(err) {
-          return safeCb(callback)(err);
+            return safeCb(callback)(err);
           })
         .$promise;
     },
 
-    updateUser: function (id, user, callback) {
+    updateUser: function(id, user, callback) {
       return User.update({
           id: id
         }, user,
-        function (data) {
+        function(data) {
           return safeCb(callback)(null, user);
         },
-        function (err) {
-            return safeCb(callback)(null, user);
+        function(err) {
+          return safeCb(callback)(null, user);
         }).$promise;
     },
     discourseSso(id, params, callback) {
-      var sso=params.sso;
-      var sig=params.sig;
+      var sso = params.sso;
+      var sig = params.sig;
       return User.discourseSso({
             id: id,
-          }, {sso,sig}, function(data) {
-             console.log("data "+data)
-            return safeCb(callback)(null,data);
+          }, {
+            sso,
+            sig
+          }, function(data) {
+            console.log("data " + data)
+            return safeCb(callback)(null, data);
           },
-          function(err) {   console.log(err)
+          function(err) {
+            console.log(err)
             return safeCb(callback)(err);
           })
         .$promise;
@@ -138,7 +142,8 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
         .$promise;
     },
     lostPassword(email, callback) {
-      return User.lostPassword({email
+      return User.lostPassword({
+          email
         }, function() {
           return safeCb(callback)(null);
         }, function(err) {
@@ -146,6 +151,22 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
         })
         .$promise;
     },
+
+    ResetPassword: function(pwdToken, newPassword, callback) {
+      return User.changeResetedPassword({
+        pwdToken: pwdToken,
+        newPassword: newPassword
+      }, function(data) {
+        console.log('data: ');
+        console.log(data);
+        $cookies.put('token', data.token);
+        currentUser = User.get();
+        return safeCb(callback)(null);
+      }, function(err) {
+        return safeCb(callback)(null);
+      }).$promise;
+    },
+
 
     /**
      * Gets all available info on a user

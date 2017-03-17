@@ -11,5 +11,5 @@ var router = express.Router();
 
 router.use('/local', require('./local').default);
 router.use('/google', require('./google').default);
-
+//router.use('/mytoken', require('./mytoken').default);
 export default router;
