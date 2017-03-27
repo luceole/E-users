@@ -130,7 +130,7 @@ export function create(req, res) {
     ssl: config.mail.ssl
   });
   server.send({
-    text: "Bonjour, Ceci est un courriel de confirmation d'inscription; Pour activer votre compte cliquez sur le lien : " + config.mail.url + "/api/users/validate/" + newUser.urlToken,
+    text: "Bonjour, Ceci est un courriel de confirmation d'inscription; Pour activer votre compte cliquez sur le lien : " + config.mail.url  + newUser.urlToken,
     from: config.mail.sender,
     to: newUser.email,
     subject: "Votre inscription"
