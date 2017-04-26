@@ -2,7 +2,7 @@
 
 class _User {}
 
-export function AuthService($location, $http, $cookies, $q, appConfig, Util, User) {
+export function AuthService($window, $location, $http, $cookies, $q, appConfig, Util, User) {
   'ngInject';
 
   var safeCb = Util.safeCb;
@@ -17,7 +17,7 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
     return userRoles.indexOf(userRole) >= userRoles.indexOf(role);
   };
 
-  if ($cookies.get('token') && $location.path() !== '/logout') {
+  if($cookies.get('token') && $location.path() !== '/logout') {
     currentUser = User.get();
   }
 
@@ -34,9 +34,9 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
       password
     }, callback) {
       return $http.post('/auth/local', {
-          uid,
-          password
-        })
+        uid,
+        password
+      })
         .then(res => {
           $cookies.put('token', res.data.token);
           currentUser = User.get();
@@ -59,6 +59,7 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
     logout() {
       $cookies.remove('token');
       currentUser = new _User();
+      $window.location = '/logout';
     },
 
     /**
@@ -70,31 +71,31 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
      */
     createUser(user, callback) {
       return User.save(user, function(data) {
-          $cookies.put('token', data.token);
-          currentUser = User.get();
-          return safeCb(callback)(null, user);
-        }, function(err) {
-          Auth.logout();
-          return safeCb(callback)(err);
-        })
+        $cookies.put('token', data.token);
+        currentUser = User.get();
+        return safeCb(callback)(null, user);
+      }, function(err) {
+        Auth.logout();
+        return safeCb(callback)(err);
+      })
         .$promise;
     },
     updateMe(id, user, callback) {
       return User.updateMe({
-            id: id
-          }, user, function(data) {
-            return safeCb(callback)(null, user);
-          },
+        id
+      }, user, function(data) {
+        return safeCb(callback)(null, user);
+      },
           function(err) {
             return safeCb(callback)(err);
           })
         .$promise;
     },
 
-    updateUser: function(id, user, callback) {
+    updateUser(id, user, callback) {
       return User.update({
-          id: id
-        }, user,
+        id
+      }, user,
         function(data) {
           return safeCb(callback)(null, user);
         },
@@ -106,16 +107,16 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
       var sso = params.sso;
       var sig = params.sig;
       return User.discourseSso({
-            id: id,
-          }, {
-            sso,
-            sig
-          }, function(data) {
-            console.log("data " + data)
-            return safeCb(callback)(null, data);
-          },
+        id,
+      }, {
+        sso,
+        sig
+      }, function(data) {
+        console.log('data ' + data);
+        return safeCb(callback)(null, data);
+      },
           function(err) {
-            console.log(err)
+            console.log(err);
             return safeCb(callback)(err);
           })
         .$promise;
@@ -130,32 +131,32 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
      */
     changePassword(oldPassword, newPassword, callback) {
       return User.changePassword({
-          id: currentUser._id
-        }, {
-          oldPassword,
-          newPassword
-        }, function() {
-          return safeCb(callback)(null);
-        }, function(err) {
-          return safeCb(callback)(err);
-        })
+        id: currentUser._id
+      }, {
+        oldPassword,
+        newPassword
+      }, function() {
+        return safeCb(callback)(null);
+      }, function(err) {
+        return safeCb(callback)(err);
+      })
         .$promise;
     },
     lostPassword(email, callback) {
       return User.lostPassword({
-          email
-        }, function() {
-          return safeCb(callback)(null);
-        }, function(err) {
-          return safeCb(callback)(err);
-        })
+        email
+      }, function() {
+        return safeCb(callback)(null);
+      }, function(err) {
+        return safeCb(callback)(err);
+      })
         .$promise;
     },
 
-    ResetPassword: function(pwdToken, newPassword, callback) {
+    ResetPassword(pwdToken, newPassword, callback) {
       return User.changeResetedPassword({
-        pwdToken: pwdToken,
-        newPassword: newPassword
+        pwdToken,
+        newPassword
       }, function(data) {
         console.log('data: ');
         console.log(data);
@@ -267,7 +268,7 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
     isAdminSync() {
       return Auth.hasRoleSync('admin');
     },
-    isActif: function() {
+    isActif() {
       return currentUser.isactif;
     },
 

@@ -13,7 +13,18 @@ export default function(app) {
   app.use('/api/things', require('./api/thing'));
   app.use('/api/users', require('./api/user'));
   //  app.use('/api/demandes', require('./api/demande'));
-  app.use('/auth', require('./auth').default);
+
+
+  app.get('/logout', (req, res, next) => {
+    req.url = `/auth/${req.session.authProvider}/logout`;
+    return next();
+  });
+
+  app.use('/auth', (req, res, next) => {
+    // Save the authentication provider to permit future logout forwarding
+    req.session.authProvider = req.path.split('/')[1];
+    return next();
+  }, require('./auth').default);
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')
