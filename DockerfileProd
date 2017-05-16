@@ -1,10 +1,10 @@
 # Conteneur E-User  en mode Production
-FROM mhart/alpine-node:4
-RUN apk add --no-cache make gcc g++  python
-RUN npm install -g node-gyp
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-COPY .  /usr/src/app
+# Le repertoire "dist" doit être  créé avant par : gulp build 
+FROM node:6
+RUN mkdir -p /usr/dist
+WORKDIR /usr/dist
+COPY ./dist   .
+RUN yarn install
 ENV NODE_ENV production
-RUN npm install
-CMD [ "npm", "start" ]
+CMD [ "node", "server" ]
+#CMD [ "bash" ]
