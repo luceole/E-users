@@ -6,5 +6,6 @@ WORKDIR /usr/dist
 COPY ./dist   .
 RUN yarn install
 ENV NODE_ENV production
+ENV DOMAIN  http://localhost:8080 
 CMD [ "node", "server" ]
 #CMD [ "bash" ]

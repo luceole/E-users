@@ -19,7 +19,7 @@ module.exports = {
   mail: {
   user: 'login SMTP',
   password : 'Password SMTP',
-  sender: 'admin@votredomaine" ,
+  sender: 'admin@mydomaine" ,
   host: 'Host SMTP',
   ssl: true,
   site: 'http://localhost:3000',
@@ -28,7 +28,7 @@ module.exports = {
 
   discourse_sso : {
   secret: '1234567890',
-  url: 'http://lab13-eole.ac-dijon.fr/session/sso_login?'
+  url: 'http://mydiscourse.domain.lan/session/sso_login?'
   }
 
 };
