@@ -2,7 +2,7 @@
   <header class="hero-unit" id="banner">
     <div class="container">
       <h1>Libre Communauté </h1>
-      <p class="lead">ECO-système Libre de l’Éducation</p>
+      <p class="lead">ECO-système Libre </p>
       {{banTitre}}
       <img src="assets/images/LogoPLLPt.png " alt="Pôle Logiciels Libres">
     </div>
@@ -36,12 +36,12 @@
               <span>Structure de rattachement :
 <select ng-model="vm.user.structure" ng-init="vm.user.structure='Education'">
          <option value="Education"> Education </option>
+          <option value="Collectivité"> Collectivité térritoriale</option>
          <option value="Ecologie"> Ecologie </option>
          <option value="Affaires Etrangères"> Affaires Etrangères </option>
          <option value="Affaires Sociales"> Affaires Sociales </option>
          <option value="Intérieur"> Intérieur </option>
          <option value="Finance"> Finances </option>
-         <option value="Collectivité"> Collectivité </option>
          <option value="Autre"> Autre </option>
 </select>
 </span>
@@ -52,7 +52,7 @@
 
             <div class="form-group" ng-class="{ 'has-success': registerForm.email.$valid && vm.submitted,
                                     'has-error': registerForm.email.$invalid && vm.submitted }">
-              <input type="email" name="email" class="form-control" ng-model="vm.user.email" placeholder="Votre courriel" required ng-focus="vm.myReset(registerForm,'email')" ; mongoose-error style="width:350px" />
+              <input type="email" name="email" class="form-control" ng-model="vm.user.email" placeholder="Votre courriel professionel" required ng-focus="vm.myReset(registerForm,'email')" ; mongoose-error style="width:350px" />
               <p class="help-block" ng-show="registerForm.email.$error.email && vm.submitted">
                 Adresse electronique invalide.
               </p>

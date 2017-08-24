@@ -1,14 +1,12 @@
 <div class="container">
-  <p>Gestion des utilisateurs (acces réservé admin)</p>
+	<p>Gestion des utilisateurs ({{usersCtrl.users.length}} inscrits)</p>
   <form>
     <input ng-model="usersCtrl.search.$" placeholder="Recherche globale">
     <input ng-model="usersCtrl.search.email" placeholder="Recherche sur le Mel"> Utilisateurs Non Actif
     <input type="checkbox" ng-model="usersCtrl.search.isactif" ng-true-value=false ng-false-value="">
   </form>
   <p class="text-warning" ng-if="usersCtrl.users.length==0"> Chargement ...</p>
-
   <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" ></dir-pagination-controls>
-  <br>
   <table class="table table-striped ">
     <tr dir-paginate="user in usersCtrl.users | orderBy:'name' | filter:usersCtrl.search:strict | itemsPerPage :'12' ">
       <td>

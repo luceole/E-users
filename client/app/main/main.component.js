@@ -16,7 +16,8 @@ export class MainController {
     this.getCurrentUser = Auth.getCurrentUserSync;
     this.$state = $state;
     this.$stateParams = $stateParams;
-    this.MSG = ""
+    this.MSG = "";
+    this.OauthActif=false;
     this.sso = (this.$state.current.name == "discoursesso");
 
     //   $scope.$on('$destroy', function() {
@@ -48,7 +49,7 @@ export class MainController {
             }
           })
       }
-        this.MSG = "Seul le forum est ouvert pour l'instant";
+        this.MSG = "";
     }
 
     // addThing() {

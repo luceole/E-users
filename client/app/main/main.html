@@ -10,7 +10,7 @@
 </div>
 
 <div ng-show="$ctrl.sso" class="alert alert-info">
-  <center> Authentification SSO pour le forum </center>
+  <center> Authentification SSO en cours ...</center>
 </div>
 <div class="container" ng-if="!$ctrl.isLoggedIn()">
   <div class="row">
@@ -55,7 +55,7 @@
               <span class="alert alert-info"><a href="/signup"> Pour créer votre compte : Inscrivez vous.</a></span>
             </p>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6" ng-if="$ctrl.OauthActif" >
             <h3>Se connecter avec</h3>
             <a href="/auth/openid" target="_self" class="btn btn-default"><img src="assets/images/openid-wordmark.svg" style="max-width:150px"/></a>
           </div>

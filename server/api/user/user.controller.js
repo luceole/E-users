@@ -162,6 +162,7 @@ export function validEmail(req, res) {
   }, '-salt -hashedPassword', function(err, user) {
     if (!user) return res.send(404);
     user.mailValid = true;
+    // Ajouter Validation automatique si Domaine mail dans la liste blanche
     user.save(function(err) {
       res.set('Content-Type', 'text/html');
       res.send(new Buffer('<p>hello ' + user.surname + '. <br>Votre mail est validé.<br></p> <a href="' + config.mail.site + '">Connexion</a>'));
