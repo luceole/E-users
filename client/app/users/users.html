@@ -30,12 +30,11 @@
         </span>
       </td>
       <td>
-        {{user.uid}}
-      </td>
-      <td>
         <strong>{{user.name}}</strong>
         <strong>{{user.surname}}</strong>
       </td>
+      <td> {{user.uid}} </td>
+      <td> {{user.creationDate | date: "dd/MM/yyyy"}} </td>
       <td>
         <strong> {{user.structure}} </strong>
       </td>

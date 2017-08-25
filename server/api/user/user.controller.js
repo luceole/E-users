@@ -129,14 +129,6 @@ export function create(req, res) {
     host: config.mail.host,
     ssl: config.mail.ssl
   });
-  server.send({
-    text: "Bonjour, Ceci est un courriel de confirmation d'inscription; Pour activer votre compte cliquez sur le lien : " + config.mail.url  + newUser.urlToken,
-    from: config.mail.sender,
-    to: newUser.email,
-    subject: "Votre inscription"
-  }, function(err, message) {
-    console.log(err || message);
-  });
 
   newUser.save()
     .then(function(user) {
@@ -148,6 +140,15 @@ export function create(req, res) {
       res.json({
         token
       });
+	 server.send({
+    	text: "Bonjour, Ceci est un courriel de confirmation d'inscription; Pour activer votre compte cliquez sur le lien : " + config.mail.url  + newUser.urlToken,
+    	from: config.mail.sender,
+        to: newUser.email,
+        subject: "Votre inscription"
+  }, function(err, message) {
+    console.log(err || message);
+  });
+
     })
     .catch(validationError(res));
 }
@@ -162,7 +163,15 @@ export function validEmail(req, res) {
   }, '-salt -hashedPassword', function(err, user) {
     if (!user) return res.send(404);
     user.mailValid = true;
-    // Ajouter Validation automatique si Domaine mail dans la liste blanche
+    // Validation automatique si Domaine mail dans la liste blanche
+    var domaineMail=user.email.split('@')[1];
+    var whiteDomain = /^ac-[a-z\-]*.fr/;
+    console.log(whiteDomain.test(domaineMail) );
+    if (whiteDomain.test(domaineMail)) 
+{
+user.isdemande=false;
+user.isactif=true;
+}
     user.save(function(err) {
       res.set('Content-Type', 'text/html');
       res.send(new Buffer('<p>hello ' + user.surname + '. <br>Votre mail est validé.<br></p> <a href="' + config.mail.site + '">Connexion</a>'));
