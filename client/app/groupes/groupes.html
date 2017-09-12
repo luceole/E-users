@@ -1,1 +1,182 @@
-<div>This is the groupes view.</div>
+
+<div class="container">
+  Administrations des groupes
+  <form>
+    <input ng-model="search.$" placeholder="Recherche globale">
+  </form>
+  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="app/users/dirPagination.tpl.html"></dir-pagination-controls>
+  <br>
+  <span>
+    <a href ng-click="groupesCtrl.add(groupe)" rel="tooltip" title="Ajouter" class="trash">
+      <div class="glyphicon glyphicon-plus">Créer un groupe</div>
+    </a>
+  </span>
+  <table class="table table-striped ">
+    <tr dir-paginate="groupe in groupesCtrl.groups | orderBy:'name' | filter:search:strict | itemsPerPage :'12' ">
+      <td>
+        <span>
+          <a href ng-click="edit(groupe)" rel="tooltip" title="Modifier" class="trash">
+            <div class="glyphicon glyphicon-pencil pull-right"></div>
+          </a>
+        </span>
+      </td>
+      <td>
+        <strong>{{groupe.name}}</strong>
+      </td>
+      <td>
+        {{groupe.info}}
+      </td>
+      <td ng-switch="groupe.type">
+        <strong ng-switch-when="0">Ouvert</strong>
+        <strong ng-switch-when="5">Modéré</strong>
+        <strong ng-switch-when="10">Réservé</strong>
+        <strong ng-switch-default>{{groupe.type}}</strong>
+      </td>
+      <td>
+        {{groupe.owner.uid}}
+      </td>
+      <td>
+        {{groupe.admins[0].uid}}
+      </td>
+      <td>
+        Membre(s): {{groupe.participants.length}}
+      </td>
+      <td>
+        <span ng-show="groupe.participants.length===0">
+          <a href ng-click="delete(groupe)" rel="tooltip" title="Effacer" class="trash">
+            <div class="glyphicon glyphicon-trash pull-right"></div>
+          </a>
+        </span>
+      </td>
+    </tr>
+  </table>
+  <script type="text/ng-template" id="modalEditAdminGroup.html">
+    <div class="modal-header">
+      <h3 class="modal-title">Modification de {{groupe.name}}
+         <button class="glyphicon glyphicon-remove pull-right" ng-click="cancel()">
+        </button></h3>
+    </div>
+    <div class="modal-body">
+
+      <form class="form" name="editerForm" ng-submit="editer(editerForm)" novalidate>
+        <tabset>
+          <tab heading="Groupe">
+            <div ng-form="forms.tab1" class="form-group" ng-class="{ 'has-success': editerForm.name.$valid && submitted,
+                                    'has-error': editerForm.name.$invalid && submitted }">
+              Description
+              <input type="text" name="info" class="form-control" ng-model="groupe.info" required style="width:350px" />
+              <p class="help-block" ng-show="forms.tab1.info.$error.required && submitted">
+                Description Obligatoire
+              </p>
+
+              Type :
+              <select name="type" required ng-model="groupe.type" ng-options="o.id as o.name for o in typeoptions">
+              </select>
+              <p class="help-block" ng-show="forms.tab1.groupe.type.$error.required && submitted">
+                Type Obligatoire
+              </p>
+              <br> Propriétaire
+              <ui-select ng-model="person.selected" ng-disable="disabled" style="width: 300px;" title="Propiétaire">
+                <ui-select-match placeholder="Selection dans la liste...">{{$select.selected.uid}}</ui-select-match>
+                <ui-select-choices repeat="person in listadmin | filter: $select.search|orderBy:'uid'">
+                  <div ng-bind-html="person.uid  | highlight: $select.search"></div>
+                  <span ng-bind-html="person.structure | highlight: $select.search"></span>
+                </ui-select-choices>
+              </ui-select>
+              <p class="help-block" ng-show="forms.tab1.person.selected.$error.required && submitted">
+                Propriétaire Obligatoire
+              </p>
+            </div>
+          </tab>
+          <tab heading="Animateurs">
+            <table class="table table-striped ">
+              <div>
+                <ui-select name="admingrp" required ng-model="admin.selected" ng-disable="disabled" style="width: 300px;" title="Administrateur">
+                  <ui-select-match placeholder="Selection dans la liste...">{{$select.selected.uid}}</ui-select-match>
+                  <ui-select-choices repeat="admin in listadmgrp| filter: $select.search|orderBy:'uid'">
+                    <div ng-bind-html="admin.uid  | highlight: $select.search"></div>
+                    <span ng-bind-html="admin.structure | highlight: $select.search"></span>
+                  </ui-select-choices>
+                </ui-select>
+                <button class="btn btn-primary" ng-click="addAdm(admin.selected,groupe.adminby)">Ajouter</button>
+              </div>
+
+              <tr dir-paginate="user in groupe.adminby | orderBy:'uid' | filter:search:strict | itemsPerPage :'12' ">
+                <td>
+                  - {{user.uid}}
+                </td>
+                <td>
+                  <a href ng-click="delAdm(user,groupe.adminby)" rel="tooltip" title="Effacer" class="trash">
+                    <div class="glyphicon glyphicon-trash pull-right"></div>
+                  </a>
+
+                </td>
+              </tr>
+            </table>
+          </tab>
+          <tab heading="Participants">
+            <div ng-repeat="user in groupe.participants"> {{user.uid}}
+            </div>
+          </tab>
+        </tabset>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" ng-click="ok(editerForm)">OK</button>
+      <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="modalAddAdminGroup.html">
+    <div class="modal-header">
+      <h3 class="modal-title">Création d'un groupe</h3>
+    </div>
+    <div class="modal-body">
+      <form class="form" name="addForm" novalidate>
+        <div class="form-group" ng-class="{ 'has-success': addForm.name.$valid && submitted,
+                                    'has-error': addForm.$invalid && submitted }">
+          Nom
+          <input type="text" name="name" class="form-control" ng-model="ModalAddAdminGroupCtrl.groupe.name" required style="width:350px" />
+          <p class="help-block" ng-show="addForm.name.$error.required && submitted">
+            Nom Obligatoire
+          </p>
+
+          Description
+          <input type="text" name="desc" class="form-control" ng-model="ModalAddAdminGroupCtrl.groupe.info" required style="width:350px" />
+          <p class="help-block" ng-show="addForm.desc.$error.required && submitted">
+            Description Obligatoire
+          </p>
+
+          Type :
+          <select name="type" required ng-model="ModalAddAdminGroupCtrl.groupe.type" ng-options="o.id as o.name for o in ModalAddAdminGroupCtrl.typeoptions">
+          </select>
+          <p class="help-block" ng-show="addForm.type.$error.required && submitted">
+            Type Obligatoire
+          </p>
+          <br> Propriétaire
+          <ui-select name="owner" required ng-model="person.selected" ng-disable="disabled" style="width: 300px;" title="Propiétaire">
+            <ui-select-match placeholder="Selection dans la liste...">{{$select.selected.uid}}</ui-select-match>
+            <ui-select-choices repeat="person in listadmin | filter: $select.search|orderBy:'uid'">
+              <div ng-bind-html="person.uid  | highlight: $select.search"></div>
+              <span ng-bind-html="person.structure | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+          <p class="help-block" ng-show="addForm.owner.$error.required && submitted">
+            Propriétaire Obligatoire
+          </p>
+          <br> Animateur du groupe :
+          <ui-select name="admingrp" ng-model="admin.selected" ng-disable="disabled" style="width: 300px;" title="Administrateur">
+            <ui-select-match placeholder="Selection dans la liste...">{{$select.selected.uid}}</ui-select-match>
+            <ui-select-choices repeat="admin in listadmgrp | filter: $select.search|orderBy:'uid'">
+              <div ng-bind-html="admin.uid  | highlight: $select.search"></div>
+              <span ng-bind-html="admin.structure | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </form>
+      <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ModalAddAdminGroupCtrl.ok(addForm)">OK</button>
+        <button class="btn btn-warning" ng-click="ModalAddAdminGroupCtrl.cancel()">Cancel</button>
+      </div>
+  </script>
+  </div>

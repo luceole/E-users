@@ -6,7 +6,8 @@ import util from '../util/util.module';
 import ngCookies from 'angular-cookies';
 import {
   authInterceptor
-} from './interceptor.service';
+}
+from './interceptor.service';
 import {
   routerDecorator
 } from './router.decorator';
@@ -19,6 +20,11 @@ import {
 import {
   DemandeResource
 } from './demande.service';
+
+import {
+  GroupResource
+} from './group.service';
+
 import uiRouter from 'angular-ui-router';
 
 function addInterceptor($httpProvider) {
@@ -31,6 +37,7 @@ export default angular.module('E-userApp.auth', [constants, util, ngCookies, uiR
   .run(routerDecorator)
   .factory('Auth', AuthService)
   .factory('User', UserResource)
+  .factory ('Group',GroupResource)
   .factory('Demande', DemandeResource)
   .config(['$httpProvider', addInterceptor])
   .name;
