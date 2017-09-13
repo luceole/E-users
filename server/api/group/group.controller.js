@@ -15,8 +15,8 @@ import Group from './group.model';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
-  return function(entity) {
-    if(entity) {
+  return function (entity) {
+    if (entity) {
       return res.status(statusCode).json(entity);
     }
     return null;
@@ -24,10 +24,10 @@ function respondWithResult(res, statusCode) {
 }
 
 function patchUpdates(patches) {
-  return function(entity) {
+  return function (entity) {
     try {
       jsonpatch.apply(entity, patches, /*validate*/ true);
-    } catch(err) {
+    } catch (err) {
       return Promise.reject(err);
     }
 
@@ -36,8 +36,8 @@ function patchUpdates(patches) {
 }
 
 function removeEntity(res) {
-  return function(entity) {
-    if(entity) {
+  return function (entity) {
+    if (entity) {
       return entity.remove()
         .then(() => {
           res.status(204).end();
@@ -47,8 +47,8 @@ function removeEntity(res) {
 }
 
 function handleEntityNotFound(res) {
-  return function(entity) {
-    if(!entity) {
+  return function (entity) {
+    if (!entity) {
       res.status(404).end();
       return null;
     }
@@ -58,7 +58,7 @@ function handleEntityNotFound(res) {
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
-  return function(err) {
+  return function (err) {
     res.status(statusCode).send(err);
   };
 }
@@ -66,26 +66,16 @@ function handleError(res, statusCode) {
 // Gets a list of Groups
 export function index(req, res) {
   return Group.find()
-  .populate('owner', 'uid')
-  .populate('participants', 'uid')
-  .populate('adminby', 'uid')
-  .exec()
+    .populate('owner', 'uid')
+    .populate('participants', 'uid')
+    .populate('adminby', 'uid')
+    .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
 // Get list of groups of one owner
-exports.byowner = function (req, res) {
-  var owner = req.query.owner;
-  Groupe.find({
-      owner: owner
-    })
-    .populate('participants', 'uid')
-    .exec()
-      .then(respondWithResult(res))
-      .catch(handleError(res));
-}
-// Get list of groupes of owner
-exports.byowner = function (req, res) {
+
+export function byowner(req, res) {
   var owner = req.query.owner;
   Groupe.find({
       owner: owner
@@ -116,18 +106,24 @@ export function create(req, res) {
 
 // Upserts the given Group in the DB at the specified ID
 export function upsert(req, res) {
-  if(req.body._id) {
+  if (req.body._id) {
     delete req.body._id;
   }
-  return Group.findOneAndUpdate({_id: req.params.id}, req.body, {upsert: true, setDefaultsOnInsert: true, runValidators: true}).exec()
+  return Group.findOneAndUpdate({
+    _id: req.params.id
+  }, req.body, {
+    upsert: true,
+    setDefaultsOnInsert: true,
+    runValidators: true
+  }).exec()
 
-    .then(respondWithResult(res))
+  .then(respondWithResult(res))
     .catch(handleError(res));
 }
 
 // Updates an existing Group in the DB
 export function patch(req, res) {
-  if(req.body._id) {
+  if (req.body._id) {
     delete req.body._id;
   }
   return Group.findById(req.params.id).exec()

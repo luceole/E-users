@@ -2,7 +2,7 @@
 
 class _User {}
 
-export function AuthService($window, $location, $http, $cookies, $q, appConfig, Util, User) {
+export function AuthService($window, $location, $http, $cookies, $q, appConfig, Util, User, Group) {
   'ngInject';
 
   var safeCb = Util.safeCb;
@@ -78,6 +78,14 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
             return safeCb(callback)(null, user);
           }, function (err) {
             Auth.logout();
+            return safeCb(callback)(err);
+          })
+          .$promise;
+      },
+      createGroup(group, callback) {
+        return Group.save(group, function (data) {
+            return safeCb(callback)(null, group);
+          }, function (err) {
             return safeCb(callback)(err);
           })
           .$promise;
