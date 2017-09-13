@@ -18,6 +18,20 @@ export function UserResource($resource) {
         controller: 'updateme'
       }
     },
+    listadmgrp: {
+      method: 'GET',
+      isArray: true,
+      params: {
+        controller: 'listadmgrp'
+      }
+    },
+    listadmin: {
+      method: 'GET',
+      isArray: true,
+      params: {
+        controller: 'listadmin'
+      }
+    },
     discourseSso: {
       method: 'PUT',
       params: {

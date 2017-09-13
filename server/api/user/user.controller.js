@@ -20,20 +20,20 @@ var _ = require('lodash');
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
-  return function(err) {
+  return function (err) {
     return res.status(statusCode).json(err);
   };
 }
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
-  return function(err) {
+  return function (err) {
     return res.status(statusCode).send(err);
   };
 }
 
 function patchUpdates(patches) {
-  return function(entity) {
+  return function (entity) {
     try {
       jsonpatch.apply(entity, patches, /*validate*/ true);
     } catch (err) {
@@ -44,7 +44,7 @@ function patchUpdates(patches) {
 }
 
 function handleEntityNotFound(res) {
-  return function(entity) {
+  return function (entity) {
     if (!entity) {
       res.status(404).end();
       return null;
@@ -67,7 +67,7 @@ function sendM(user) {
     from: config.mail.sender,
     to: user.email,
     subject: "Perte de votre mot de passe"
-  }, function(err, message) {
+  }, function (err, message) {
     console.log(err || message);
   });
 
@@ -80,13 +80,39 @@ export function index(req, res) {
   //  console.log("Serveur User")
   return User.find({}, '-salt -password').exec()
     .then(users => {
-
       res.status(200).json(users);
     })
     .catch(handleError(res));
 }
 
-exports.demandes = function(req, res) {
+export function listadmgrp(req, res) {
+  return User.find({
+      role: {
+        $in: ['admin', 'admin_grp']
+      },
+    }, '-salt -password', ).exec()
+    .then(users => {
+      res.status(200).json(users);
+    })
+    .catch(handleError(res));
+}
+
+export
+
+function listadmin(req, res) {
+  return User.find({
+      role: {
+        $in: ['admin']
+      },
+    }, '-salt -password', ).exec()
+    .then(users => {
+      res.status(200).json(users);
+    })
+    .catch(handleError(res));
+}
+
+
+exports.demandes = function (req, res) {
   var query = {
     isdemande: true
   };
@@ -99,7 +125,7 @@ exports.demandes = function(req, res) {
     sort: "email"
   };
 
-  return User.paginate(query, options, function(err, result) {
+  return User.paginate(query, options, function (err, result) {
     //console.log(result);
     if (err) return res.send(500, err);
     res.json(200, {
@@ -131,7 +157,7 @@ export function create(req, res) {
   });
 
   newUser.save()
-    .then(function(user) {
+    .then(function (user) {
       var token = jwt.sign({
         _id: user._id
       }, config.secrets.session, {
@@ -140,14 +166,14 @@ export function create(req, res) {
       res.json({
         token
       });
-	 server.send({
-    	text: "Bonjour, Ceci est un courriel de confirmation d'inscription; Pour activer votre compte cliquez sur le lien : " + config.mail.url  + newUser.urlToken,
-    	from: config.mail.sender,
+      server.send({
+        text: "Bonjour, Ceci est un courriel de confirmation d'inscription; Pour activer votre compte cliquez sur le lien : " + config.mail.url + newUser.urlToken,
+        from: config.mail.sender,
         to: newUser.email,
         subject: "Votre inscription"
-  }, function(err, message) {
-    console.log(err || message);
-  });
+      }, function (err, message) {
+        console.log(err || message);
+      });
 
     })
     .catch(validationError(res));
@@ -160,19 +186,18 @@ export function validEmail(req, res) {
   var urlToken = req.params[0];
   User.findOne({
     urlToken: urlToken
-  }, '-salt -hashedPassword', function(err, user) {
+  }, '-salt -hashedPassword', function (err, user) {
     if (!user) return res.send(404);
     user.mailValid = true;
     // Validation automatique si Domaine mail dans la liste blanche
-    var domaineMail=user.email.split('@')[1];
+    var domaineMail = user.email.split('@')[1];
     var whiteDomain = /^ac-[a-z\-]*.fr/;
-    console.log(whiteDomain.test(domaineMail) );
-    if (whiteDomain.test(domaineMail)) 
-{
-user.isdemande=false;
-user.isactif=true;
-}
-    user.save(function(err) {
+    console.log(whiteDomain.test(domaineMail));
+    if (whiteDomain.test(domaineMail)) {
+      user.isdemande = false;
+      user.isactif = true;
+    }
+    user.save(function (err) {
       res.set('Content-Type', 'text/html');
       res.send(new Buffer('<p>hello ' + user.surname + '. <br>Votre mail est validé.<br></p> <a href="' + config.mail.site + '">Connexion</a>'));
     })
@@ -256,7 +281,7 @@ export function show(req, res, next) {
  */
 export function destroy(req, res) {
   return User.findByIdAndRemove(req.params.id).exec()
-    .then(function() {
+    .then(function () {
       res.status(204).end();
     })
     .catch(handleError(res));
@@ -267,16 +292,16 @@ export function destroy(req, res) {
  *
  */
 // Updates an existing user. (prop isactif)
-exports.update = function(req, res) {
+exports.update = function (req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
   console.log(req.body)
-  // return User.findById(req.params.id).exec()
-  //   .then(handleEntityNotFound(res))
-  //   .then(patchUpdates(req.body))
-  //   .then(respondWithResult(res))
-  //   .catch(handleError(res));
+    // return User.findById(req.params.id).exec()
+    //   .then(handleEntityNotFound(res))
+    //   .then(patchUpdates(req.body))
+    //   .then(respondWithResult(res))
+    //   .catch(handleError(res));
 
   return User.findById(req.params.id).exec()
     .then(user => {
@@ -296,13 +321,13 @@ exports.update = function(req, res) {
 
 
 // SSO Discourse
-exports.discourseSso = function(req, res) {
+exports.discourseSso = function (req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
   //  console.log("server discourseSso " + req.params.id);
 
-  User.findById(req.params.id, function(err, user) {
+  User.findById(req.params.id, function (err, user) {
     if (err) {
       return handleError(res, err);
     }
@@ -379,7 +404,7 @@ export function updateMe(req, res) {
                 to: user.email,
                 subject: "Votre inscription"
               },
-              function(err, message) {
+              function (err, message) {
                 console.log(err || message);
               });
           }
