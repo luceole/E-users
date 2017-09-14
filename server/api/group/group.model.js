@@ -107,7 +107,7 @@ GroupSchema
   .path('owner')
   .validate(function (value, respond) {
     var self = this;
-    console.log(value)
+    //console.log(value)
     User.findById(value, function (err, user) {
       if (err) throw err;
       if (user) {
