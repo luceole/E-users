@@ -77,7 +77,7 @@ export function index(req, res) {
 
 export function byowner(req, res) {
   var owner = req.query.owner;
-  Groupe.find({
+  Group.find({
       owner: owner
     })
     .populate('participants', 'uid')
@@ -86,6 +86,20 @@ export function byowner(req, res) {
     .catch(handleError(res));
 }
 
+// Get list of open groupes
+export function isopen (req, res) {
+  console.log("IsOpen")
+  Group.find({
+      type: {
+        $lt: 10
+      }
+    })
+  .populate('owner', 'uid')
+  .populate('participants', 'uid')
+  .exec()
+  .then(respondWithResult(res))
+  .catch(handleError(res));
+};
 
 
 

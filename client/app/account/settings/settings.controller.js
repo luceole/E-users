@@ -3,12 +3,13 @@
 export default class SettingsController {
 
   /*@ngInject*/
-  constructor(Auth) {
+  constructor(Auth,Group) {
     this.Auth = Auth;
     this.getCurrentUser = Auth.getCurrentUser;
     this.user = Auth.getCurrentUserSync();
   //  this.errors = {};
     this.editMessage = '';
+    this.groups = Group.query();
   }
 
   edit(form) {
