@@ -6,7 +6,7 @@ import routes from './groupes.routes';
 import modal from 'angular-ui-bootstrap/src/modal';
 
 export class ModalEditGroupComponent {
-  constructor(Auth, User, Group, $uibModalInstance,gp) {
+  constructor(Auth, User, Group, $uibModalInstance, gp) {
     'ngInject'
     this.Auth = Auth;
     this.listadmin = User.listadmin();
@@ -37,7 +37,8 @@ export class ModalEditGroupComponent {
   cancel() {
     this.$uibModalInstance.dismiss('cancel');
   };
-  ok (form) {
+
+  ok(form) {
     this.submitted = true;
     console.log(this.forms.tab1.$valid)
     if (this.forms.tab1.$valid) {
@@ -45,28 +46,32 @@ export class ModalEditGroupComponent {
       angular.forEach(this.groupe.adminby, function (user) {
         Nadm.push(user._id)
       });
+      console.log(Nadm)
       this.Auth.updateGroup(this.groupe._id, {
           info: this.groupe.info,
           type: this.groupe.type,
           owner: this.person.selected._id,
           adminby: Nadm
         })
-        .then(function (r) {
-          Sgroupe.info = r.info;
-          Sgroupe.type = r.type;
-          Sgroupe.owner.uid = this.person.selected.uid;
-          $modalInstance.close();
-        })
-        .catch(function (err) {
-          err = err.data;
-          $window.alert("Erreur de mise à jour: " + err);
-          this.errors = {};
+        .then((r) => {
 
-          // Update validity of form fields that match the mongoose errors
-          angular.forEach(err.errors, function (error, field) {
-            form[field].$setValidity('mongoose', false);
-            this.errors[field] = error.message;
-          });
+          /*  Sgroupe.info = r.info;
+  Sgroupe.type = r.type;
+  Sgroupe.owner.uid = this.person.selected.uid;*/
+          this.$uibModalInstance.close();
+        })
+        .catch((err) => {
+
+          err = err.data;
+
+          alert("Erreur de mise à jour: " + err);
+          /* this.errors = {};
+
+           // Update validity of form fields that match the mongoose errors
+           angular.forEach(err.errors, function (error, field) {
+             form[field].$setValidity('mongoose', false);
+             this.errors[field] = error.message;
+           });*/
         });
     }
   };
@@ -75,7 +80,7 @@ export class ModalEditGroupComponent {
     grpadm.push(user)
   }
 
-  delAdm (user, grpadm) {
+  delAdm(user, grpadm) {
     grpadm.splice(grpadm.indexOf(user), 1);
   }
 
@@ -141,7 +146,7 @@ export class ModalAddGroupComponent {
           console.log(err.errors);
           this.errors = {};
           // Update validity of form fields that match the mongoose errors
-          angular.forEach(err.errors, function(error, field) {
+          angular.forEach(err.errors, function (error, field) {
             form[field].$setValidity('mongoose', false);
             this.errors[field] = error.message;
           });
@@ -184,7 +189,7 @@ export class GroupesComponent {
       templateUrl: 'modalEditAdminGroup.html',
       backdrop: 'static',
       resolve: {
-        gp: function() {
+        gp: function () {
           return gp
         }
       }

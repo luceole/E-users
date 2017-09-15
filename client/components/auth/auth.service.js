@@ -90,13 +90,13 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
           })
           .$promise;
       },
-      updateGroup (id, groupe, callback) {
+      updateGroup(id, groupe, callback) {
 
         return Group.update({
             id: id
           }, groupe,
           function (data) {
-            return safeCb(callback)(null, group);
+            return safeCb(callback)(null, groupe);
           },
           function (err) {
             return safeCb(callback)(err);
@@ -111,6 +111,7 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
               return safeCb(callback)(null, user);
             },
             function (err) {
+              console.log(err)
               return safeCb(callback)(err);
             })
           .$promise;

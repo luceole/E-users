@@ -5,5 +5,9 @@ export function GroupResource($resource) {
 
   return $resource('/api/groups/:id/:controller', {
     id: '@_id'
-  });
+  }, {
+    update: {
+      method: 'PUT',
+    }
+  })
 }
