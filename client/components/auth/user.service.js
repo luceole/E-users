@@ -32,6 +32,18 @@ export function UserResource($resource) {
         controller: 'listadmin'
       }
     },
+    addusergroup: {
+      method: 'PUT',
+      params: {
+        controller: 'addusergroup'
+      }
+    },
+    delusergroup: {
+      method: 'PUT',
+      params: {
+        controller: 'delusergroup'
+      }
+    },
     discourseSso: {
       method: 'PUT',
       params: {

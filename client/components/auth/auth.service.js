@@ -125,9 +125,44 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
             return safeCb(callback)(null, user);
           },
           function (err) {
-            return safeCb(callback)(null, user);
+            return safeCb(callback)(null, err);
           }).$promise;
       },
+
+      addUserGroup(idGroup, callback) {
+        return User.addusergroup({
+            id: currentUser._id
+          }, {
+            idGroup: idGroup
+          },
+          function (user) {
+            currentUser = User.get();
+            return safeCb(callback)(null, user);
+          },
+          function (err) {
+          return safeCb(callback)( err);
+          }).$promise;
+      },
+
+      delUserGroup(idGroup, callback) {
+        var cb = callback || angular.noop;
+        return User.delusergroup({
+            id: currentUser._id
+          }, {
+            idGroup: idGroup
+          },
+          function (user) {
+            currentUser = User.get();
+            return safeCb(callback)(null, user);
+          },
+          function (err) {
+              return safeCb(callback)( err);
+          }).$promise;
+      },
+
+
+
+
       discourseSso(id, params, callback) {
         var sso = params.sso;
         var sig = params.sig;

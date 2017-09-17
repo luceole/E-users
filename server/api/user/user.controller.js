@@ -1,6 +1,7 @@
 'use strict';
 
 import User from './user.model';
+import Group from '../group/group.model';
 import jsonpatch from 'fast-json-patch';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
@@ -15,8 +16,6 @@ var _ = require('lodash');
 //   host: config.mail.host,
 //   ssl: config.mail.ssl
 // });
-
-
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
@@ -232,7 +231,7 @@ export function lostPassword(req, res) {
 export function resetPassword(req, res) {
 
   var pwdToken = req.body.pwdToken;
-  console.log(pwdToken)
+//  console.log(pwdToken)
   if (!pwdToken) return res.sendStatus(404);
   var newPass = String(req.body.newPassword);
   User.findOne({
@@ -317,6 +316,67 @@ exports.update = function (req, res) {
         .catch(validationError(res));
     });
 }
+
+
+// Inscription dans un groupe
+// Revoir le coté "transaction"
+exports.addusergroup = function(req, res) {
+  var userId = req.params.id;
+  var groupId = String(req.body.idGroup);
+  return User.findById(userId).exec()
+  //  .populate('memberOf', 'info')
+    .then(user => {
+      user.memberOf.push(groupId);
+      return user.save()
+        .then(user => {
+          console.log(user.uid)
+          Group.findById(groupId, function(err, group) {
+            if (err) {
+              return err;
+            }
+            group.participants.push(userId);
+            group.save(function(err) {
+              if (err) {
+                return err;
+              }
+              return res.json(200, user);
+            });
+          });
+        });
+    });
+};
+
+
+exports.delusergroup = function (req, res) {
+  var userId = req.params.id;
+  var groupId = String(req.body.idGroup);
+  return User.findById(userId, '-salt -hashedPassword').exec()
+    //.populate('memberOf','info')  // le pull ne marche pas bien avec populate
+
+    .then (user => {
+        console.log("delusergroup :" + groupId)
+        console.log(user.memberOf)
+        user.memberOf.pull(groupId);
+      console.log(user.memberOf);
+      return user.save()
+      .then (user => {
+        Group.findById(groupId, function (err, group) {
+          if (err) {
+            return err;
+          }
+          group.participants.pull(userId);
+          group.save(function (err) {
+            if (err) {
+              return err;
+            }
+            console.log(user.memberOf);
+            return res.json(200, user);
+          });
+        });
+      });
+    });
+};
+
 
 
 

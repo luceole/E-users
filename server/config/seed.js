@@ -71,7 +71,7 @@ if (config.env !== 'production') {
               active: true,
                 owner: UserAdmin._id,
                 adminby: [UserAdmin._id],
-                participants: [UserAdmin._id],
+                participants: [],
               events: [{
                 title: 'The Dream Team',
                 start: '2015-04-2',

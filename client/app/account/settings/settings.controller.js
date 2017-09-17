@@ -3,13 +3,14 @@
 export default class SettingsController {
 
   /*@ngInject*/
-  constructor(Auth,Group) {
+  constructor(Auth, Group) {
     this.Auth = Auth;
+    this.Group = Group;
     this.getCurrentUser = Auth.getCurrentUser;
     this.user = Auth.getCurrentUserSync();
-  //  this.errors = {};
+    //  this.errors = {};
     this.editMessage = '';
-    this.groups = Group.query();
+    this.groups = Group.listopengroups();  // Groupe OPEN
   }
 
   edit(form) {
@@ -58,4 +59,72 @@ export default class SettingsController {
         });
     }
   }
+
+  isMemberOf(groupe) {
+    var grpId = groupe._id
+    // var r = this.user.memberOf.filter(function (obj) {
+    //   return obj._id == grpId;
+    // });
+    var r = this.user.memberOf.filter( o =>  o ==  grpId)
+    console.log(grpId +" ?" +this.user.memberOf+" "+r[0])
+    return r[0] ? 1 : null
+  };
+
+  addusergroup(groupe) {
+    var grpId = groupe._id
+    var groupeInfo = groupe.info;
+    console.log(this.user.memberOf)
+    var r = this.user.memberOf.filter(function (obj) {
+      return obj._id == grpId;
+    });
+    if (r ? r[0] : null) {
+      alert("Deja Inscrit dans " + groupe.name);
+    } else {
+      this.Auth.addUserGroup(grpId,  ( err,u) => {
+        if (err) {
+          alert("Erreur MAJ " + err);
+          console.log(err)
+        }
+        this.user = u;
+        angular.forEach(this.user.memberOf, (o, i) => {
+          if (o._id === grpId) {
+            this.user.memberOf.splice(i, 1);
+          }
+        });
+      //    this.user = this.Auth.getCurrentUserSync();
+
+          this.groups = this.Group.listopengroups()
+      });
+    }
+  };
+
+delusergroup(groupe) {
+    var grpId = groupe._id
+    var groupeInfo = groupe.info
+    var r = this.user.memberOf.filter(function (obj) {
+      return obj._id == grpId;
+    });
+    if (!r ? r[0] : null) {
+      alert("Pas Inscrit dans " + groupe.name);
+    } else {
+      this.Auth.delUserGroup(grpId, (err,u  ) => {
+        if (err) {
+          alert("Erreur MAJ " + err.data);
+          console.log(err)
+        }
+
+       this.user=u;  // Pas utilisable problème mongoose pull avec populate
+        angular.forEach(this.user.memberOf, (o, i) => {
+          if (o._id === grpId) {
+            this.user.memberOf.splice(i, 1);
+          }
+        });
+    //    this.user = this.Auth.getCurrentUserSync();
+      this.groups = this.Group.listopengroups();
+      });
+    }
+  };
+
+
+
 }
