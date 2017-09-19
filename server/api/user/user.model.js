@@ -46,11 +46,11 @@ var UserSchema = new Schema({
   'authorPadID': String,
   memberOf: [{
     type: Schema.Types.ObjectId,
-    ref: 'Groupe'
+    ref: 'Group'
   }],
   adminOf: [{
     type: Schema.Types.ObjectId,
-    ref: 'Groupe'
+    ref: 'Group'
   }],
   salt: String,
   google: {},

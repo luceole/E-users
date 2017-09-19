@@ -77,7 +77,9 @@ function sendM(user) {
  */
 export function index(req, res) {
   //  console.log("Serveur User")
-  return User.find({}, '-salt -password').exec()
+  return User.find({}, '-salt -password')
+.populate('memberOf','name info')
+  .exec()
     .then(users => {
       res.status(200).json(users);
     })
@@ -323,8 +325,9 @@ exports.update = function (req, res) {
 exports.addusergroup = function(req, res) {
   var userId = req.params.id;
   var groupId = String(req.body.idGroup);
-  return User.findById(userId).exec()
-  //  .populate('memberOf', 'info')
+  return User.findById(userId)
+  // .populate('memberOf', 'info')
+  .exec()
     .then(user => {
       user.memberOf.push(groupId);
       return user.save()
