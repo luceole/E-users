@@ -9,7 +9,6 @@
  */
 
 'use strict';
-
 import jsonpatch from 'fast-json-patch';
 import Group from './group.model';
 
@@ -30,7 +29,6 @@ function patchUpdates(patches) {
     } catch (err) {
       return Promise.reject(err);
     }
-
     return entity.save();
   };
 }
@@ -87,21 +85,19 @@ export function byowner(req, res) {
 }
 
 // Get list of open groupes
-export function isopen (req, res) {
+export function isopen(req, res) {
   console.log("IsOpen")
   Group.find({
       type: {
         $lt: 10
       }
     })
-  .populate('owner', 'uid')
-  .populate('participants', 'uid')
-  .exec()
-  .then(respondWithResult(res))
-  .catch(handleError(res));
+    .populate('owner', 'uid')
+    .populate('participants', 'uid')
+    .exec()
+    .then(respondWithResult(res))
+    .catch(handleError(res));
 };
-
-
 
 // Gets a single Group from the DB
 export function show(req, res) {
@@ -124,14 +120,13 @@ export function upsert(req, res) {
     delete req.body._id;
   }
   return Group.findOneAndUpdate({
-    _id: req.params.id
-  }, req.body, {
-    upsert: true,
-    setDefaultsOnInsert: true,
-    runValidators: true
-  }).exec()
-
-  .then(respondWithResult(res))
+      _id: req.params.id
+    }, req.body, {
+      upsert: true,
+      setDefaultsOnInsert: true,
+      runValidators: true
+    }).exec()
+    .then(respondWithResult(res))
     .catch(handleError(res));
 }
 

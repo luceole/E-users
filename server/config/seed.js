@@ -38,7 +38,7 @@ if (config.env !== 'production') {
           console.log('finished populating users');
         });
       var uT = [];
-      for (var i = 0; i < 2; i++) {
+      for (var i = 0; i < 15; i++) {
         uT.push({
           provider: 'local',
           name: 'EOLE' + i,
@@ -54,14 +54,14 @@ if (config.env !== 'production') {
           password: 'test'
         });
       }
-      User.create(uT, function() {
+      User.create(uT, function () {
         console.log('finished populating users eole');
 
-        Group.find({}).remove(function() {
+        Group.find({}).remove(function () {
 
           User.findOne({
             uid: 'admin'
-          }, function(err, UserAdmin) {
+          }, function (err, UserAdmin) {
 
             Group.create({
               name: 'dream-team',
@@ -69,9 +69,9 @@ if (config.env !== 'production') {
               note: 'Bonjour le groupe',
               type: 0,
               active: true,
-                owner: UserAdmin._id,
-                adminby: [UserAdmin._id],
-                participants: [],
+              owner: UserAdmin._id,
+              adminby: [UserAdmin._id],
+              participants: [],
               events: [{
                 title: 'The Dream Team',
                 start: '2015-04-2',
@@ -84,8 +84,8 @@ if (config.env !== 'production') {
         }); // Fin Groups
       });
     });
-} else {
-  User.count({}, function(err, count) {
+} else { // Mode Production Create first Admin if empty User
+  User.count({}, function (err, count) {
     if (count == 0) {
       User.create({
           provider: 'local',
@@ -99,7 +99,7 @@ if (config.env !== 'production') {
           password: 'admin'
         })
         .then(() => {
-          console.log('finished populating Administrator');
+          console.log('finished populating Administrator => Connect and change password');
         });
     }
   });

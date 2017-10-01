@@ -5,6 +5,7 @@ export default class LoginController {
   /*@ngInject*/
   constructor(Auth, $state) {
     this.Auth = Auth;
+
     this.$state = $state;
   }
 

@@ -8,31 +8,24 @@ import jwt from 'jsonwebtoken';
 import email from 'emailjs/email';
 import randtoken from 'rand-token';
 import discourse_sso from 'discourse-sso';
-
 var _ = require('lodash');
-// var server = email.server.connect({
-//   user: config.mail.user,
-//   password: config.mail.password,
-//   host: config.mail.host,
-//   ssl: config.mail.ssl
-// });
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
-  return function (err) {
+  return function(err) {
     return res.status(statusCode).json(err);
   };
 }
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
-  return function (err) {
+  return function(err) {
     return res.status(statusCode).send(err);
   };
 }
 
 function patchUpdates(patches) {
-  return function (entity) {
+  return function(entity) {
     try {
       jsonpatch.apply(entity, patches, /*validate*/ true);
     } catch (err) {
@@ -43,7 +36,7 @@ function patchUpdates(patches) {
 }
 
 function handleEntityNotFound(res) {
-  return function (entity) {
+  return function(entity) {
     if (!entity) {
       res.status(404).end();
       return null;
@@ -53,33 +46,26 @@ function handleEntityNotFound(res) {
 }
 
 function sendM(user) {
-
   var server = email.server.connect({
     user: config.mail.user,
     password: config.mail.password,
     host: config.mail.host,
     ssl: config.mail.ssl
   });
-
   server.send({
     text: "Bonjour, Pour changer votre mot de passe  cliquez sur le lien : " + config.mail.site + "/resetpwd/" + user.pwdToken,
     from: config.mail.sender,
     to: user.email,
     subject: "Perte de votre mot de passe"
-  }, function (err, message) {
+  }, function(err, message) {
     console.log(err || message);
   });
-
 }
-/**
- * Get list of users
- * restriction: 'admin'
- */
+
 export function index(req, res) {
-  //  console.log("Serveur User")
   return User.find({}, '-salt -password')
-.populate('memberOf','name info')
-  .exec()
+    .populate('memberOf', 'name info')
+    .exec()
     .then(users => {
       res.status(200).json(users);
     })
@@ -98,9 +84,7 @@ export function listadmgrp(req, res) {
     .catch(handleError(res));
 }
 
-export
-
-function listadmin(req, res) {
+export function listadmin(req, res) {
   return User.find({
       role: {
         $in: ['admin']
@@ -113,12 +97,11 @@ function listadmin(req, res) {
 }
 
 
-exports.demandes = function (req, res) {
+export function demandes(req, res) {
   var query = {
     isdemande: true
   };
   var page = req.query.page;
-  //console.log("Serveur Demandes page=>"+page);
   var options = {
     select: 'uid name surname creationDate email structure isactif mailValid',
     page: page,
@@ -126,8 +109,7 @@ exports.demandes = function (req, res) {
     sort: "email"
   };
 
-  return User.paginate(query, options, function (err, result) {
-    //console.log(result);
+  return User.paginate(query, options, function(err, result) {
     if (err) return res.send(500, err);
     res.json(200, {
       docs: result.docs,
@@ -136,10 +118,6 @@ exports.demandes = function (req, res) {
   });
 }
 
-
-/**
- * Creates a new user
- */
 export function create(req, res) {
   var newUser = new User(req.body);
   newUser.provider = 'local';
@@ -158,7 +136,7 @@ export function create(req, res) {
   });
 
   newUser.save()
-    .then(function (user) {
+    .then(function(user) {
       var token = jwt.sign({
         _id: user._id
       }, config.secrets.session, {
@@ -172,7 +150,7 @@ export function create(req, res) {
         from: config.mail.sender,
         to: newUser.email,
         subject: "Votre inscription"
-      }, function (err, message) {
+      }, function(err, message) {
         console.log(err || message);
       });
 
@@ -183,22 +161,22 @@ export function create(req, res) {
  * Valid Mail of new User
  **/
 export function validEmail(req, res) {
-  //  console.log(req.params);
   var urlToken = req.params[0];
   User.findOne({
     urlToken: urlToken
-  }, '-salt -hashedPassword', function (err, user) {
+  }, '-salt -hashedPassword', function(err, user) {
     if (!user) return res.send(404);
     user.mailValid = true;
     // Validation automatique si Domaine mail dans la liste blanche
     var domaineMail = user.email.split('@')[1];
+    //Put  whiteDomain in config ?
     var whiteDomain = /^ac-[a-z\-]*.fr/;
-    console.log(whiteDomain.test(domaineMail));
+    // console.log(whiteDomain.test(domaineMail));
     if (whiteDomain.test(domaineMail)) {
       user.isdemande = false;
       user.isactif = true;
     }
-    user.save(function (err) {
+    user.save(function(err) {
       res.set('Content-Type', 'text/html');
       res.send(new Buffer('<p>hello ' + user.surname + '. <br>Votre mail est validé.<br></p> <a href="' + config.mail.site + '">Connexion</a>'));
     })
@@ -219,7 +197,6 @@ export function lostPassword(req, res) {
     .then(user => {
       if (!user) return res.sendStatus(404);
       user.pwdToken = randtoken.generate(16)
-      console.log(user)
       user.save()
         .then(user => {
           sendM(user);
@@ -233,7 +210,6 @@ export function lostPassword(req, res) {
 export function resetPassword(req, res) {
 
   var pwdToken = req.body.pwdToken;
-//  console.log(pwdToken)
   if (!pwdToken) return res.sendStatus(404);
   var newPass = String(req.body.newPassword);
   User.findOne({
@@ -243,7 +219,6 @@ export function resetPassword(req, res) {
       if (!user) return res.sendStatus(404);
       console.log("ReInit PASSWD" + user.name)
       user.password = newPass;
-      console.log("ReInit PASSWD" + user.password)
       user.pwdToken = '';
       return user.save()
         .then(() => {
@@ -282,28 +257,21 @@ export function show(req, res, next) {
  */
 export function destroy(req, res) {
   return User.findByIdAndRemove(req.params.id).exec()
-    .then(function () {
+    .then(function() {
       res.status(204).end();
     })
     .catch(handleError(res));
 }
 
-/**
- *  Update a user
- *
- */
-// Updates an existing user. (prop isactif)
-exports.update = function (req, res) {
+export function update(req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
-  console.log(req.body)
-    // return User.findById(req.params.id).exec()
-    //   .then(handleEntityNotFound(res))
-    //   .then(patchUpdates(req.body))
-    //   .then(respondWithResult(res))
-    //   .catch(handleError(res));
-
+  // return User.findById(req.params.id).exec()
+  //   .then(handleEntityNotFound(res))
+  //   .then(patchUpdates(req.body))
+  //   .then(respondWithResult(res))
+  //   .catch(handleError(res));
   return User.findById(req.params.id).exec()
     .then(user => {
       var updated = _.merge(user, req.body);
@@ -311,7 +279,6 @@ exports.update = function (req, res) {
       updated.isactif = req.body.isactif;
       return updated.save()
         .then(user => {
-          //console.log(user)
           //res.status(200).json(user);
           res.status(204).end();
         })
@@ -319,20 +286,17 @@ exports.update = function (req, res) {
     });
 }
 
-
-// Inscription dans un groupe
-// Revoir le coté "transaction"
-exports.addusergroup = function(req, res) {
+// Revoir le coté "transaction" de la double ecriture
+export function addusergroup(req, res) {
   var userId = req.params.id;
   var groupId = String(req.body.idGroup);
   return User.findById(userId)
-  // .populate('memberOf', 'info')
-  .exec()
+    .populate('memberOf', 'info')
+    .exec()
     .then(user => {
       user.memberOf.push(groupId);
       return user.save()
         .then(user => {
-          console.log(user.uid)
           Group.findById(groupId, function(err, group) {
             if (err) {
               return err;
@@ -349,66 +313,51 @@ exports.addusergroup = function(req, res) {
     });
 };
 
-
-exports.delusergroup = function (req, res) {
+export function delusergroup(req, res) {
   var userId = req.params.id;
   var groupId = String(req.body.idGroup);
-  return User.findById(userId, '-salt -hashedPassword').exec()
-    //.populate('memberOf','info')  // le pull ne marche pas bien avec populate
-
-    .then (user => {
-        console.log("delusergroup :" + groupId)
-        console.log(user.memberOf)
-        user.memberOf.pull(groupId);
-      console.log(user.memberOf);
+  return User.findById(userId, '-salt -hashedPassword')
+    .populate('memberOf', 'info')
+    .exec()
+    .then(user => {
+      user.memberOf.pull(groupId);
       return user.save()
-      .then (user => {
-        Group.findById(groupId, function (err, group) {
-          if (err) {
-            return err;
-          }
-          group.participants.pull(userId);
-          group.save(function (err) {
+        .then(user => {
+          Group.findById(groupId, function(err, group) {
             if (err) {
               return err;
             }
-            console.log(user.memberOf);
-            return res.json(200, user);
+            group.participants.pull(userId);
+            group.save(function(err) {
+              if (err) {
+                return err;
+              }
+              console.log(user.memberOf);
+              return res.json(200, user);
+            });
           });
         });
-      });
     });
 };
 
-
-
-
-// SSO Discourse
-exports.discourseSso = function (req, res) {
+export function discourseSso(req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
-  //  console.log("server discourseSso " + req.params.id);
-
-  User.findById(req.params.id, function (err, user) {
+  User.findById(req.params.id, function(err, user) {
     if (err) {
       return handleError(res, err);
     }
     if (!user) {
-      //  console.log("user not find")
       return res.send(404);
     }
     if (!user.isactif) {
       return res.send(404);
     }
-
-    var sso = new discourse_sso(config.discourse_sso.secret); // Mettre en config :-)
+    var sso = new discourse_sso(config.discourse_sso.secret);
     var payload = String(req.body.sso);
     var sig = String(req.body.sig);
-    //console.log("payload=" + payload);
-    //console.log("sig=" + sig)
     if (sso.validate(payload, sig)) {
-      //console.log("sso valide secret="+config.discourse_sso.secret)
       var nonce = sso.getNonce(payload);
       var userparams = {
         // Required, will throw exception otherwise
@@ -431,15 +380,10 @@ exports.discourseSso = function (req, res) {
   });
 }
 
-
-
-
-// Self Update
 export function updateMe(req, res) {
   var userId = req.user._id;
   var newUser = new User(req.body);
   var MailChange = false;
-
   return User.findById(userId).exec()
     .then(user => {
       user.name = newUser.name;
@@ -467,7 +411,7 @@ export function updateMe(req, res) {
                 to: user.email,
                 subject: "Votre inscription"
               },
-              function (err, message) {
+              function(err, message) {
                 console.log(err || message);
               });
           }
@@ -477,14 +421,10 @@ export function updateMe(req, res) {
     });
 }
 
-/**
- * Change a users password
- */
 export function changePassword(req, res) {
   var userId = req.user._id;
   var oldPass = String(req.body.oldPassword);
   var newPass = String(req.body.newPassword);
-
   return User.findById(userId).exec()
     .then(user => {
       if (user.authenticate(oldPass)) {
@@ -500,12 +440,8 @@ export function changePassword(req, res) {
     });
 }
 
-/**
- * Get my info
- */
 export function me(req, res, next) {
   var userId = req.user._id;
-
   return User.findOne({
       _id: userId
     }, '-salt -password').exec()
@@ -518,9 +454,6 @@ export function me(req, res, next) {
     .catch(err => next(err));
 }
 
-/**
- * Authentication callback
- */
 export function authCallback(req, res) {
   res.redirect('/');
 }

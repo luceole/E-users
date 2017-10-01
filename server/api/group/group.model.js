@@ -1,6 +1,5 @@
 'use strict';
 
-//var User = require('../user/user.model');
 import User from '../user/user.model';
 mongoose.Promise = require('bluebird');
 var mongoosePaginate = require('mongoose-paginate');
@@ -8,12 +7,6 @@ import mongoose, {
   Schema
 } from 'mongoose';
 
-
-var GroupSchema = new Schema({
-  name: String,
-  info: String,
-  active: Boolean
-});
 
 var EventSchema = new Schema({
   title: String,
@@ -64,26 +57,24 @@ var GroupSchema = new Schema({
 /**
  * MiddleWare
  */
+
+// Modify User adminOf
 GroupSchema.pre('save', function (next) {
   var grpId = this._id
   this.adminby.forEach(function (id) {
-    console.log(id)
     var query = {
       "_id": id
     };
     var update = {
-      // $push: { adminOf:{$each: [this._id]} , $position: 0}
       $addToSet: {
         adminOf: grpId
       }
     };
-
     User.findOneAndUpdate(query, update, function (err, user) {
       if (err) {
         console.log("erreur Admin groupe : " + err);
       }
-
-      next(); // Continue même en erreur !?!
+      next(); // Always go on !
     });
   });
 

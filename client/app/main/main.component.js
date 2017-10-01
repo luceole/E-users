@@ -17,7 +17,7 @@ export class MainController {
     this.$state = $state;
     this.$stateParams = $stateParams;
     this.MSG = "";
-    this.OauthActif=false;
+    this.OauthActif=true;
     this.sso = (this.$state.current.name == "discoursesso");
 
     //   $scope.$on('$destroy', function() {
