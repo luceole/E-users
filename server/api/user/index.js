@@ -17,8 +17,13 @@ router.get('/', auth.hasRole('admin'), controller.index);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.put('/:id/update', auth.hasRole('admin'), controller.update);
 router.get('/demandes', auth.hasRole('admin'), controller.demandes);
+router.get('/listadmgrp', auth.hasRole('admin'), controller.listadmgrp);
+router.get('/listadmin', auth.hasRole('admin'), controller.listadmin);
 router.get('/me', auth.isAuthenticated(), controller.me);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
+router.put('/:id/addusergroup', auth.isAuthenticated(), controller.addusergroup);
+router.put('/:id/delusergroup', auth.isAuthenticated(), controller.delusergroup);
+
 router.put('/:id/discoursesso', auth.isAuthenticated(), controller.discourseSso);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.put('/:id/updateme', auth.isAuthenticated(), controller.updateMe);

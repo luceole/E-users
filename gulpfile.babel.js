@@ -1,4 +1,4 @@
-// Generated on 2016-09-23 using generator-angular-fullstack 4.0.5
+// Generated on 2017-09-13 using generator-angular-fullstack 4.0.5
 'use strict';
 
 import _ from 'lodash';

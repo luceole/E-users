@@ -14,19 +14,19 @@
               <p class="help-block" ng-show="modifForm.name.$error.required && vm.submitted">
                 Nom Obligatoire
               </p>
-    </div>
-    <div class="form-group" ng-class="{ 'has-success': modifForm.surname.$valid && vm.submitted,
+            </div>
+            <div class="form-group" ng-class="{ 'has-success': modifForm.surname.$valid && vm.submitted,
                                     'has-error': modifForm.surname.$invalid && vm.submitted }">
 
-      Prénom
-      <input type="text" name="surname" class="form-control" ng-model="vm.user.surname" placeholder="Votre prénom" required style="width:350px" />
-      <p class="help-block" ng-show="modifForm.surname.$error.required && vm.submitted">
-        Prénom Obligatoire
-      </p>
-  </div>
-  <div class="form-group" ng-class="{ 'has-success': modifForm.structure.$valid && vm.submitted,
+              Prénom
+              <input type="text" name="surname" class="form-control" ng-model="vm.user.surname" placeholder="Votre prénom" required style="width:350px" />
+              <p class="help-block" ng-show="modifForm.surname.$error.required && vm.submitted">
+                Prénom Obligatoire
+              </p>
+            </div>
+            <div class="form-group" ng-class="{ 'has-success': modifForm.structure.$valid && vm.submitted,
                                     'has-error': modifForm.structure.$invalid && vm.submitted }">
-    <span>Structure de rattachement :
+              <span>Structure de rattachement :
 <select ng-model="vm.user.structure" ng-init="vm.user.structure">
          <option value="Education"> Education </option>
          <option value="Ecologie"> Ecologie </option>
@@ -38,83 +38,123 @@
          <option value="Autre"> Autre </option>
 </select>
 </span>
-    <p class="help-block" ng-show="modifForm.structure.$error.required && vm.submitted">
-      Structure de rattachement Obligatoire
-    </p>
-</div>
+              <p class="help-block" ng-show="modifForm.structure.$error.required && vm.submitted">
+                Structure de rattachement Obligatoire
+              </p>
+            </div>
 
-<div class="form-group" ng-class="{ 'has-success': modifForm.email.$valid && vm.submitted,
+            <div class="form-group" ng-class="{ 'has-success': modifForm.email.$valid && vm.submitted,
                                     'has-error': modifForm.email.$invalid && vm.submitted }">
-  Courriel
-  <input type="email" name="email" class="form-control" ng-model="vm.user.email" ng-focus="vm.myInit(modifForm,'email')" placeholder="Votre courriel" required mongoose-error style="width:350px" />
-  <p class="help-block" ng-show="modifForm.email.$error.email ">
-    Adresse electronique invalide.
-  </p>
-  <p class="help-block" ng-show="modifForm.email.$error.required && vm.submitted">
-    Quel est votre adresse electronique?
-  </p>
-  <p class="help-block" ng-show="modifForm.email.$error.mongoose">
-    {{ vm.errors.email }}
-  </p>
-  </div>
+              Courriel
+              <input type="email" name="email" class="form-control" ng-model="vm.user.email" ng-focus="vm.myInit(modifForm,'email')" placeholder="Votre courriel" required mongoose-error style="width:350px" />
+              <p class="help-block" ng-show="modifForm.email.$error.email ">
+                Adresse electronique invalide.
+              </p>
+              <p class="help-block" ng-show="modifForm.email.$error.required && vm.submitted">
+                Quel est votre adresse electronique?
+              </p>
+              <p class="help-block" ng-show="modifForm.email.$error.mongoose">
+                {{ vm.errors.email }}
+              </p>
+            </div>
 
 
 
-  <div>&nbsp
-    <p>
-      <button class="btn  btn-default btn-lg btn-primary" ng-disabled="modifForm.$invalid || passwdForm.$pending" type="submit">
-            Modifier
-          </button>
-      <p class="help-block"> {{vm.editMessage }} </p>
-  </div>
-  </form>
+            <div>&nbsp
+              <p>
+                <button class="btn  btn-default btn-lg btn-primary" ng-disabled="modifForm.$invalid || passwdForm.$pending" type="submit">
+                  Modifier
+                </button>
+                <p class="help-block"> {{vm.editMessage }} </p>
+            </div>
+          </form>
 
-  </uib-tab>
-  <uib-tab heading="Mot de passe">
-    <div class="row">
-      <div class="col-sm-12">
-        <h3>Changement de votre mot de passe: {{vm.user.uid}}</h3>
-      </div>
+        </uib-tab>
+        <uib-tab heading="Mot de passe">
+          <div class="row">
+            <div class="col-sm-12">
+              <h3>Changement de votre mot de passe: {{vm.user.uid}}</h3>
+            </div>
 
-      <div class="col-sm-12">
-        <form class="form" name="passwdForm" ng-submit="vm.changePassword(passwdForm)" novalidate>
+            <div class="col-sm-12">
+              <form class="form" name="passwdForm" ng-submit="vm.changePassword(passwdForm)" novalidate>
 
-          <div class="form-group">
-            <label>Mot de passe actuel</label>
+                <div class="form-group">
+                  <label>Mot de passe actuel</label>
 
-            <input type="password" name="password" class="form-control" ng-model="vm.user.oldPassword" ng-focus="vm.myInit(passwdForm,'password')" mongoose-error style="width:350px" />
-            <p class="help-block" ng-show="passwdForm.password.$error.mongoose">
-              {{ vm.errors.other }}
-            </p>
+                  <input type="password" name="password" class="form-control" ng-model="vm.user.oldPassword" ng-focus="vm.myInit(passwdForm,'password')" mongoose-error style="width:350px" />
+                  <p class="help-block" ng-show="passwdForm.password.$error.mongoose">
+                    {{ vm.errors.other }}
+                  </p>
+                </div>
+
+                <div class="form-group">
+                  <label>Nouveau mot de passe</label>
+
+                  <input type="password" name="newPassword" class="form-control" ng-model="vm.user.newPassword" ng-minlength="8" required style="width:350px" />
+                  <p class="help-block" ng-show="(passwdForm.newPassword.$error.minlength ||passwdForm.newPassword.$error.required) && (passwdForm.newPassword.$dirty || vm.submitted)">
+                    8 caractères minimum.
+                  </p>
+                </div>
+
+                <div class="form-group">
+                  <label>Confirmez le mot de passe </label>
+
+                  <input type="password" name="confirmPassword" class="form-control" ng-model="vm.user.confirmPassword" match="vm.user.newPassword" ng-minlength="8" required style="width:350px" />
+                  <p class="help-block" ng-show="passwdForm.confirmPassword.$error.match">
+                    Mot de passe différent!
+                  </p>
+
+                </div>
+
+                <p class="help-block"> {{ vm.message }} </p>
+
+                <button class="btn btn-lg btn-primary" ng-disabled="passwdForm.$invalid || passwdForm.$pending" type="submit">Modifier</button>
+              </form>
+            </div>
           </div>
+        </uib-tab>
+        <uib-tab heading="Vos Groupes">
+          Gestion des groupes de {{vm.user.uid}}
+          <form>
+            <input ng-model="search.$" placeholder="Recherche globale">
+          </form>
 
-          <div class="form-group">
-            <label>Nouveau mot de passe</label>
+          <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="app/users/dirPagination.tpl.html"></dir-pagination-controls>
+          <br>
+          <table class="table table-striped ">
+            <tr dir-paginate="group in vm.groups | orderBy:'name' | filter:search:strict | itemsPerPage :'12' ">
+              <td>
+                <button class="btn btn-success btn-xs" type="button" ng-if="vm.isMemberOf(group)" ng-click="vm.delusergroup(group)">
+                  <span class="glyphicon glyphicon-star"></span>Désinscrire
+                </button>
 
-            <input type="password" name="newPassword" class="form-control" ng-model="vm.user.newPassword" ng-minlength="8" required style="width:350px" />
-            <p class="help-block" ng-show="(passwdForm.newPassword.$error.minlength ||passwdForm.newPassword.$error.required) && (passwdForm.newPassword.$dirty || vm.submitted)">
-              8 caractères minimum.
-            </p>
-          </div>
+                <button class="btn btn-warning btn-xs" type="button" ng-if="!vm.isMemberOf(group)" ng-click="vm.addusergroup(group)">
+                  <span class="glyphicon glyphicon-star"></span>Inscrire
+                </button>
+              </td>
+              <td>
+                <strong>{{group.name}}</strong>
+              </td>
+              <td>
+                {{group.info}}
+              </td>
+              <td ng-switch="group.type">
+                <strong ng-switch-when="0">Ouvert</strong>
+                <strong ng-switch-when="5">Modéré</strong>
+                <strong ng-switch-when="10">Réservé</strong>
+                <strong ng-switch-default>{{group.type}}</strong>
+              </td>
 
-          <div class="form-group">
-            <label>Confirmez le mot de passe </label>
+              <td> Membre(s): {{group.participants.length}}
+              </td>
+            </tr>
+          </table>
 
-            <input type="password" name="confirmPassword" class="form-control" ng-model="vm.user.confirmPassword" match="vm.user.newPassword" ng-minlength="8" required style="width:350px" />
-            <p class="help-block" ng-show="passwdForm.confirmPassword.$error.match">
-              Mot de passe différent!
-            </p>
 
-          </div>
 
-          <p class="help-block"> {{ vm.message }} </p>
-
-          <button class="btn btn-lg btn-primary" ng-disabled="passwdForm.$invalid || passwdForm.$pending" type="submit">Modifier</button>
-        </form>
-      </div>
-      </div>
-  </uib-tab>
-  </uib-tabset>
+        </uib-tab>
+      </uib-tabset>
+    </div>
   </div>
-  </div>
-  </div>
+</div>

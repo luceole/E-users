@@ -11,7 +11,8 @@ export function setup(User, config) {
       scope: 'openid profile email'
     },
   }, function(tokenSet, userInfo, done) {
-    User.findOne({uid: userInfo.sub}).exec()
+	  console.log(userInfo)
+    User.findOne({email: userInfo.email}).exec()
       .then(user => {
         if(!user) return done(null, false, 'Compte inconnu !');
         user.openid = {tokenSet, issuer: config.openid.issuer, client: config.openid.client };

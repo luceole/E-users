@@ -3,12 +3,14 @@
 export default class SettingsController {
 
   /*@ngInject*/
-  constructor(Auth) {
+  constructor(Auth, Group) {
     this.Auth = Auth;
+    this.Group = Group;
     this.getCurrentUser = Auth.getCurrentUser;
     this.user = Auth.getCurrentUserSync();
-  //  this.errors = {};
+    //  this.errors = {};
     this.editMessage = '';
+    this.groups = Group.listopengroups(); // Groupe OPEN
   }
 
   edit(form) {
@@ -57,4 +59,58 @@ export default class SettingsController {
         });
     }
   }
+
+  isMemberOf(groupe) {
+    var grpId = groupe._id
+    // var r = this.user.memberOf.filter(function (obj) {
+    //   return obj._id == grpId;
+    // });
+    var r = this.user.memberOf.filter(o => o == grpId)
+    //console.log("isMember " + grpId + " ?" + this.user.memberOf + " " + r[0])
+    return r[0] ? 1 : null
+  };
+
+  addusergroup(groupe) {
+    var grpId = groupe._id
+  //  var groupeInfo = groupe.info;
+    this.Auth.addUserGroup(grpId, (err, u) => {
+      if (err) {
+        alert("Erreur MAJ " + err);
+        console.log(err)
+      }
+      this.user = this.Auth.getCurrentUserSync();
+      this.groups = this.Group.listopengroups()
+    });
+
+  };
+
+  delusergroup(groupe) {
+    var grpId = groupe._id
+    var groupeInfo = groupe.info
+    this.Auth.delUserGroup(grpId, (err, u) => {
+      if (err) {
+        alert("Erreur MAJ " + err.data);
+        console.log(err)
+      }
+      //      console.log(u)
+      //      this.user=u;  // Pas utilisable ??  problème mongoose pull avec populate
+      /*      console.log(this.user.memberOf);
+            angular.forEach(this.user.memberOf, (o, i) => {
+              console.log(o + "=?"+grpId)
+              if (o== grpId) {
+                  console.log(this.user.memberOf)
+                this.user.memberOf.splice(i, 1);
+                console.log(this.user.memberOf)
+              }
+            });
+            */
+
+      this.user = this.Auth.getCurrentUserSync();
+      this.groups = this.Group.listopengroups();
+    });
+
+  };
+
+
+
 }

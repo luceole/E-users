@@ -5,7 +5,7 @@
 'use strict';
 import config from '../config/environment';
 import User from '../api/user/user.model';
-
+import Group from '../api/group/group.model';
 if (config.env !== 'production') {
   User.find({}).remove()
     .then(() => {
@@ -28,7 +28,7 @@ if (config.env !== 'production') {
           surname: 'Alfred',
           uid: 'admin',
           email: 'admin@admin.com',
-          urlToken: 'token',
+
           mailValid: true,
           structure: 'MEN',
           isactif: true,
@@ -38,7 +38,7 @@ if (config.env !== 'production') {
           console.log('finished populating users');
         });
       var uT = [];
-      for (var i = 0; i < 20; i++) {
+      for (var i = 0; i < 15; i++) {
         uT.push({
           provider: 'local',
           name: 'EOLE' + i,
@@ -54,20 +54,44 @@ if (config.env !== 'production') {
           password: 'test'
         });
       }
-      User.create(uT, function() {
+      User.create(uT, function () {
         console.log('finished populating users eole');
+
+        Group.find({}).remove(function () {
+
+          User.findOne({
+            uid: 'admin'
+          }, function (err, UserAdmin) {
+
+            Group.create({
+              name: 'dream-team',
+              info: 'The Dream Team',
+              note: 'Bonjour le groupe',
+              type: 0,
+              active: true,
+              owner: UserAdmin._id,
+              adminby: [UserAdmin._id],
+              participants: [],
+              events: [{
+                title: 'The Dream Team',
+                start: '2015-04-2',
+                lieu: 'Dijon',
+                allDay: true
+              }]
+            })
+          });
+
+        }); // Fin Groups
       });
     });
-} else {
-  User.count({}, function(err, count) {
+} else { // Mode Production Create first Admin if empty User
+  User.count({}, function (err, count) {
     if (count == 0) {
       User.create({
           provider: 'local',
           role: 'admin',
           name: 'Administrator',
           surname: 'Alfred',
-          uid: 'admin',
-          email: 'admin@localhost',
           urlToken: '',
           mailValid: true,
           structure: 'MEN',
@@ -75,7 +99,7 @@ if (config.env !== 'production') {
           password: 'admin'
         })
         .then(() => {
-          console.log('finished populating Administrator');
+          console.log('finished populating Administrator => Connect and change password');
         });
     }
   });
