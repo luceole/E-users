@@ -16,7 +16,6 @@ if (config.env !== 'production') {
           uid: 'test',
           surname: 'User',
           email: 'luc.bourdot@ac-dijon.fr',
-          urlToken: 'token',
           mailValid: true,
           structure: 'Education',
           isactif: true,

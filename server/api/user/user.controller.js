@@ -134,9 +134,10 @@ export function create(req, res) {
     host: config.mail.host,
     ssl: config.mail.ssl
   });
-
+    
   newUser.save()
     .then(function(user) {
+
       var token = jwt.sign({
         _id: user._id
       }, config.secrets.session, {
@@ -153,6 +154,7 @@ export function create(req, res) {
       }, function(err, message) {
         console.log(err || message);
       });
+
 
     })
     .catch(validationError(res));

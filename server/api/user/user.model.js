@@ -43,7 +43,7 @@ var UserSchema = new Schema({
     type: Date,
     'default': Date.now
   },
-  'authorPadID': String,
+  authorPadID: String,
   memberOf: [{
     type: Schema.Types.ObjectId,
     ref: 'Group'
@@ -199,11 +199,13 @@ UserSchema
 
     etherpad.createAuthor(this.uid,
       (error, data) => {
-        if (error) console.error('Error creating User on PAD: ' + error.message)
+        if (error) return next(error.message)
         else {
-          console.log('New pad USer created: ' + data.authorID)
+        //  console.log(this.uid +': New pad USer created: ' + data.authorID)
           this.authorPadID = data.authorID;
+          return next();
         }});
+
     // Make salt with a callback
     this.makeSalt((saltErr, salt) => {
       if (saltErr) {
