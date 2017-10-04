@@ -197,6 +197,13 @@ UserSchema
       }
     }
 
+    etherpad.createAuthor(this.uid,
+      (error, data) => {
+        if (error) console.error('Error creating User on PAD: ' + error.message)
+        else {
+          console.log('New pad USer created: ' + data.authorID)
+          this.authorPadID = data.authorID;
+        }});
     // Make salt with a callback
     this.makeSalt((saltErr, salt) => {
       if (saltErr) {

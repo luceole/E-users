@@ -14,7 +14,7 @@ import Group from './group.model';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
-  return function (entity) {
+  return function(entity) {
     if (entity) {
       return res.status(statusCode).json(entity);
     }
@@ -23,7 +23,7 @@ function respondWithResult(res, statusCode) {
 }
 
 function patchUpdates(patches) {
-  return function (entity) {
+  return function(entity) {
     try {
       jsonpatch.apply(entity, patches, /*validate*/ true);
     } catch (err) {
@@ -34,7 +34,7 @@ function patchUpdates(patches) {
 }
 
 function removeEntity(res) {
-  return function (entity) {
+  return function(entity) {
     if (entity) {
       return entity.remove()
         .then(() => {
@@ -45,7 +45,7 @@ function removeEntity(res) {
 }
 
 function handleEntityNotFound(res) {
-  return function (entity) {
+  return function(entity) {
     if (!entity) {
       res.status(404).end();
       return null;
@@ -56,7 +56,7 @@ function handleEntityNotFound(res) {
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
-  return function (err) {
+  return function(err) {
     res.status(statusCode).send(err);
   };
 }
@@ -109,43 +109,64 @@ export function show(req, res) {
 
 // Creates a new Group in the DB
 export function create(req, res) {
-  return Group.create(req.body)
-    .then(respondWithResult(res, 201))
-    .catch(handleError(res));
+  var newGroupe = new Group(req.body);
+  etherpad.createGroup(function(error, data) {
+    if (error) console.error('Error creating group: ' + error.message)
+    else {
+      console.log('New group created: ' + data.groupID)
+      newGroupe.groupPadID = data.groupID;
+      var args = {
+        groupID: data.groupID,
+        padName: newGroupe.name,
+        text: 'Bienvenu sur le PAD du groupe ' + newGroupe.name,
+      }
+      etherpad.createGroupPad(args, function(error, data) {
+        if (error) console.error('Error creating pad: ' + error.message)
+        else {
+          console.log('New pad created: ' + data.padID)
+        }
+
+      })
+    }
+    // Alway Create Group
+    return Group.create(newGroupe)
+      .then(respondWithResult(res, 201))
+      .catch(handleError(res));
+  });
 }
 
-// Upserts the given Group in the DB at the specified ID
-export function upsert(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
+  // Upserts the given Group in the DB at the specified ID
+  export function upsert(req, res) {
+    if (req.body._id) {
+      delete req.body._id;
+    }
+    return Group.findOneAndUpdate({
+        _id: req.params.id
+      }, req.body, {
+        upsert: true,
+        setDefaultsOnInsert: true,
+        runValidators: true
+      }).exec()
+      .then(respondWithResult(res))
+      .catch(handleError(res));
   }
-  return Group.findOneAndUpdate({
-      _id: req.params.id
-    }, req.body, {
-      upsert: true,
-      setDefaultsOnInsert: true,
-      runValidators: true
-    }).exec()
-    .then(respondWithResult(res))
-    .catch(handleError(res));
-}
 
-// Updates an existing Group in the DB
-export function patch(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
+  // Updates an existing Group in the DB
+  export function patch(req, res) {
+    if (req.body._id) {
+      delete req.body._id;
+    }
+    return Group.findById(req.params.id).exec()
+      .then(handleEntityNotFound(res))
+      .then(patchUpdates(req.body))
+      .then(respondWithResult(res))
+      .catch(handleError(res));
   }
-  return Group.findById(req.params.id).exec()
-    .then(handleEntityNotFound(res))
-    .then(patchUpdates(req.body))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
-}
 
-// Deletes a Group from the DB
-export function destroy(req, res) {
-  return Group.findById(req.params.id).exec()
-    .then(handleEntityNotFound(res))
-    .then(removeEntity(res))
-    .catch(handleError(res));
-}
+  // Deletes a Group from the DB
+  export function destroy(req, res) {
+    return Group.findById(req.params.id).exec()
+      .then(handleEntityNotFound(res))
+      .then(removeEntity(res))
+      .catch(handleError(res));
+  }
