@@ -6,7 +6,7 @@ var mongoosePaginate = require('mongoose-paginate');
 import mongoose, {
   Schema
 } from 'mongoose';
-
+var config = require('../../config/environment');
 const authTypes = ['github', 'twitter', 'facebook', 'google'];
 
 var UserSchema = new Schema({
@@ -64,7 +64,7 @@ var UserSchema = new Schema({
 // Public profile information
 UserSchema
   .virtual('profile')
-  .get(function () {
+  .get(function() {
     return {
       name: this.name,
       surname: this.surname,
@@ -82,7 +82,7 @@ UserSchema
 // Non-sensitive info we'll be putting in the token
 UserSchema
   .virtual('token')
-  .get(function () {
+  .get(function() {
     return {
       _id: this._id,
       role: this.role
@@ -96,7 +96,7 @@ UserSchema
 // Validate empty uid
 UserSchema
   .path('uid')
-  .validate(function (uid) {
+  .validate(function(uid) {
     if (authTypes.indexOf(this.provider) !== -1) {
       return true;
     }
@@ -106,7 +106,7 @@ UserSchema
 // Validate empty email
 UserSchema
   .path('email')
-  .validate(function (email) {
+  .validate(function(email) {
     if (authTypes.indexOf(this.provider) !== -1) {
       return true;
     }
@@ -116,7 +116,7 @@ UserSchema
 // Validate empty password
 UserSchema
   .path('password')
-  .validate(function (password) {
+  .validate(function(password) {
     if (authTypes.indexOf(this.provider) !== -1) {
       return true;
     }
@@ -126,7 +126,7 @@ UserSchema
 // Validate uid is not taken
 UserSchema
   .path('uid')
-  .validate(function (value, respond) {
+  .validate(function(value, respond) {
     if (authTypes.indexOf(this.provider) !== -1) {
       return respond(true);
     }
@@ -143,7 +143,7 @@ UserSchema
         }
         return respond(true);
       })
-      .catch(function (err) {
+      .catch(function(err) {
         throw err;
       });
   }, 'Cette identifiant est dèja utilisé!');
@@ -152,7 +152,7 @@ UserSchema
 // Validate email is not taken
 UserSchema
   .path('email')
-  .validate(function (value, respond) {
+  .validate(function(value, respond) {
     if (authTypes.indexOf(this.provider) !== -1) {
       return respond(true);
     }
@@ -169,13 +169,13 @@ UserSchema
         }
         return respond(true);
       })
-      .catch(function (err) {
+      .catch(function(err) {
         throw err;
       });
   }, 'Cette adresse est utilisée avec un autre identifiant!');
 
 
-var validatePresenceOf = function (value) {
+var validatePresenceOf = function(value) {
   return value && value.length;
 };
 
@@ -183,12 +183,12 @@ var validatePresenceOf = function (value) {
  * Pre-save hook
  */
 UserSchema
-  .pre('save', function (next) {
+  .pre('save', function(next) {
     // Handle new/update passwords
+    //console.log("pre "+this.uid)
     if (!this.isModified('password')) {
       return next();
     }
-
     if (!validatePresenceOf(this.password)) {
       if (authTypes.indexOf(this.provider) === -1) {
         return next(new Error('Invalid password'));
@@ -196,16 +196,6 @@ UserSchema
         return next();
       }
     }
-
-    etherpad.createAuthor(this.uid,
-      (error, data) => {
-        if (error) return next(error.message)
-        else {
-        //  console.log(this.uid +': New pad USer created: ' + data.authorID)
-          this.authorPadID = data.authorID;
-          return next();
-        }});
-
     // Make salt with a callback
     this.makeSalt((saltErr, salt) => {
       if (saltErr) {
@@ -219,7 +209,26 @@ UserSchema
         this.password = hashedPassword;
         return next();
       });
-    });
+    })
+  })
+.pre('save', function(next) {
+  //  console.log('pre2 '+this.uid)
+    if (config.etherpad) {
+      etherpad.createAuthorIfNotExistsFor(this.uid,
+        (error, data) => {
+          if (error) {
+            console.log('New pad User created  ERROR : ' + error.message);
+            this.authorPadID = "";
+          } else {
+            console.log(this.uid + ': New pad USer created: ' + data.authorID)
+            this.authorPadID = data.authorID;
+            //  return next();
+          }
+          return next() // Alway Create even EtherPad error
+        });
+    } else {
+      return next()
+    }
   });
 
 /**

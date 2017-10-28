@@ -134,7 +134,7 @@ export function create(req, res) {
     host: config.mail.host,
     ssl: config.mail.ssl
   });
-    
+
   newUser.save()
     .then(function(user) {
 
@@ -177,6 +177,21 @@ export function validEmail(req, res) {
     if (whiteDomain.test(domaineMail)) {
       user.isdemande = false;
       user.isactif = true;
+    } else {
+      var server = email.server.connect({
+        user: config.mail.user,
+        password: config.mail.password,
+        host: config.mail.host,
+        ssl: config.mail.ssl
+      });
+      server.send({
+        text: "Bonjour, vous avez une nouvelle demande de validation de " +user.email + " ("+user.surname+ " "+user.name +") sur le site :" + config.mail.site  ,
+        from: config.mail.sender,
+        to: config.mail.sender,
+        subject: "E-User : Nouvelle Demande"
+      }, function(err, message) {
+        console.log(err || message);
+      });
     }
     user.save(function(err) {
       res.set('Content-Type', 'text/html');

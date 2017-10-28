@@ -16,12 +16,14 @@ import User from './api/user/user.model';
 // Etherpad ?
 if (config.etherpad) {
   var ether_api = require('etherpad-lite-client');
-  console.log(" - Link Etherpad=" + config.etherpad.host + ":" + config.etherpad.port);
+
   global.etherpad = ether_api.connect({
     apikey: config.etherpad.apikey,
     host: config.etherpad.host,
     port: config.etherpad.port,
   });
+    console.log(" - Link Etherpad=" + config.etherpad.host + ":" + config.etherpad.port)
+    console.log(global.etherpad);
 }
 
 // Connect to MongoDB

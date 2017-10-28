@@ -27,7 +27,6 @@ if (config.env !== 'production') {
           surname: 'Alfred',
           uid: 'admin',
           email: 'admin@admin.com',
-
           mailValid: true,
           structure: 'MEN',
           isactif: true,
@@ -62,10 +61,11 @@ if (config.env !== 'production') {
             uid: 'admin'
           }, function (err, UserAdmin) {
 
-            Group.create({
-              name: 'dream-team',
+            Group.create(
+	    {
+              name: 'dream',
               info: 'The Dream Team',
-              note: 'Bonjour le groupe',
+              note: 'Bonjour le groupe Dream Team',
               type: 0,
               active: true,
               owner: UserAdmin._id,
@@ -77,9 +77,30 @@ if (config.env !== 'production') {
                 lieu: 'Dijon',
                 allDay: true
               }]
+            },
+	   {
+              name: 'eole',
+              info: ' Eole Team',
+              note: 'Bonjour le groupe Eole Team',
+              type: 1,
+              active: true,
+              owner: UserAdmin._id,
+              adminby: [UserAdmin._id],
+              participants: [],
+              events: []
+            },
+           {
+              name: 'Private',
+              info: ' Private Team',
+              note: 'Bonjour le groupe Eole Team',
+              type: 2,
+              active: true,
+              owner: UserAdmin._id,
+              adminby: [UserAdmin._id],
+              participants: [],
+              events: []
             })
           });
-
         }); // Fin Groups
       });
     });
