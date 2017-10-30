@@ -1,7 +1,5 @@
 'use strict';
-
 export default class SettingsController {
-
   /*@ngInject*/
   constructor(Auth, Group) {
     this.Auth = Auth;
@@ -40,7 +38,6 @@ export default class SettingsController {
   };
 
   myInit(form, field) {
-    console.log(form)
     form[field].$setValidity('mongoose', true);
   }
 
@@ -78,10 +75,10 @@ export default class SettingsController {
         alert("Erreur MAJ " + err);
         console.log(err)
       }
+      // Force =>  Read User
       this.user = this.Auth.getCurrentUserSync();
       this.groups = this.Group.listopengroups()
     });
-
   };
 
   delusergroup(groupe) {
@@ -92,25 +89,10 @@ export default class SettingsController {
         alert("Erreur MAJ " + err.data);
         console.log(err)
       }
-      //      console.log(u)
-      //      this.user=u;  // Pas utilisable ??  problème mongoose pull avec populate
-      /*      console.log(this.user.memberOf);
-            angular.forEach(this.user.memberOf, (o, i) => {
-              console.log(o + "=?"+grpId)
-              if (o== grpId) {
-                  console.log(this.user.memberOf)
-                this.user.memberOf.splice(i, 1);
-                console.log(this.user.memberOf)
-              }
-            });
-            */
-
+      // Force =>  Read User
       this.user = this.Auth.getCurrentUserSync();
       this.groups = this.Group.listopengroups();
     });
 
   };
-
-
-
 }

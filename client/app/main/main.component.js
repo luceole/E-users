@@ -5,7 +5,7 @@ import routing from './main.routes';
 export class MainController {
 
   /*@ngInject*/
-  constructor($http, $scope, $state, $stateParams, $window, socket, Auth) {
+  constructor($http, $scope, $state, $stateParams, $window, socket,appConfig, Auth) {
 
     this.w = $window;
     this.$http = $http;
@@ -17,7 +17,9 @@ export class MainController {
     this.$state = $state;
     this.$stateParams = $stateParams;
     this.MSG = "";
-    this.OauthActif=true;
+    this.DeviseSite = appConfig.DeviseSite || "Eco-système ";
+    this.TitreSite = appConfig.TitreSite || "Libre Communaute";
+    this.OauthActif=  appConfig.OauthActif || false;
     this.sso = (this.$state.current.name == "discoursesso");
 
     //   $scope.$on('$destroy', function() {
@@ -33,7 +35,6 @@ export class MainController {
       //   });
       if (this.$state.current.name == "discoursesso") {
         this.MSG = " ***  REDIRECTION Forum Discourse en cours .."
-
         this.Auth.getCurrentUser()
           .then((u) => {
             if (u._id) {

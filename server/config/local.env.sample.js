@@ -5,6 +5,11 @@
 //
 // You will need to set these on the server you deploy to.
 
+// See config/environment for this 3 parameters
+//DeviseSite : "Eco-système Logiciels Libres ",
+//TitreSite  : "Libre Communaute",
+//OauthActif :  false,
+
 module.exports = {
   DOMAIN: 'http://localhost:9000',
   SESSION_SECRET: 'This-is-my-secret',
