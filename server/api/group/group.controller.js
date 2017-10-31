@@ -86,7 +86,6 @@ export function byowner(req, res) {
 
 // Get list of open groupes
 export function isopen(req, res) {
-  console.log("IsOpen")
   Group.find({
       type: {
         $lt: 10

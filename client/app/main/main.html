@@ -78,41 +78,10 @@
       <div class="alert alert-warning" ng-if="!$ctrl.getCurrentUser().isactif"> Votre compte est en attende de validation par le modérateur. </div>
     </div>
     <div class="alert alert-success" ng-if="$ctrl.getCurrentUser().isactif">
-      <h3>Informations:</h3> {{$ctrl.MSG}}
-      <br><a href="https://forum.libre-communaute.fr">https://forum.libre-communaute.fr</a>
-      <span ng-if="getCurrentUser().memberOf.length > 0">Vous êtes inscrit dans les groupes : </span>
-      <ul>
-        <li ng-repeat=" grp in getCurrentUser().memberOf">
-          {{grp.info}}
-          <button ng-click="openNote(grp)">Informations </button>
-          <button ng-click="openPad(grp)">PAD</button>
+      <h3 ng-if="$ctrl.MSG">Informations:</h3> {{$ctrl.MSG }}  
+        <h3>Services en lignes</h3>
+      <p><span class="glyphicon glyphicon-bullhorn"></span><a href="https://forum.libre-communaute.fr"> Forum Libre Communauté</a>
+        <p><span class="glyphicon glyphicon-certificate"></span><a href="https://chat.libre-communaute.fr"> Chat Libre Communauté</a>
+       </div></div>
 
-        </li>
-      </ul>
-    </div>
-    <div class="alert alert-warning" ng-if="vm.getCurrentUser().isactif"> Votre compte est en attente de validation par le modérateur </div>
-  </div>
-</div>
-
-<script type="text/ng-template" id="modalNote.html">
-  <h3 class="modal-title"> Note du groupe {{info}}
-         <button class="glyphicon glyphicon-remove pull-right" ng-click="cancel()">
-        </button></h3>
-  <div class="modal-body">
-    <div ng-show="isAdmin_grp()">
-      <div ckeditor="options" ng-model="content">
-      </div>
-      <div class="modal-footer">
-        <div class="alert alert-success" align="center" ng-if="msg"> {{msg}}
-          <button class="glyphicon glyphicon-save" ng-click="save()">
-          </button>
-        </div>
-      </div>
-    </div>
-    <div ng-show="!isAdmin_grp()">
-      <div ng-bind-html="content"> </div>
-    </div>
-
-  </div>
-</script>
 </div>
