@@ -11,6 +11,7 @@ export class NavbarComponent {
     this.isLoggedIn = Auth.isLoggedInSync;
     this.isAdmin = Auth.isAdminSync;
     this.getCurrentUser = Auth.getCurrentUserSync;
+    this.isActif= Auth.isActif;
     this.status = {
       isopen: false
     };

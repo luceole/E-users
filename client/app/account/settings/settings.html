@@ -42,7 +42,6 @@
                 Structure de rattachement Obligatoire
               </p>
             </div>
-
             <div class="form-group" ng-class="{ 'has-success': modifForm.email.$valid && vm.submitted,
                                     'has-error': modifForm.email.$invalid && vm.submitted }">
               Courriel
@@ -57,9 +56,6 @@
                 {{ vm.errors.email }}
               </p>
             </div>
-
-
-
             <div>&nbsp
               <p>
                 <button class="btn  btn-default btn-lg btn-primary" ng-disabled="modifForm.$invalid || passwdForm.$pending" type="submit">
@@ -68,7 +64,6 @@
                 <p class="help-block"> {{vm.editMessage }} </p>
             </div>
           </form>
-
         </uib-tab>
         <uib-tab heading="Mot de passe">
           <div class="row">
@@ -78,16 +73,13 @@
 
             <div class="col-sm-12">
               <form class="form" name="passwdForm" ng-submit="vm.changePassword(passwdForm)" novalidate>
-
                 <div class="form-group">
                   <label>Mot de passe actuel</label>
-
                   <input type="password" name="password" class="form-control" ng-model="vm.user.oldPassword" ng-focus="vm.myInit(passwdForm,'password')" mongoose-error style="width:350px" />
                   <p class="help-block" ng-show="passwdForm.password.$error.mongoose">
                     {{ vm.errors.other }}
                   </p>
                 </div>
-
                 <div class="form-group">
                   <label>Nouveau mot de passe</label>
 
@@ -104,22 +96,18 @@
                   <p class="help-block" ng-show="passwdForm.confirmPassword.$error.match">
                     Mot de passe différent!
                   </p>
-
                 </div>
-
                 <p class="help-block"> {{ vm.message }} </p>
-
                 <button class="btn btn-lg btn-primary" ng-disabled="passwdForm.$invalid || passwdForm.$pending" type="submit">Modifier</button>
               </form>
             </div>
           </div>
         </uib-tab>
-        <uib-tab heading="Vos Groupes">
+        <uib-tab heading="Vos Groupes" >
           Gestion des groupes de {{vm.user.uid}}
           <form>
             <input ng-model="search.$" placeholder="Recherche globale">
           </form>
-
           <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="app/users/dirPagination.tpl.html"></dir-pagination-controls>
           <br>
           <table class="table table-striped ">
@@ -145,14 +133,10 @@
                 <strong ng-switch-when="10">Réservé</strong>
                 <strong ng-switch-default>{{group.type}}</strong>
               </td>
-
               <td> Membre(s): {{group.participants.length}}
               </td>
             </tr>
           </table>
-
-
-
         </uib-tab>
       </uib-tabset>
     </div>

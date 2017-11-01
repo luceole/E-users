@@ -42,6 +42,18 @@ export function isAuthenticated() {
     });
 }
 
+ export function isactif() {
+  return compose()
+    .use(isAuthenticated())
+    .use(function meetsRequirements(req, res, next) {
+    if (req.user.isactif) {
+      next()
+      return null;
+    } else {
+        return res.status(403).send('Forbidden');
+    }
+    });
+}
 /**
  * Checks if the user role meets the minimum requirements of the route
  */

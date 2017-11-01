@@ -39,7 +39,7 @@
         <li ng-show="$ctrl.isLoggedIn()">
           <p class="navbar-text">Hello {{ $ctrl.getCurrentUser().name}}</p>
         </li>
-        <li ng-show="$ctrl.isLoggedIn()" ui-sref-active="active"><a ui-sref="settings"><span class="glyphicon glyphicon-cog" rel="tooltip" title="Parametres" alt="Parametres"></span></a></li>
+        <li ng-show="$ctrl.isActif()" ui-sref-active="active"><a ui-sref="settings"><span class="glyphicon glyphicon-cog" rel="tooltip" title="Parametres" alt="Parametres"></span></a></li>
         <li ng-show="$ctrl.isLoggedIn()"><a ui-sref="logout" rel="tooltip" title="Quitter" alt="Quitter"><span class="glyphicon glyphicon-log-out"></span></a></li>
       </ul>
     </div>
