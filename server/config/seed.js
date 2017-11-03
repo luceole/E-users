@@ -110,9 +110,11 @@ if (config.env !== 'production') {
       User.create({
           provider: 'local',
           role: 'admin',
+	  uid: 'admin',    
           name: 'Administrator',
           surname: 'Alfred',
           urlToken: '',
+	  email : 'admin.local.lan',    
           mailValid: true,
           structure: 'MEN',
           isactif: true,
