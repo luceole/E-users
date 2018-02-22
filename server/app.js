@@ -14,6 +14,7 @@ import http from 'http';
 import User from './api/user/user.model';
 
 // Etherpad ?
+global.etherpad = false;
 if (config.etherpad) {
   var ether_api = require('etherpad-lite-client');
 
