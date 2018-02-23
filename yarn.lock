@@ -2679,6 +2679,12 @@ etag@^1.7.0, etag@~1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.0.tgz#6f631aef336d6c46362b51764044ce216be3c051"
 
+etherpad-lite-client@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/etherpad-lite-client/-/etherpad-lite-client-0.8.0.tgz#c7db6240f5ca1b09d039b40eaecf3ca2f00a0979"
+  dependencies:
+    underscore "1.3.x"
+
 event-emitter@~0.3.5:
   version "0.3.5"
   resolved "https://registry.yarnpkg.com/event-emitter/-/event-emitter-0.3.5.tgz#df8c69eef1647923c7157b9ce83840610b02cc39"
@@ -8721,6 +8727,10 @@ undefsafe@0.0.3:
 underscore.string@~3.2.3:
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/underscore.string/-/underscore.string-3.2.3.tgz#806992633665d5e5fcb4db1fb3a862eb68e9e6da"
+
+underscore@1.3.x:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.3.3.tgz#47ac53683daf832bfa952e1774417da47817ae42"
 
 underscore@1.7.x:
   version "1.7.0"
