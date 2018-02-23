@@ -141,9 +141,12 @@ export class ModalAddGroupComponent {
           this.$uibModalInstance.close(r);
         })
         .catch((err) => {
+          var msg=" ";
           err = err.data
-          alert("Erreur en création");
-          console.log(err.errors);
+          if (err.code==11000) msg = " Ce groupe existe dèja!"
+          else  msg=err.errmsg;
+          alert("Erreur en création:" + msg);
+          console.log(err);
           this.errors = {};
           // Update validity of form fields that match the mongoose errors
           angular.forEach(err.errors, function (error, field) {
