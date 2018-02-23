@@ -107,7 +107,7 @@ export function show(req, res) {
 }
 
 // Creates a new Group in the DB                                                                                                             
-function create(req, res) {                                                                                               
+export function create(req, res) {                                                                                               
   var newGroupe = new _group2.default(req.body);                             
 if (etherpad)  {                                        
   etherpad.createGroup(function (error, data) {                              
