@@ -106,6 +106,7 @@ export function show(req, res) {
     .catch(handleError(res));
 }
 
+<<<<<<< HEAD
 // Creates a new Group in the DB
 export function create(req, res) {
   var newGroupe = new  Group(req.body);
@@ -121,6 +122,23 @@ if (etherpad)  {
       };
       etherpad.createGroupPad(args, function (error, data) {
         if (error) console.error('Error creating pad: ' + error.message);else {
+=======
+// Creates a new Group in the DB                                                                                                             
+export function create(req, res) {                                                                                               
+  var newGroupe = new _group2.default(req.body);                             
+if (etherpad)  {                                        
+  etherpad.createGroup(function (error, data) {                              
+    if (error) console.error('Error creating group: ' + error.message);else {                                             
+      console.log('New group created: ' + data.groupID);                                                                                     
+      newGroupe.groupPadID = data.groupID;                  
+      var args = {                                                             
+        groupID: data.groupID,                          
+        padName: newGroupe.name,                                                                                                             
+        text: 'Bienvenu sur le PAD du groupe ' + newGroupe.name                
+      };                                                    
+      etherpad.createGroupPad(args, function (error, data) {                                           
+        if (error) console.error('Error creating pad: ' + error.message);else {                        
+>>>>>>> c1a6d5753f947e12ef43f03a18706015a76e4ace
           console.log('New pad created: ' + data.padID);
         }
       });
