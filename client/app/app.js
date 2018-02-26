@@ -26,6 +26,7 @@ import account from './account';
 import groupes from './groupes/groupes.component';
 import demandes from './demandes/demandes.component';
 import users from './users/users.component';
+import collaborate from './collaborate/collaborate.component';
 import navbar from '../components/navbar/navbar.component';
 import footer from '../components/footer/footer.component';
 import main from './main/main.component';
@@ -37,7 +38,7 @@ import './app.scss';
 
 angular.module('E-userApp', [ngCookies, ngResource, ngSanitize, ngMaterial, 'btford.socket-io', ngValidationMatch, uiRouter,
     uiBootstrap, uiSelect,
-    _Auth, account, groupes, navbar, footer, main, constants, socket, util, demandes, users
+    _Auth, account, groupes, collaborate, navbar, footer, main, constants, socket, util, demandes, users
   ])
   .config(routeConfig)
   .run(function ($rootScope, $location, Auth) {

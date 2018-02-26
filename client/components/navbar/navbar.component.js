@@ -4,7 +4,11 @@
 import angular from 'angular';
 
 export class NavbarComponent {
-
+menu = [{
+    title: 'Mes groupes',
+    state: 'collaborate'
+  }];
+isCollapsed = true;
   constructor(Auth) {
     'ngInject';
 
