@@ -13,10 +13,18 @@ export class ModalEditGroupComponent {
     this.listadmgrp = User.listadmgrp();
     this.$uibModalInstance = $uibModalInstance;
     this.groupe = new Group(gp);
+
+     this.adminbyOld=[];
+     var w=[];
+    angular.forEach(this.groupe.adminby, function (o) {
+      w.push(o._id)
+    });
+    this.adminbyOld=w.slice();
     this.person = {};
     this.person.selected = this.groupe.owner;
     this.admin = {};
     this.forms = {};
+
     this.typeoptions = [{
         id: 0,
         name: "Ouvert"
@@ -40,13 +48,17 @@ export class ModalEditGroupComponent {
 
   ok(form) {
     this.submitted = true;
-    console.log(this.forms.tab1.$valid)
+    //console.log(this.forms.tab1.$valid)
     if (this.forms.tab1.$valid) {
       var Nadm = [];
+      var Supp = [];
       angular.forEach(this.groupe.adminby, function (user) {
         Nadm.push(user._id)
       });
-      console.log(Nadm)
+      angular.forEach(this.adminbyOld, function (u) {
+      if (Nadm.indexOf(u) === -1)  Supp.push(u)
+      });
+
       this.Auth.updateGroup(this.groupe._id, {
           info: this.groupe.info,
           type: this.groupe.type,
@@ -54,16 +66,21 @@ export class ModalEditGroupComponent {
           adminby: Nadm
         })
         .then((r) => {
-
+          //console.log("Old "+this.adminbyOld)
+          //console.log("new "+Nadm)
+          //console.log("supp="+Supp)
+          if (Supp.length) {
+          this.Auth.userAdmingroup(this.groupe._id,Supp).then(
+            console.log("MAj adminby ")
+          )
+        }
           /*  Sgroupe.info = r.info;
   Sgroupe.type = r.type;
   Sgroupe.owner.uid = this.person.selected.uid;*/
           this.$uibModalInstance.close();
         })
         .catch((err) => {
-
           err = err.data;
-
           alert("Erreur de mise à jour: " + err);
           /* this.errors = {};
 
@@ -132,8 +149,8 @@ export class ModalAddGroupComponent {
           }
         })
         .then((r) => {
-          console.log(r)
-          console.log("Add is OK " + r.name + " " + r.info);
+          //console.log(r)
+          //console.log("Add is OK " + r.name + " " + r.info);
           r.owner = {
             _id: this.person.selected._id,
             uid: this.person.selected.uid
@@ -176,11 +193,11 @@ export class GroupesComponent {
     });
 
     ModalInstance.result.then((s) => {
-      console.log(s)
+      //console.log(s)
       this.groups = this.Group.query();
     }, () => {
       this.groups = this.Group.query()
-      console.log('Modal dismissed at: ' + new Date());
+      //console.log('Modal dismissed at: ' + new Date());
     });
   };
 
@@ -198,11 +215,11 @@ export class GroupesComponent {
       }
     });
     ModalInstance.result.then((s) => {
-      console.log(s)
+      //console.log(s)
       this.groups = this.Group.query();
     }, () => {
       this.groups = this.Group.query()
-      console.log('Modal dismissed at: ' + new Date());
+      //console.log('Modal dismissed at: ' + new Date());
     });
   };
 

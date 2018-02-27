@@ -137,6 +137,7 @@ if (etherpad)  {
     if (req.body._id) {
       delete req.body._id;
     }
+    
     return Group.findOneAndUpdate({
         _id: req.params.id
       }, req.body, {

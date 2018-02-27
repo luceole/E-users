@@ -62,7 +62,7 @@ export default class SettingsController {
     // var r = this.user.memberOf.filter(function (obj) {
     //   return obj._id == grpId;
     // });
-    var r = this.user.memberOf.filter(o => o == grpId)
+    var r = this.user.memberOf.filter(o => o._id == grpId)
     //console.log("isMember " + grpId + " ?" + this.user.memberOf + " " + r[0])
     return r[0] ? 1 : null
   };

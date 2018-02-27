@@ -1,1 +1,65 @@
-<div>This is the collaborate view.</div>
+<div class="container">
+
+  <div class="col-lg-10">
+    <h3>Groupes</h3>
+    <div ng-if="collaborateCtrl.getCurrentUser().isactif">
+      <span ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0">Vous êtes inscrit dans : {{collaborateCtrl.getCurrentUser().memberOf.length}} groupe(s) </span>
+      <form>
+        <input ng-model="search.$" placeholder="Recherche globale">
+      </form>
+      <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="app/account/settings/dirPagination.tpl.html"></dir-pagination-controls>
+      <br>
+      <table class="table table-striped ">
+        <tr dir-paginate="group in collaborateCtrl.getCurrentUser().memberOf | orderBy: 'name'| filter:search:strict | itemsPerPage : '12' ">
+          <td>
+            <button class="btn  btn-default btn-sm btn-primary" ng-click="collaborateCtrl.openNote(group)"><span class="glyphicon .glyphicon-info-sign"></span>Informations </button>
+            <button class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openPad(group)">EtherPAD</button>
+          </td>
+          <td>
+            <strong>{{group.name}}</strong>
+          </td>
+          <td>
+            {{group.info}}
+          </td>
+        </tr>
+      </table>
+
+
+      <div ng-if="false">Agenda de vos groupes
+        <button ng-click="refreshEvents() ">Recharger </button>
+        <div ui-calendar="uiConfig.calendar " id="calendar " class="span8 calendar " ng-model="eventSources " calendar="myCalendar " calendar-watch-event="watchColor "></div>
+      </div>
+
+      <div init-toolbar=" ">
+
+      </div>
+
+      <div class="alert alert-success " align="center " ng-if="alert.msg "> {{alert.msg}}</div>
+    </div>
+    <div class="alert alert-warning " ng-if="!collaborateCtrl.getCurrentUser().isactif "> Votre compte est en attende de validation par le modérateur </div>
+  </div>
+
+</div>
+<div ng-include=" 'components/footer/footer.html' "></div>
+
+<script type="text/ng-template " id="modalNote.html ">
+  <h3 class="modal-title "> Note du groupe: {{NC.groupe.info}} {{NC.isAdminOf}}
+    <button class="glyphicon glyphicon-remove pull-right " ng-click="NC.cancel() ">
+        </button></h3>
+  <div class="modal-body ">
+
+    <div ng-show="NC.isAdminOf ">
+      <div ckeditor="options " ng-model="NC.groupe.note "> </div>
+      <div class="modal-footer ">
+        <div class="alert alert-success " align="center " ng-if="NC.msg "> {{NC.msg}}
+        </div>
+        <button class="glyphicon glyphicon-save " ng-click="NC.save() ">
+            </button>
+      </div>
+    </div>
+    <div ng-show="!NC.isAdminOf ">
+      <div ng-bind-html="NC.groupe.note "></div>
+    </div>
+  </div>
+</script>
+<script type="text/javascript" src="//cdn.ckeditor.com/4.7.3/standard/ckeditor.js"></script>

@@ -160,7 +160,17 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
           }).$promise;
       },
 
-
+       userAdmingroup(idgrp,listusers,callback) {
+         var cb = callback || angular.noop;
+         return User.userAdmingroup({
+            idgrp, listusers
+           }, function () {
+             return safeCb(callback)(null);
+           }, function (err) {
+             return safeCb(callback)(err);
+           })
+           .$promise;
+       },
 
 
       discourseSso(id, params, callback) {

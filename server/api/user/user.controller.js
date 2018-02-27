@@ -2,6 +2,7 @@
 
 import User from './user.model';
 import Group from '../group/group.model';
+
 import jsonpatch from 'fast-json-patch';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
@@ -64,7 +65,8 @@ function sendM(user) {
 
 export function index(req, res) {
   return User.find({}, '-salt -password')
-    .populate('memberOf', 'name info')
+    .populate('memberOf', 'name info groupPadID')
+    .populate('adminOf', 'info note groupPadID name')
     .exec()
     .then(users => {
       res.status(200).json(users);
@@ -258,12 +260,31 @@ export function resetPassword(req, res) {
  */
 export function show(req, res, next) {
   var userId = req.params.id;
-  return User.findById(userId).exec()
+  return User.findById(userId, '-salt -hashedPassword')
+    .populate('memberOf')
+    .populate('adminOf', 'info note groupPadID name')
+    .exec()
     .then(user => {
       if (!user) {
         return res.status(404).end();
       }
       res.json(user.profile);
+    })
+    .catch(err => next(err));
+}
+
+export function me(req, res, next) {
+  var userId = req.user._id;
+  return User.findOne({
+      _id: userId
+    }, '-salt -password')
+    .populate('memberOf')
+    .exec()
+    .then(user => { // don't ever give out the password or salt
+      if (!user) {
+        return res.status(401).end();
+      }
+      return res.json(user);
     })
     .catch(err => next(err));
 }
@@ -303,7 +324,29 @@ export function update(req, res) {
     });
 }
 
-// Revoir le coté "transaction" de la double ecriture
+export function useradmingroup(req,res){
+var listusers=req.body.listusers;
+var idgrp=req.body.idgrp;
+
+listusers.forEach(function(userId) {
+  console.log("grp="+idgrp)
+  Group.findById(idgrp, function(err, group) {
+    if (err) {
+      return err;
+    }
+    group.adminby.pull(userId);
+    group.save(function(err) {
+      if (err) {
+        return err;
+      }
+      return res.status(200).end();
+  });
+});
+})
+}
+
+// Revoir le coté "transaction" de la double ecriture.  Utilser le middleware pre(save) ?
+
 export function addusergroup(req, res) {
   var userId = req.params.id;
   var groupId = String(req.body.idGroup);
@@ -319,16 +362,16 @@ export function addusergroup(req, res) {
               return err;
             }
             group.participants.push(userId);
-            group.save(function(err) {
+              group.save(function(err) {
               if (err) {
                 return err;
               }
-              return res.json(200, user);
+                return res.json(200, user);
+              });
             });
-          });
-        });
-    });
-};
+         });
+      });
+}
 
 export function delusergroup(req, res) {
   var userId = req.params.id;
@@ -349,7 +392,7 @@ export function delusergroup(req, res) {
               if (err) {
                 return err;
               }
-              console.log(user.memberOf);
+            //  console.log(user.memberOf);
               return res.json(200, user);
             });
           });
@@ -457,19 +500,7 @@ export function changePassword(req, res) {
     });
 }
 
-export function me(req, res, next) {
-  var userId = req.user._id;
-  return User.findOne({
-      _id: userId
-    }, '-salt -password').exec()
-    .then(user => { // don't ever give out the password or salt
-      if (!user) {
-        return res.status(401).end();
-      }
-      return res.json(user);
-    })
-    .catch(err => next(err));
-}
+
 
 export function authCallback(req, res) {
   res.redirect('/');

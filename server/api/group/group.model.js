@@ -58,9 +58,12 @@ var GroupSchema = new Schema({
  * MiddleWare
  */
 
+
 // Modify User adminOf
 GroupSchema.pre('save', function (next) {
-  var grpId = this._id
+  var grpId = this._id;
+
+  //console.log(this.isModified('adminby'))  //  tester
   this.adminby.forEach(function (id) {
     var query = {
       "_id": id
@@ -72,7 +75,27 @@ GroupSchema.pre('save', function (next) {
     };
     User.findOneAndUpdate(query, update, function (err, user) {
       if (err) {
-        console.log("erreur Admin groupe : " + err);
+        console.log("erreur Adminby  : " + err);
+      }
+      next(); // Always go on !
+    });
+  });
+
+});
+GroupSchema.pre('remove', function (next) {
+  var grpId = this._id;
+  this.adminby.forEach(function (id) {
+    var query = {
+      "_id": id
+    };
+    var update = {
+      $addToSet: {
+        adminOf: grpId
+      }
+    };
+    User.findOneAndUpdate(query, update, function (err, user) {
+      if (err) {
+        console.log("erreur Adminby : " + err);
       }
       next(); // Always go on !
     });
