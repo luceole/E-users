@@ -11,7 +11,7 @@
 'use strict';
 import jsonpatch from 'fast-json-patch';
 import Group from './group.model';
-
+var config = require('../../config/environment');
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
@@ -65,7 +65,7 @@ function handleError(res, statusCode) {
 export function index(req, res) {
   return Group.find()
     .populate('owner', 'uid')
-    .populate('participants', 'uid')
+    .populate('participants', 'uid info note')
     .populate('adminby', 'uid')
     .exec()
     .then(respondWithResult(res))
@@ -78,7 +78,7 @@ export function byowner(req, res) {
   Group.find({
       owner: owner
     })
-    .populate('participants', 'uid')
+    .populate('participants', 'uid info note')
     .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -92,7 +92,7 @@ export function isopen(req, res) {
       }
     })
     .populate('owner', 'uid')
-    .populate('participants', 'uid')
+    .populate('participants', 'uid info note')
     .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -109,27 +109,7 @@ export function show(req, res) {
 // Creates a new Group in the DB
 export function create(req, res) {
   var newGroupe = new  Group(req.body);
-if (etherpad)  {
-  etherpad.createGroup(function (error, data) {
-    if (error) console.error('Error creating group: ' + error.message);else {
-      console.log('New group created: ' + data.groupID);
-      newGroupe.groupPadID = data.groupID;
-      var args = {
-        groupID: data.groupID,
-        padName: newGroupe.name,
-        text: 'Bienvenu sur le PAD du groupe ' + newGroupe.name
-      };
-      etherpad.createGroupPad(args, function (error, data) {
-        if (error) console.error('Error creating pad: ' + error.message);else {
-          console.log('New pad created: ' + data.padID);
-        }
-      });
-    }
-    return Group.create(newGroupe).then(respondWithResult(res, 201)).catch(handleError(res));
-  });
-} else
-// Alway Create Group
-    return Group.create(newGroupe).then(respondWithResult(res, 201)).catch(handleError(res));
+  return Group.create(newGroupe).then(respondWithResult(res, 201)).catch(handleError(res));
 }
 
   // Upserts the given Group in the DB at the specified ID
@@ -137,7 +117,7 @@ if (etherpad)  {
     if (req.body._id) {
       delete req.body._id;
     }
-    
+
     return Group.findOneAndUpdate({
         _id: req.params.id
       }, req.body, {

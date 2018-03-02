@@ -349,7 +349,28 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
        */
       getToken() {
         return $cookies.get('token');
-      }
+      },
+    /**
+    *
+    * Session Etherpad
+    *
+    **/
+    openPad: function (pad, callback) {
+    var cb = callback || angular.noop;
+    $http.post('/api/pads', {
+      groupID: pad.groupID,
+      authorID: pad.authorID,
+    }).
+    success(function (data) {
+      // console.log("session PAD: " + data.sessionID);
+      $cookieStore.put('sessionID', data.sessionID);
+      return cb(data);
+    }).
+    error(function (err) {
+      console.lo("err :" + err)
+      return cb(err);
+    }.bind(this)).$promise;
+  },
   };
 
   return Auth;

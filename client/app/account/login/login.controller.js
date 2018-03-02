@@ -12,8 +12,6 @@ export default class LoginController {
   login(form) {
     this.submitted = true;
     this.msg = "";
-    console.log(form.$valid);
-
     if (form.$valid) {
       this.Auth.login({
           uid: this.user.uid,

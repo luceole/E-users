@@ -1,8 +1,6 @@
 'use strict';
 const angular = require('angular');
-
 const uiRouter = require('angular-ui-router');
-
 import routes from './collaborate.routes';
 
 export class NoteComponent {
@@ -20,7 +18,6 @@ export class NoteComponent {
     };
     this.isAdmin = Auth.isAdmin;
     this.isAdmin_grp = Auth.isAdmin_grp;
-    console.log( this.Auth.getCurrentUserSync().adminOf )
     this.isAdminOf = this.Auth.getCurrentUserSync().adminOf.find(o => o === this.groupe._id);
     //this.isAdminOf = this.Auth.getCurrentUserSync().adminOf == this.groupe._id;
     this.$uibModalInstance = $uibModalInstance;
@@ -61,6 +58,8 @@ export class CollaborateComponent {
     this.OauthActif = true;
     this.DeviseSite = appConfig.DeviseSite || "Eco-système Libre";
     this.TitreSite = appConfig.TitreSite || "Libre Communaute";
+    if (appConfig.etherpad)
+    this.urlPad = appConfig.etherpad.url
     /* $scope.$on('$destroy', function () {
        socket.unsyncUpdates('thing');
      });*/
@@ -80,17 +79,17 @@ export class CollaborateComponent {
   }
 
   openPad(grp) {
-    console.log(this.getCurrentUser());
-    var auhorID = this.getCurrentUser().authorPadID;
+    var authorID = this.getCurrentUser().authorPadID;
     this.$http.post('/api/pads', {
-      authorID: auhorID,
+      authorID: authorID,
       groupID: grp.groupPadID
     }).success((data) => {
-      if (data) {
-        console.log(data)
+        if (data) {
         this.$cookies.put('sessionID', data.sessionID);
-        this.$window.open('//localhost:9001/p/' + grp.groupPadID + "$" + grp.name + "?userName=" + this.getCurrentUser().name);
-      } else alert("Pad  non trouvé ou vous n'êtes pas autorisé");
+        var url = this.urlPad+"/p/"+ grp.groupPadID + "$" + grp.name + "?userName="+this.getCurrentUser().name;
+        //this.$window.open('//localhost:9001/p/' + grp.groupPadID + "$" + grp.name + "?userName=" + this.getCurrentUser().name);
+        this.$window.open(url)
+      } else alert(url+"\n Pad  non trouvé ou vous n'êtes pas autorisé");
     }).error(function (err) {
       console.log("err :" + err)
       alert("Serveur Pad  non actif");

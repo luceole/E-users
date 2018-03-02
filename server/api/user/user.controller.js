@@ -65,8 +65,8 @@ function sendM(user) {
 
 export function index(req, res) {
   return User.find({}, '-salt -password')
-    .populate('memberOf', 'name info groupPadID')
-    .populate('adminOf', 'info note groupPadID name')
+    .populate('memberOf', 'name info note groupPadID')
+    .populate('adminOf', 'name info  groupPadID ')
     .exec()
     .then(users => {
       res.status(200).json(users);
@@ -127,6 +127,7 @@ export function create(req, res) {
   newUser.urlToken = randtoken.generate(16);
   newUser.mailValid = false;
   newUser.isdemande = true;
+  newUser.authorPadID ="coucou";
   /**
    * Envoie du Mail de confirmation
    */
@@ -261,7 +262,7 @@ export function resetPassword(req, res) {
 export function show(req, res, next) {
   var userId = req.params.id;
   return User.findById(userId, '-salt -hashedPassword')
-    .populate('memberOf')
+    .populate('memberOf', 'name info note groupPadID')
     .populate('adminOf', 'info note groupPadID name')
     .exec()
     .then(user => {
@@ -278,9 +279,10 @@ export function me(req, res, next) {
   return User.findOne({
       _id: userId
     }, '-salt -password')
-    .populate('memberOf')
+    .populate('memberOf', 'name info note groupPadID')
     .exec()
     .then(user => { // don't ever give out the password or salt
+    console.log(user)
       if (!user) {
         return res.status(401).end();
       }
@@ -347,31 +349,35 @@ listusers.forEach(function(userId) {
 
 // Revoir le coté "transaction" de la double ecriture.  Utilser le middleware pre(save) ?
 
+
 export function addusergroup(req, res) {
   var userId = req.params.id;
   var groupId = String(req.body.idGroup);
-  return User.findById(userId)
+  return User.findById(userId, '-salt -hashedPassword')
     .populate('memberOf', 'info')
     .exec()
     .then(user => {
       user.memberOf.push(groupId);
-      return user.save()
+        return user.save()
         .then(user => {
           Group.findById(groupId, function(err, group) {
             if (err) {
+              console.log(err)
               return err;
             }
             group.participants.push(userId);
-              group.save(function(err) {
+            group.save(function(err) {
               if (err) {
-                return err;
+                  console.log(err)
               }
-                return res.json(200, user);
-              });
             });
-         });
-      });
-}
+          });
+          return res.status(200).json(user)
+        });
+        //return res.status(200).json(user)
+    });
+};
+
 
 export function delusergroup(req, res) {
   var userId = req.params.id;
@@ -381,22 +387,24 @@ export function delusergroup(req, res) {
     .exec()
     .then(user => {
       user.memberOf.pull(groupId);
-      return user.save()
+        return user.save()
         .then(user => {
+          console.log("1")
           Group.findById(groupId, function(err, group) {
             if (err) {
+              console.log(err)
               return err;
             }
             group.participants.pull(userId);
             group.save(function(err) {
               if (err) {
-                return err;
+                  console.log(err)
               }
-            //  console.log(user.memberOf);
-              return res.json(200, user);
             });
           });
+          return res.status(200).json(user)
         });
+      //  return res.status(200).json(user)
     });
 };
 

@@ -24,7 +24,6 @@ if (config.etherpad) {
     port: config.etherpad.port,
   });
     console.log(" - Link Etherpad=" + config.etherpad.host + ":" + config.etherpad.port)
-    console.log(global.etherpad);
 }
 
 // Connect to MongoDB

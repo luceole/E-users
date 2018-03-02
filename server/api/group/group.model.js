@@ -7,7 +7,7 @@ import mongoose, {
   Schema
 } from 'mongoose';
 
-
+var config = require('../../config/environment');
 var EventSchema = new Schema({
   title: String,
   start: Date,
@@ -62,8 +62,7 @@ var GroupSchema = new Schema({
 // Modify User adminOf
 GroupSchema.pre('save', function (next) {
   var grpId = this._id;
-
-  //console.log(this.isModified('adminby'))  //  tester
+  if (this.isModified('adminby')) {
   this.adminby.forEach(function (id) {
     var query = {
       "_id": id
@@ -77,11 +76,47 @@ GroupSchema.pre('save', function (next) {
       if (err) {
         console.log("erreur Adminby  : " + err);
       }
-      next(); // Always go on !
+      return next(); // Always go on !
     });
   });
-
+}
+  return next(); // Always go on !
 });
+
+//.pre(save)  in case of seed or error etherpad on groupcreate!
+GroupSchema.pre('save', function (next) {
+  if (config.etherpad)  {
+    var groupID = this.groupPadID;
+    if (groupID!=undefined)
+    {
+       return next();
+   }
+      console.log('pre save group 2')
+      etherpad.createGroup((error, data) => {
+     //etherpad.createGroupIfNotExistsFor({groupMapper: groupID},(error, data) => {
+      if (error) console.error('Error creating group: '+groupID+ ' ' + error.message);
+      else {
+        console.log('New group created: ' + data.groupID);
+        this.groupPadID = data.groupID;
+        var args = {
+          groupID: data.groupID,
+          padName: this.name,
+          text: 'Bienvenu sur le PAD du groupe ' + this.name
+        };
+        etherpad.createGroupPad(args, function (error, data) {
+          if (error) console.error('Error creating pad: ' + error.message);
+          else {
+            console.log('New pad created: ' + data.padID);
+          }
+        });
+     }
+       console.log("grp pre save next")
+      return next();  // Always create Group
+   });
+} else
+     return next();
+});
+
 GroupSchema.pre('remove', function (next) {
   var grpId = this._id;
   this.adminby.forEach(function (id) {
@@ -97,10 +132,9 @@ GroupSchema.pre('remove', function (next) {
       if (err) {
         console.log("erreur Adminby : " + err);
       }
-      next(); // Always go on !
+      return next(); // Always go on !
     });
   });
-
 });
 /**
  * Validations

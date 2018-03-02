@@ -59,36 +59,36 @@ export default class SettingsController {
 
   isMemberOf(groupe) {
     var grpId = groupe._id
-    // var r = this.user.memberOf.filter(function (obj) {
-    //   return obj._id == grpId;
-    // });
+    //this.user = this.Auth.getCurrentUserSync();
     var r = this.user.memberOf.filter(o => o._id == grpId)
-    //console.log("isMember " + grpId + " ?" + this.user.memberOf + " " + r[0])
-    return r[0] ? 1 : null
+    return (r.length)
   };
 
   addusergroup(groupe) {
     var grpId = groupe._id
-  //  var groupeInfo = groupe.info;
+
     this.Auth.addUserGroup(grpId, (err, u) => {
       if (err) {
-        alert("Erreur MAJ " + err);
+        alert("Erreur MAJ " + err.data);
         console.log(err)
       }
+      console.log(u)
       // Force =>  Read User
       this.user = this.Auth.getCurrentUserSync();
       this.groups = this.Group.listopengroups()
+      //console.log(  this.groups)
     });
   };
 
   delusergroup(groupe) {
     var grpId = groupe._id
-    var groupeInfo = groupe.info
+
     this.Auth.delUserGroup(grpId, (err, u) => {
       if (err) {
         alert("Erreur MAJ " + err.data);
         console.log(err)
       }
+    //  console.log(u)
       // Force =>  Read User
       this.user = this.Auth.getCurrentUserSync();
       this.groups = this.Group.listopengroups();

@@ -36,7 +36,7 @@ if (config.env !== 'production') {
           console.log('finished populating users');
         });
       var uT = [];
-      for (var i = 0; i < 15; i++) {
+      for (var i = 0; i <10; i++) {
         uT.push({
           provider: 'local',
           name: 'EOLE' + i,

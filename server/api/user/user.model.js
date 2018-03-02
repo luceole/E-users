@@ -43,7 +43,7 @@ var UserSchema = new Schema({
     type: Date,
     'default': Date.now
   },
-  authorPadID: String,
+  'authorPadID': String,
   memberOf: [{
     type: Schema.Types.ObjectId,
     ref: 'Group'
@@ -185,7 +185,6 @@ var validatePresenceOf = function(value) {
 UserSchema
   .pre('save', function(next) {
     // Handle new/update passwords
-    //console.log("pre "+this.uid)
     if (!this.isModified('password')) {
       return next();
     }
@@ -212,23 +211,26 @@ UserSchema
     })
   })
 .pre('save', function(next) {
-  //  console.log('pre2 '+this.uid)
-    if (config.etherpad) {
-      etherpad.createAuthorIfNotExistsFor(this.uid,
+
+    console.log('pre2 '+this.uid+" "+this.authorPadID)
+
+  if (config.etherpad) {
+      if (this.authorPadID) return next();
+      etherpad.createAuthor(this.uid,
         (error, data) => {
           if (error) {
-            console.log('New pad User created  ERROR : ' + error.message);
+            console.log('New pad User create ERROR : ' + error.message);
             this.authorPadID = "";
+            return next() // Alway Create even EtherPad error
           } else {
-            console.log(this.uid + ': New pad USer created: ' + data.authorID)
+            console.log(this.uid + ': New pad User created: ' + data.authorID)
             this.authorPadID = data.authorID;
-            //  return next();
+            return next();
           }
-          return next() // Alway Create even EtherPad error
         });
-    } else {
-      return next()
     }
+    console.log("next")
+    //return next()  //always Create
   });
 
 /**
