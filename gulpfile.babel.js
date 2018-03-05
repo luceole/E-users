@@ -349,6 +349,20 @@ gulp.task('serve', cb => {
         cb
     );
 });
+gulp.task('go', cb => {
+    runSequence(
+        [
+            'clean:tmp',
+            'inject',
+            'copy:fonts:dev',
+            'env:all'
+        ],
+        // 'webpack:dev',
+        ['start:server', 'start:client'],
+        'watch',
+        cb
+    );
+});
 
 gulp.task('serve:debug', cb => {
     runSequence(

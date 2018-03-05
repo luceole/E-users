@@ -13,23 +13,23 @@ var _ = require('lodash');
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
-  return function(err) {
+  return function (err) {
     return res.status(statusCode).json(err);
   };
 }
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
-  return function(err) {
+  return function (err) {
     return res.status(statusCode).send(err);
   };
 }
 
 function patchUpdates(patches) {
-  return function(entity) {
+  return function (entity) {
     try {
       jsonpatch.apply(entity, patches, /*validate*/ true);
-    } catch (err) {
+    } catch(err) {
       return Promise.reject(err);
     }
     return entity.save();
@@ -37,8 +37,8 @@ function patchUpdates(patches) {
 }
 
 function handleEntityNotFound(res) {
-  return function(entity) {
-    if (!entity) {
+  return function (entity) {
+    if(!entity) {
       res.status(404).end();
       return null;
     }
@@ -58,14 +58,14 @@ function sendM(user) {
     from: config.mail.sender,
     to: user.email,
     subject: "Perte de votre mot de passe"
-  }, function(err, message) {
+  }, function (err, message) {
     console.log(err || message);
   });
 }
 
 export function index(req, res) {
   return User.find({}, '-salt -password')
-    .populate('memberOf', 'name info note groupPadID')
+    .populate('memberOf', 'name info note digest groupPadID')
     .populate('adminOf', 'name info  groupPadID ')
     .exec()
     .then(users => {
@@ -111,8 +111,8 @@ export function demandes(req, res) {
     sort: "email"
   };
 
-  return User.paginate(query, options, function(err, result) {
-    if (err) return res.send(500, err);
+  return User.paginate(query, options, function (err, result) {
+    if(err) return res.send(500, err);
     res.json(200, {
       docs: result.docs,
       total: result.total
@@ -127,7 +127,7 @@ export function create(req, res) {
   newUser.urlToken = randtoken.generate(16);
   newUser.mailValid = false;
   newUser.isdemande = true;
-  newUser.authorPadID ="coucou";
+  newUser.authorPadID = "coucou";
   /**
    * Envoie du Mail de confirmation
    */
@@ -139,7 +139,7 @@ export function create(req, res) {
   });
 
   newUser.save()
-    .then(function(user) {
+    .then(function (user) {
 
       var token = jwt.sign({
         _id: user._id
@@ -154,7 +154,7 @@ export function create(req, res) {
         from: config.mail.sender,
         to: newUser.email,
         subject: "Votre inscription"
-      }, function(err, message) {
+      }, function (err, message) {
         console.log(err || message);
       });
 
@@ -169,15 +169,15 @@ export function validEmail(req, res) {
   var urlToken = req.params[0];
   User.findOne({
     urlToken: urlToken
-  }, '-salt -hashedPassword', function(err, user) {
-    if (!user) return res.send(404);
+  }, '-salt -hashedPassword', function (err, user) {
+    if(!user) return res.send(404);
     user.mailValid = true;
     // Validation automatique si Domaine mail dans la liste blanche
     var domaineMail = user.email.split('@')[1];
     //Put  whiteDomain in config ?
     var whiteDomain = /^ac-[a-z\-]*.fr/;
     // console.log(whiteDomain.test(domaineMail));
-    if (whiteDomain.test(domaineMail)) {
+    if(whiteDomain.test(domaineMail)) {
       user.isdemande = false;
       user.isactif = true;
     } else {
@@ -188,15 +188,15 @@ export function validEmail(req, res) {
         ssl: config.mail.ssl
       });
       server.send({
-        text: "Bonjour, vous avez une nouvelle demande de validation de " +user.email + " ("+user.surname+ " "+user.name +") sur le site :" + config.mail.site  ,
+        text: "Bonjour, vous avez une nouvelle demande de validation de " + user.email + " (" + user.surname + " " + user.name + ") sur le site :" + config.mail.site,
         from: config.mail.sender,
         to: config.mail.sender,
         subject: "E-User : Nouvelle Demande"
-      }, function(err, message) {
+      }, function (err, message) {
         console.log(err || message);
       });
     }
-    user.save(function(err) {
+    user.save(function (err) {
       res.set('Content-Type', 'text/html');
       res.send(new Buffer('<p>hello ' + user.surname + '. <br>Votre mail est validé.<br></p> <a href="' + config.mail.site + '">Connexion</a>'));
     })
@@ -210,12 +210,12 @@ export function lostPassword(req, res) {
 
   var email = req.query.email;
   console.log("Lost PWD =>" + email);
-  if (!email) return res.sendStatus(404);
+  if(!email) return res.sendStatus(404);
   return User.findOne({
       email: email
     }).exec()
     .then(user => {
-      if (!user) return res.sendStatus(404);
+      if(!user) return res.sendStatus(404);
       user.pwdToken = randtoken.generate(16)
       user.save()
         .then(user => {
@@ -230,13 +230,13 @@ export function lostPassword(req, res) {
 export function resetPassword(req, res) {
 
   var pwdToken = req.body.pwdToken;
-  if (!pwdToken) return res.sendStatus(404);
+  if(!pwdToken) return res.sendStatus(404);
   var newPass = String(req.body.newPassword);
   User.findOne({
       pwdToken: pwdToken
     }).exec()
     .then(user => {
-      if (!user) return res.sendStatus(404);
+      if(!user) return res.sendStatus(404);
       console.log("ReInit PASSWD" + user.name)
       user.password = newPass;
       user.pwdToken = '';
@@ -262,11 +262,11 @@ export function resetPassword(req, res) {
 export function show(req, res, next) {
   var userId = req.params.id;
   return User.findById(userId, '-salt -hashedPassword')
-    .populate('memberOf', 'name info note groupPadID')
+    .populate('memberOf', 'name info note digest groupPadID')
     .populate('adminOf', 'info note groupPadID name')
     .exec()
     .then(user => {
-      if (!user) {
+      if(!user) {
         return res.status(404).end();
       }
       res.json(user.profile);
@@ -279,11 +279,10 @@ export function me(req, res, next) {
   return User.findOne({
       _id: userId
     }, '-salt -password')
-    .populate('memberOf', 'name info note groupPadID')
+    .populate('memberOf', 'name info note digest groupPadID')
     .exec()
     .then(user => { // don't ever give out the password or salt
-    console.log(user)
-      if (!user) {
+      if(!user) {
         return res.status(401).end();
       }
       return res.json(user);
@@ -297,14 +296,14 @@ export function me(req, res, next) {
  */
 export function destroy(req, res) {
   return User.findByIdAndRemove(req.params.id).exec()
-    .then(function() {
+    .then(function () {
       res.status(204).end();
     })
     .catch(handleError(res));
 }
 
 export function update(req, res) {
-  if (req.body._id) {
+  if(req.body._id) {
     delete req.body._id;
   }
   // return User.findById(req.params.id).exec()
@@ -326,25 +325,25 @@ export function update(req, res) {
     });
 }
 
-export function useradmingroup(req,res){
-var listusers=req.body.listusers;
-var idgrp=req.body.idgrp;
+export function useradmingroup(req, res) {
+  var listusers = req.body.listusers;
+  var idgrp = req.body.idgrp;
 
-listusers.forEach(function(userId) {
-  console.log("grp="+idgrp)
-  Group.findById(idgrp, function(err, group) {
-    if (err) {
-      return err;
-    }
-    group.adminby.pull(userId);
-    group.save(function(err) {
-      if (err) {
+  listusers.forEach(function (userId) {
+    console.log("grp=" + idgrp)
+    Group.findById(idgrp, function (err, group) {
+      if(err) {
         return err;
       }
-      return res.status(200).end();
-  });
-});
-})
+      group.adminby.pull(userId);
+      group.save(function (err) {
+        if(err) {
+          return err;
+        }
+        return res.status(200).end();
+      });
+    });
+  })
 }
 
 // Revoir le coté "transaction" de la double ecriture.  Utilser le middleware pre(save) ?
@@ -358,23 +357,23 @@ export function addusergroup(req, res) {
     .exec()
     .then(user => {
       user.memberOf.push(groupId);
-        return user.save()
+      return user.save()
         .then(user => {
-          Group.findById(groupId, function(err, group) {
-            if (err) {
+          Group.findById(groupId, function (err, group) {
+            if(err) {
               console.log(err)
               return err;
             }
             group.participants.push(userId);
-            group.save(function(err) {
-              if (err) {
-                  console.log(err)
+            group.save(function (err) {
+              if(err) {
+                console.log(err)
               }
             });
           });
           return res.status(200).json(user)
         });
-        //return res.status(200).json(user)
+      //return res.status(200).json(user)
     });
 };
 
@@ -387,18 +386,18 @@ export function delusergroup(req, res) {
     .exec()
     .then(user => {
       user.memberOf.pull(groupId);
-        return user.save()
+      return user.save()
         .then(user => {
           console.log("1")
-          Group.findById(groupId, function(err, group) {
-            if (err) {
+          Group.findById(groupId, function (err, group) {
+            if(err) {
               console.log(err)
               return err;
             }
             group.participants.pull(userId);
-            group.save(function(err) {
-              if (err) {
-                  console.log(err)
+            group.save(function (err) {
+              if(err) {
+                console.log(err)
               }
             });
           });
@@ -409,23 +408,23 @@ export function delusergroup(req, res) {
 };
 
 export function discourseSso(req, res) {
-  if (req.body._id) {
+  if(req.body._id) {
     delete req.body._id;
   }
-  User.findById(req.params.id, function(err, user) {
-    if (err) {
+  User.findById(req.params.id, function (err, user) {
+    if(err) {
       return handleError(res, err);
     }
-    if (!user) {
+    if(!user) {
       return res.send(404);
     }
-    if (!user.isactif) {
+    if(!user.isactif) {
       return res.send(404);
     }
     var sso = new discourse_sso(config.discourse_sso.secret);
     var payload = String(req.body.sso);
     var sig = String(req.body.sig);
-    if (sso.validate(payload, sig)) {
+    if(sso.validate(payload, sig)) {
       var nonce = sso.getNonce(payload);
       var userparams = {
         // Required, will throw exception otherwise
@@ -457,7 +456,7 @@ export function updateMe(req, res) {
       user.name = newUser.name;
       user.surname = newUser.surname;
       user.structure = newUser.structure;
-      if (user.email != newUser.email) {
+      if(user.email != newUser.email) {
         MailChange = true;
         newUser.urlToken = randtoken.generate(16);
         user.email = newUser.email;
@@ -466,7 +465,7 @@ export function updateMe(req, res) {
       }
       return user.save()
         .then(user => {
-          if (MailChange) {
+          if(MailChange) {
             var server = email.server.connect({
               user: config.mail.user,
               password: config.mail.password,
@@ -479,7 +478,7 @@ export function updateMe(req, res) {
                 to: user.email,
                 subject: "Votre inscription"
               },
-              function(err, message) {
+              function (err, message) {
                 console.log(err || message);
               });
           }
@@ -495,7 +494,7 @@ export function changePassword(req, res) {
   var newPass = String(req.body.newPassword);
   return User.findById(userId).exec()
     .then(user => {
-      if (user.authenticate(oldPass)) {
+      if(user.authenticate(oldPass)) {
         user.password = newPass;
         return user.save()
           .then(() => {

@@ -1,6 +1,7 @@
 'use strict';
 const angular = require('angular');
 const uiRouter = require('angular-ui-router');
+
 import routes from './collaborate.routes';
 
 export class NoteComponent {
@@ -58,8 +59,8 @@ export class CollaborateComponent {
     this.OauthActif = true;
     this.DeviseSite = appConfig.DeviseSite || "Eco-système Libre";
     this.TitreSite = appConfig.TitreSite || "Libre Communaute";
-    if (appConfig.etherpad)
-    this.urlPad = appConfig.etherpad.url
+    if(appConfig.etherpad)
+      this.urlPad = appConfig.etherpad.url
     /* $scope.$on('$destroy', function () {
        socket.unsyncUpdates('thing');
      });*/
@@ -84,20 +85,26 @@ export class CollaborateComponent {
       authorID: authorID,
       groupID: grp.groupPadID
     }).success((data) => {
-        if (data) {
+      if(data) {
         this.$cookies.put('sessionID', data.sessionID);
-        var url = this.urlPad+"/p/"+ grp.groupPadID + "$" + grp.name + "?userName="+this.getCurrentUser().name;
+        var url = this.urlPad + "/p/" + grp.groupPadID + "$" + grp.name + "?userName=" + this.getCurrentUser().name;
         //this.$window.open('//localhost:9001/p/' + grp.groupPadID + "$" + grp.name + "?userName=" + this.getCurrentUser().name);
         this.$window.open(url)
-      } else alert(url+"\n Pad  non trouvé ou vous n'êtes pas autorisé");
+      } else alert(url + "\n Pad  non trouvé ou vous n'êtes pas autorisé");
     }).error(function (err) {
       console.log("err :" + err)
       alert("Serveur Pad  non actif");
     });
   };
+
+  openCalc(grp) {
+
+
+    var url = "http://localhost:8000/" + grp.name + "?auth=" + grp.digest;
+    console.log(url)
+    this.$window.open(url);
+  };
 }
-
-
 export default angular.module('eUsersApp.collaborate', [uiRouter])
   .config(routes)
   .component('collaborate', {
