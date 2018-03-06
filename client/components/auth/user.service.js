@@ -44,7 +44,7 @@ export function UserResource($resource) {
         controller: 'delusergroup'
       }
     },
-  userAdmingroup: {
+    userAdmingroup: {
       method: 'PUT',
       params: {
         controller: 'useradmingroup'

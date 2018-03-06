@@ -5,6 +5,7 @@ export default function($stateProvider) {
   $stateProvider
     .state('collaborate', {
       url: '/collaborate',
-      template: '<collaborate></collaborate>'
+      template: '<collaborate></collaborate>',
+      authenticate: true
     });
 }

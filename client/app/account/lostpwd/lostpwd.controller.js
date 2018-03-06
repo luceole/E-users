@@ -5,24 +5,22 @@ export default class LostpwdController {
   constructor(Auth, $state) {
     this.Auth = Auth;
     this.$state = $state;
-    this.email = "";
-    this.message=" ";
+    this.email = '';
+    this.message = ' ';
   }
 
 
   register(form) {
     this.submitted = true;
-    if (form.$valid) {
-
+    if(form.$valid) {
       this.Auth.lostPassword(this.email)
         .then(() => {
-          this.message = 'Initialisation du mot de passe: courriel envoyé à ' + this.email;
+          this.message = `Initialisation du mot de passe: courriel envoyé à ${this.email}`;
         })
-        .catch((err) => {
-          console.log(err)
-          this.message = "ERREUR : Adresse non trouvée";
+        .catch(err => {
+          console.log(err);
+          this.message = 'ERREUR : Adresse non trouvée';
         });
     }
-
   }
 }

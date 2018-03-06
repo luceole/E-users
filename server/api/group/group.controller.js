@@ -15,7 +15,7 @@ var config = require('../../config/environment');
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
-    if (entity) {
+    if(entity) {
       return res.status(statusCode).json(entity);
     }
     return null;
@@ -26,7 +26,7 @@ function patchUpdates(patches) {
   return function(entity) {
     try {
       jsonpatch.apply(entity, patches, /*validate*/ true);
-    } catch (err) {
+    } catch(err) {
       return Promise.reject(err);
     }
     return entity.save();
@@ -35,7 +35,7 @@ function patchUpdates(patches) {
 
 function removeEntity(res) {
   return function(entity) {
-    if (entity) {
+    if(entity) {
       return entity.remove()
         .then(() => {
           res.status(204).end();
@@ -46,7 +46,7 @@ function removeEntity(res) {
 
 function handleEntityNotFound(res) {
   return function(entity) {
-    if (!entity) {
+    if(!entity) {
       res.status(404).end();
       return null;
     }
@@ -76,8 +76,8 @@ export function index(req, res) {
 export function byowner(req, res) {
   var owner = req.query.owner;
   Group.find({
-      owner: owner
-    })
+    owner
+  })
     .populate('participants', 'uid info note')
     .exec()
     .then(respondWithResult(res))
@@ -87,16 +87,16 @@ export function byowner(req, res) {
 // Get list of open groupes
 export function isopen(req, res) {
   Group.find({
-      type: {
-        $lt: 10
-      }
-    })
+    type: {
+      $lt: 10
+    }
+  })
     .populate('owner', 'uid')
     .populate('participants', 'uid info note')
     .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
-};
+}
 
 // Gets a single Group from the DB
 export function show(req, res) {
@@ -108,43 +108,44 @@ export function show(req, res) {
 
 // Creates a new Group in the DB
 export function create(req, res) {
-  var newGroupe = new  Group(req.body);
-  return Group.create(newGroupe).then(respondWithResult(res, 201)).catch(handleError(res));
+  var newGroupe = new Group(req.body);
+  return Group.create(newGroupe).then(respondWithResult(res, 201))
+    .catch(handleError(res));
 }
 
-  // Upserts the given Group in the DB at the specified ID
-  export function upsert(req, res) {
-    if (req.body._id) {
-      delete req.body._id;
-    }
-
-    return Group.findOneAndUpdate({
-        _id: req.params.id
-      }, req.body, {
-        upsert: true,
-        setDefaultsOnInsert: true,
-        runValidators: true
-      }).exec()
-      .then(respondWithResult(res))
-      .catch(handleError(res));
+// Upserts the given Group in the DB at the specified ID
+export function upsert(req, res) {
+  if(req.body._id) {
+    delete req.body._id;
   }
 
-  // Updates an existing Group in the DB
-  export function patch(req, res) {
-    if (req.body._id) {
-      delete req.body._id;
-    }
-    return Group.findById(req.params.id).exec()
-      .then(handleEntityNotFound(res))
-      .then(patchUpdates(req.body))
-      .then(respondWithResult(res))
-      .catch(handleError(res));
-  }
+  return Group.findOneAndUpdate({
+    _id: req.params.id
+  }, req.body, {
+    upsert: true,
+    setDefaultsOnInsert: true,
+    runValidators: true
+  }).exec()
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
 
-  // Deletes a Group from the DB
-  export function destroy(req, res) {
-    return Group.findById(req.params.id).exec()
-      .then(handleEntityNotFound(res))
-      .then(removeEntity(res))
-      .catch(handleError(res));
+// Updates an existing Group in the DB
+export function patch(req, res) {
+  if(req.body._id) {
+    delete req.body._id;
   }
+  return Group.findById(req.params.id).exec()
+    .then(handleEntityNotFound(res))
+    .then(patchUpdates(req.body))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
+
+// Deletes a Group from the DB
+export function destroy(req, res) {
+  return Group.findById(req.params.id).exec()
+    .then(handleEntityNotFound(res))
+    .then(removeEntity(res))
+    .catch(handleError(res));
+}

@@ -88,27 +88,23 @@ export function createOri(req, res) {
 
 // Creates session for Etherpad
 export function create(req, res) {
-  console.log("openPad");
+  console.log('openPad');
   console.log(req.body);
   var args = {
     groupID: req.body.groupID,
     authorID: req.body.authorID,
     validUntil: Math.floor(Date.now() / 1000) + 6000,
-  }
+  };
   etherpad.createSession(args,
-    function (error, data) {
-      if (error) {
-
-        console.error('Error creating Session on PAD: ' + error.message)
-      }
-      else {
-        console.log('New pad Session created: ' + data.sessionID)
+    function(error, data) {
+      if(error) {
+        console.error(`Error creating Session on PAD: ${error.message}`);
+      } else {
+        console.log(`New pad Session created: ${data.sessionID}`);
       }
       return res.json(200, data);
-
     });
-};
-
+}
 
 
 // Upserts the given Pad in the DB at the specified ID

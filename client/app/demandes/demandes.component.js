@@ -2,7 +2,7 @@ const angular = require('angular');
 
 const uiRouter = require('angular-ui-router');
 
-import './dirPagination'
+import './dirPagination';
 
 import routes from './demandes.routes';
 
@@ -15,7 +15,7 @@ export class DemandesComponent {
     this.Auth = Auth;
     this.User = User;
     this.isAdmin = Auth.isAdminSync;
-    this.getCurrentUser = Auth.getCurrentUserSync
+    this.getCurrentUser = Auth.getCurrentUserSync;
     this.Demande = Demande;
     this.usersPerPage = 12; //Idem Paginate Server Side
     this.current = 1;
@@ -39,13 +39,13 @@ export class DemandesComponent {
   }
 
   pageChanged(newPage) {
-    console.log(newPage)
+    console.log(newPage);
     this.Demande.get({
-        page: newPage
-      })
+      page: newPage
+    })
       .$promise
       .then(result => {
-        console.log(this.demandes.docs[0])
+        console.log(this.demandes.docs[0]);
         this.users = result.docs;
         this.demandes = result;
         this.totalUsers = result.total;
@@ -53,10 +53,10 @@ export class DemandesComponent {
   }
 
   traite(ds) {
-    console.log("traite");
+    console.log('traite');
     angular.forEach(this.users, u => {
-      console.log(" " + u.isactif + " " + u.uid)
-      if (u.isactif) {
+      console.log(` ${u.isactif} ${u.uid}`);
+      if(u.isactif) {
         u.isdemande = false;
 
         this.Auth.updateUser(u._id, u, () => {
@@ -70,22 +70,19 @@ export class DemandesComponent {
         });
       }
     });
-
-  };
+  }
 
   checkAll() {
     angular.forEach(this.users, function(u) {
       u.isactif = true;
     });
-  };
+  }
 
   uncheckAll() {
     angular.forEach(this.users, function(u) {
       u.isactif = false;
     });
-  };
-
-
+  }
 } // Class
 
 export default angular.module('E-userApp.demandes', [uiRouter, 'angularUtils.directives.dirPagination'])

@@ -12,15 +12,15 @@ import lostpwd from './lostpwd';
 import resetpwd from './resetpwd';
 import oauthButtons from '../../components/oauth-buttons';
 
-export default angular.module('E-userApp.account', [uiRouter, login, settings, signup, lostpwd,resetpwd,
-    oauthButtons
-  ])
+export default angular.module('E-userApp.account', [uiRouter, login, settings, signup, lostpwd, resetpwd,
+  oauthButtons
+])
   .config(routing)
-  .run(function ($rootScope) {
+  .run(function($rootScope) {
     'ngInject';
 
-    $rootScope.$on('$stateChangeStart', function (event, next, nextParams, current) {
-      if (next.name === 'logout' && current && current.name && !current.authenticate) {
+    $rootScope.$on('$stateChangeStart', function(event, next, nextParams, current) {
+      if(next.name === 'logout' && current && current.name && !current.authenticate) {
         next.referrer = current.name;
       }
     });
