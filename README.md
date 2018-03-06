@@ -1,6 +1,20 @@
 # E-USERS
 
-This project was generated with the [Angular Full-Stack Generator](https://github.com/DaftMonk/generator-angular-fullstack) version 4.0.5.
+Groups work application
+
+- Manage Users and Groups
+
+ - Access to :
+
+      - Forum (Discourse )
+      - Collaborative text editor (EtherPad)
+      - Collaborative spreadsheet (Ethercal)
+      - Notes Text(ckeditor)
+
+
+
+
+This project was generated with the [Angular Full-Stack Generator](https://github.com/DaftMonk/generator-angular-fullstack)
 
 ## Getting Started
 
