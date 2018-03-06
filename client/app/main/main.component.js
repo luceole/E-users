@@ -17,6 +17,7 @@ export class MainController {
     this.MSG = '';
     this.DeviseSite = appConfig.DeviseSite || 'Eco-système ';
     this.TitreSite = appConfig.TitreSite || 'Libre Communaute';
+    this.onlineServices = appConfig.onlineServices;
     this.OauthActif = appConfig.OauthActif || false;
     this.sso = this.$state.current.name == 'discoursesso';
 

@@ -63,7 +63,8 @@
       </div>
     </div>
   </div> -->
-</div><!-- <div class="row">
+</div>
+<!-- <div class="row">
     <div class="col-lg-12">
       <div class="col-sm-2"></div>
       <div class="col-sm-10">
@@ -129,9 +130,15 @@
     </div>
     <div class="alert alert-success" ng-if="$ctrl.getCurrentUser().isactif">
       <h3 ng-if="$ctrl.MSG">Informations:</h3> {{$ctrl.MSG }}
-        <h3>Services en lignes</h3>
-      <p><span class="glyphicon glyphicon-bullhorn"></span><a href="https://forum.libre-communaute.fr"> Forum Libre Communauté</a>
-        <p><span class="glyphicon glyphicon-certificate"></span><a href="https://chat.libre-communaute.fr"> Chat Libre Communauté</a>
-       </div></div>
+      <h3>Vos services en lignes</h3>
+      <!-- <p><span class="glyphicon glyphicon-bullhorn"></span><a href="https://forum.libre-communaute.fr"> Forum Libre Communauté</a>
+        <p><span class="glyphicon glyphicon-certificate"></span><a href="https://chat.libre-communaute.fr"> Chat Libre Communauté</a> -->
+
+      <div ng-repeat="service in $ctrl.onlineServices">
+        <span class="glyphicon {{service.glyphicon}}"></span><a href="{{service.url}}" target="_blank"> {{service.title}}</a>
+      </div>
+
+    </div>
+  </div>
 
 </div>
