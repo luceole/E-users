@@ -26,7 +26,7 @@ function registerEvents(Pad) {
 
 function emitEvent(event) {
   return function(doc) {
-    PadEvents.emit(event + ':' + doc._id, doc);
+    PadEvents.emit(`${event}:${doc._id}`, doc);
     PadEvents.emit(event, doc);
   };
 }

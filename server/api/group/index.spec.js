@@ -38,7 +38,7 @@ describe('Group API Router:', function() {
     it('should route to group.controller.index', function() {
       expect(routerStub.get
         .withArgs('/', 'groupCtrl.index')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 
@@ -46,7 +46,7 @@ describe('Group API Router:', function() {
     it('should route to group.controller.show', function() {
       expect(routerStub.get
         .withArgs('/:id', 'groupCtrl.show')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 
@@ -54,7 +54,7 @@ describe('Group API Router:', function() {
     it('should route to group.controller.create', function() {
       expect(routerStub.post
         .withArgs('/', 'groupCtrl.create')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 
@@ -62,7 +62,7 @@ describe('Group API Router:', function() {
     it('should route to group.controller.upsert', function() {
       expect(routerStub.put
         .withArgs('/:id', 'groupCtrl.upsert')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 
@@ -70,7 +70,7 @@ describe('Group API Router:', function() {
     it('should route to group.controller.patch', function() {
       expect(routerStub.patch
         .withArgs('/:id', 'groupCtrl.patch')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 
@@ -78,7 +78,7 @@ describe('Group API Router:', function() {
     it('should route to group.controller.destroy', function() {
       expect(routerStub.delete
         .withArgs('/:id', 'groupCtrl.destroy')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 });

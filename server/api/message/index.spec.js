@@ -38,7 +38,7 @@ describe('Message API Router:', function() {
     it('should route to message.controller.index', function() {
       expect(routerStub.get
         .withArgs('/', 'messageCtrl.index')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 
@@ -46,7 +46,7 @@ describe('Message API Router:', function() {
     it('should route to message.controller.show', function() {
       expect(routerStub.get
         .withArgs('/:id', 'messageCtrl.show')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 
@@ -54,7 +54,7 @@ describe('Message API Router:', function() {
     it('should route to message.controller.create', function() {
       expect(routerStub.post
         .withArgs('/', 'messageCtrl.create')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 
@@ -62,7 +62,7 @@ describe('Message API Router:', function() {
     it('should route to message.controller.upsert', function() {
       expect(routerStub.put
         .withArgs('/:id', 'messageCtrl.upsert')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 
@@ -70,7 +70,7 @@ describe('Message API Router:', function() {
     it('should route to message.controller.patch', function() {
       expect(routerStub.patch
         .withArgs('/:id', 'messageCtrl.patch')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 
@@ -78,7 +78,7 @@ describe('Message API Router:', function() {
     it('should route to message.controller.destroy', function() {
       expect(routerStub.delete
         .withArgs('/:id', 'messageCtrl.destroy')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 });

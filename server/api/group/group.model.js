@@ -61,21 +61,21 @@ var GroupSchema = new Schema({
 
 
 // Modify User adminOf
-GroupSchema.pre('save', function (next) {
+GroupSchema.pre('save', function(next) {
   var grpId = this._id;
   if(this.isModified('adminby')) {
-    this.adminby.forEach(function (id) {
+    this.adminby.forEach(function(id) {
       var query = {
-        "_id": id
+        _id: id
       };
       var update = {
         $addToSet: {
           adminOf: grpId
         }
       };
-      User.findOneAndUpdate(query, update, function (err, user) {
+      User.findOneAndUpdate(query, update, function(err, user) {
         if(err) {
-          console.log("erreur Adminby  : " + err);
+          console.log(`erreur Adminby  : ${err}`);
         }
         return next(); // Always go on !
       });
@@ -85,8 +85,8 @@ GroupSchema.pre('save', function (next) {
 });
 
 //.pre(save) for EtherCalc
-GroupSchema.pre('save', function (next) {
-  const secret = "secret"; // Mettre en fichier local.env.js
+GroupSchema.pre('save', function(next) {
+  const secret = 'secret'; // Mettre en fichier local.env.js
   const hash = crypto.createHmac('sha256', secret)
     .update(this.name)
     .digest('hex');
@@ -96,7 +96,7 @@ GroupSchema.pre('save', function (next) {
 
 
 //.pre(save) for EtherPad
-GroupSchema.pre('save', function (next) {
+GroupSchema.pre('save', function(next) {
   //  Digest Ethercalc
 
   if(config.etherpad) {
@@ -106,41 +106,42 @@ GroupSchema.pre('save', function (next) {
     }
     etherpad.createGroup((error, data) => {
       //etherpad.createGroupIfNotExistsFor({groupMapper: groupID},(error, data) => {
-      if(error) console.error('Error creating group: ' + groupID + ' ' + error.message);
+      if(error) console.error(`Error creating group: ${groupID} ${error.message}`);
       else {
         this.groupPadID = data.groupID;
         var args = {
           groupID: data.groupID,
           padName: this.name,
-          text: 'Bienvenu sur le PAD du groupe ' + this.name
+          text: `Bienvenu sur le PAD du groupe ${this.name}`
         };
         etherpad.createGroupPad(args, (error, data) => {
-          if(error) console.error('Error creating pad: ' + error.message);
+          if(error) console.error(`Error creating pad: ${error.message}`);
           else {
-            console.log('New pad for group' + this.name + ' created: ' + data.padID);
+            console.log(`New pad for group${this.name} created: ${data.padID}`);
           }
         });
       }
       return next(); // Always create Group
     });
-  } else
+  } else {
     return next();
+  }
 });
 
-GroupSchema.pre('remove', function (next) {
+GroupSchema.pre('remove', function(next) {
   var grpId = this._id;
-  this.adminby.forEach(function (id) {
+  this.adminby.forEach(function(id) {
     var query = {
-      "_id": id
+      _id: id
     };
     var update = {
       $addToSet: {
         adminOf: grpId
       }
     };
-    User.findOneAndUpdate(query, update, function (err, user) {
+    User.findOneAndUpdate(query, update, function(err, user) {
       if(err) {
-        console.log("erreur Adminby : " + err);
+        console.log(`erreur Adminby : ${err}`);
       }
       return next(); // Always go on !
     });
@@ -151,22 +152,22 @@ GroupSchema.pre('remove', function (next) {
  */
 GroupSchema
   .path('name')
-  .validate(function (name) {
+  .validate(function(name) {
     return name.length;
   }, 'Nom de groupe obligatoire');
 
 GroupSchema
   .path('owner')
-  .validate(function (owner) {
+  .validate(function(owner) {
     return owner.length;
   }, 'Propriétaire obligatoire');
 
 GroupSchema
   .path('owner')
-  .validate(function (value, respond) {
+  .validate(function(value, respond) {
     var self = this;
     //console.log(value)
-    User.findById(value, function (err, user) {
+    User.findById(value, function(err, user) {
       if(err) throw err;
       if(user) {
         return respond(true);

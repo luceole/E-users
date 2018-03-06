@@ -36,7 +36,7 @@ export default function(app) {
   app.use(express.static(app.get('appPath')));
   app.use(morgan('dev'));
 
-  app.set('views', config.root + '/server/views');
+  app.set('views', `${config.root}/server/views`);
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
   app.use(shrinkRay());
@@ -94,7 +94,7 @@ export default function(app) {
     browserSync.init({
       open: false,
       logFileChanges: false,
-      proxy: 'localhost:' + config.port,
+      proxy: `localhost:${config.port}`,
       ws: true,
       middleware: [
         webpackDevMiddleware(compiler, {

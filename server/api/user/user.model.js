@@ -41,9 +41,9 @@ var UserSchema = new Schema({
   firstdate: Date,
   creationDate: {
     type: Date,
-    'default': Date.now
+    default: Date.now
   },
-  'authorPadID': String,
+  authorPadID: String,
   memberOf: [{
     type: Schema.Types.ObjectId,
     ref: 'Group'
@@ -64,7 +64,7 @@ var UserSchema = new Schema({
 // Public profile information
 UserSchema
   .virtual('profile')
-  .get(function () {
+  .get(function() {
     return {
       name: this.name,
       surname: this.surname,
@@ -82,7 +82,7 @@ UserSchema
 // Non-sensitive info we'll be putting in the token
 UserSchema
   .virtual('token')
-  .get(function () {
+  .get(function() {
     return {
       _id: this._id,
       role: this.role
@@ -96,7 +96,7 @@ UserSchema
 // Validate empty uid
 UserSchema
   .path('uid')
-  .validate(function (uid) {
+  .validate(function(uid) {
     if(authTypes.indexOf(this.provider) !== -1) {
       return true;
     }
@@ -106,7 +106,7 @@ UserSchema
 // Validate empty email
 UserSchema
   .path('email')
-  .validate(function (email) {
+  .validate(function(email) {
     if(authTypes.indexOf(this.provider) !== -1) {
       return true;
     }
@@ -116,7 +116,7 @@ UserSchema
 // Validate empty password
 UserSchema
   .path('password')
-  .validate(function (password) {
+  .validate(function(password) {
     if(authTypes.indexOf(this.provider) !== -1) {
       return true;
     }
@@ -126,14 +126,14 @@ UserSchema
 // Validate uid is not taken
 UserSchema
   .path('uid')
-  .validate(function (value, respond) {
+  .validate(function(value, respond) {
     if(authTypes.indexOf(this.provider) !== -1) {
       return respond(true);
     }
 
     return this.constructor.findOne({
-        uid: value
-      }).exec()
+      uid: value
+    }).exec()
       .then(user => {
         if(user) {
           if(this.id === user.id) {
@@ -143,7 +143,7 @@ UserSchema
         }
         return respond(true);
       })
-      .catch(function (err) {
+      .catch(function(err) {
         throw err;
       });
   }, 'Cette identifiant est dèja utilisé!');
@@ -152,14 +152,14 @@ UserSchema
 // Validate email is not taken
 UserSchema
   .path('email')
-  .validate(function (value, respond) {
+  .validate(function(value, respond) {
     if(authTypes.indexOf(this.provider) !== -1) {
       return respond(true);
     }
 
     return this.constructor.findOne({
-        email: value
-      }).exec()
+      email: value
+    }).exec()
       .then(user => {
         if(user) {
           if(this.id === user.id) {
@@ -169,13 +169,13 @@ UserSchema
         }
         return respond(true);
       })
-      .catch(function (err) {
+      .catch(function(err) {
         throw err;
       });
   }, 'Cette adresse est utilisée avec un autre identifiant!');
 
 
-var validatePresenceOf = function (value) {
+var validatePresenceOf = function(value) {
   return value && value.length;
 };
 
@@ -183,7 +183,7 @@ var validatePresenceOf = function (value) {
  * Pre-save hook
  */
 UserSchema
-  .pre('save', function (next) {
+  .pre('save', function(next) {
     // Handle new/update passwords
     if(!this.isModified('password')) {
       return next();
@@ -208,10 +208,9 @@ UserSchema
         this.password = hashedPassword;
         return next();
       });
-    })
+    });
   })
-  .pre('save', function (next) {
-
+  .pre('save', function(next) {
     //  console.log('pre2 '+this.uid+" "+this.authorPadID)
 
     if(config.etherpad) {
@@ -219,11 +218,11 @@ UserSchema
       etherpad.createAuthor(this.uid,
         (error, data) => {
           if(error) {
-            console.log('New pad User create ERROR : ' + error.message);
-            this.authorPadID = "";
-            return next() // Alway Create even EtherPad error
+            console.log(`New pad User create ERROR : ${error.message}`);
+            this.authorPadID = '';
+            return next(); // Alway Create even EtherPad error
           } else {
-            console.log(this.uid + ': New Pad-User created ')
+            console.log(`${this.uid}: New Pad-User created `);
             this.authorPadID = data.authorID;
             return next();
           }

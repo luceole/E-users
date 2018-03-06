@@ -3,7 +3,7 @@
 import {
   Router
 }
-from 'express';
+  from 'express';
 import * as controller from './user.controller';
 import * as auth from '../../auth/auth.service';
 

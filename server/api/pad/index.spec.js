@@ -40,7 +40,7 @@ describe('Pad API Router:', function() {
     it('should route to pad.controller.index', function() {
       expect(routerStub.get
         .withArgs('/', 'padCtrl.index')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 
@@ -48,7 +48,7 @@ describe('Pad API Router:', function() {
     it('should route to pad.controller.show', function() {
       expect(routerStub.get
         .withArgs('/:id', 'padCtrl.show')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 
@@ -56,7 +56,7 @@ describe('Pad API Router:', function() {
     it('should route to pad.controller.create', function() {
       expect(routerStub.post
         .withArgs('/', 'padCtrl.create')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 
@@ -64,7 +64,7 @@ describe('Pad API Router:', function() {
     it('should route to pad.controller.upsert', function() {
       expect(routerStub.put
         .withArgs('/:id', 'padCtrl.upsert')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 
@@ -72,7 +72,7 @@ describe('Pad API Router:', function() {
     it('should route to pad.controller.patch', function() {
       expect(routerStub.patch
         .withArgs('/:id', 'padCtrl.patch')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 
@@ -80,7 +80,7 @@ describe('Pad API Router:', function() {
     it('should route to pad.controller.destroy', function() {
       expect(routerStub.delete
         .withArgs('/:id', 'padCtrl.destroy')
-        ).to.have.been.calledOnce;
+      ).to.have.been.calledOnce;
     });
   });
 });

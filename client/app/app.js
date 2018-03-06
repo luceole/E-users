@@ -16,11 +16,10 @@ import ckeditor from 'angular-ckeditor';
 import ngValidationMatch from 'angular-validation-match';
 
 
-
 import {
   routeConfig
 }
-from './app.config';
+  from './app.config';
 
 import _Auth from '../components/auth/auth.module';
 import account from './account';
@@ -39,15 +38,15 @@ import socket from '../components/socket/socket.service';
 import './app.scss';
 
 angular.module('E-userApp', [ngCookies, ngResource, ngSanitize, ngMaterial, 'btford.socket-io', ngValidationMatch, uiRouter,
-    uiBootstrap, uiSelect, ckeditor,
-    _Auth, account, groupes, collaborate, navbar, footer, main, constants, socket, util, demandes, users
-  ])
+  uiBootstrap, uiSelect, ckeditor,
+  _Auth, account, groupes, collaborate, navbar, footer, main, constants, socket, util, demandes, users
+])
   .config(routeConfig)
-  .run(function ($rootScope, $location, Auth) {
+  .run(function($rootScope, $location, Auth) {
     'ngInject';
     // Redirect to login if route requires auth and you're not logged in
-    $rootScope.$on('$stateChangeStart', function (event, next) {
-      Auth.isLoggedIn(function (loggedIn) {
+    $rootScope.$on('$stateChangeStart', function(event, next) {
+      Auth.isLoggedIn(function(loggedIn) {
         if(next.authenticate && !loggedIn) {
           $location.path('/main');
         }

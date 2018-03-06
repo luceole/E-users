@@ -14,17 +14,17 @@ export default class SettingsController {
   edit(form) {
     this.submitted = true;
     this.editMessage = '';
-    if (form.$valid) {
+    if(form.$valid) {
       return this.Auth.updateMe(this.user._id, {
-          name: this.user.name,
-          surname: this.user.surname,
-          structure: this.user.structure,
-          email: this.user.email
-        })
+        name: this.user.name,
+        surname: this.user.surname,
+        structure: this.user.structure,
+        email: this.user.email
+      })
         .then(() => {
           this.editMessage = 'Mise à jour prise en compte';
         })
-        .catch((err) => {
+        .catch(err => {
           err = err.data;
           this.errors = {};
           // Update validity of form fields that match the mongoose errors
@@ -35,7 +35,7 @@ export default class SettingsController {
           });
         });
     }
-  };
+  }
 
   myInit(form, field) {
     form[field].$setValidity('mongoose', true);
@@ -44,7 +44,7 @@ export default class SettingsController {
   changePassword(form) {
     this.submitted = true;
     //  console.log(this.user.oldPassword, this.user.newPassword)
-    if (form.$valid) {
+    if(form.$valid) {
       this.Auth.changePassword(this.user.oldPassword, this.user.newPassword)
         .then(() => {
           this.message = 'Modification du mot de passe effectuée.';
@@ -58,41 +58,40 @@ export default class SettingsController {
   }
 
   isMemberOf(groupe) {
-    var grpId = groupe._id
+    var grpId = groupe._id;
     //this.user = this.Auth.getCurrentUserSync();
-    var r = this.user.memberOf.filter(o => o._id == grpId)
-    return (r.length)
-  };
+    var r = this.user.memberOf.filter(o => o._id == grpId);
+    return r.length;
+  }
 
   addusergroup(groupe) {
-    var grpId = groupe._id
+    var grpId = groupe._id;
 
     this.Auth.addUserGroup(grpId, (err, u) => {
-      if (err) {
-        alert("Erreur MAJ " + err.data);
-        console.log(err)
+      if(err) {
+        alert(`Erreur MAJ ${err.data}`);
+        console.log(err);
       }
-      console.log(u)
+      console.log(u);
       // Force =>  Read User
       this.user = this.Auth.getCurrentUserSync();
-      this.groups = this.Group.listopengroups()
+      this.groups = this.Group.listopengroups();
       //console.log(  this.groups)
     });
-  };
+  }
 
   delusergroup(groupe) {
-    var grpId = groupe._id
+    var grpId = groupe._id;
 
     this.Auth.delUserGroup(grpId, (err, u) => {
-      if (err) {
-        alert("Erreur MAJ " + err.data);
-        console.log(err)
+      if(err) {
+        alert(`Erreur MAJ ${err.data}`);
+        console.log(err);
       }
-    //  console.log(u)
+      //  console.log(u)
       // Force =>  Read User
       this.user = this.Auth.getCurrentUserSync();
       this.groups = this.Group.listopengroups();
     });
-
-  };
+  }
 }

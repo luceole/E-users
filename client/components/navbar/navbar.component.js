@@ -5,22 +5,22 @@ import angular from 'angular';
 
 export class NavbarComponent {
 menu = [{
-    title: 'Mes groupes',
-    state: 'collaborate'
-  }];
+  title: 'Mes groupes',
+  state: 'collaborate'
+}];
 isCollapsed = true;
-  constructor(Auth) {
-    'ngInject';
+constructor(Auth) {
+  'ngInject';
 
-    this.isLoggedIn = Auth.isLoggedInSync;
-    this.isAdmin = Auth.isAdminSync;
-    this.getCurrentUser = Auth.getCurrentUserSync;
-    this.isActif= Auth.isActif;
-    this.status = {
-      isopen: false
-    };
-  }
-};
+  this.isLoggedIn = Auth.isLoggedInSync;
+  this.isAdmin = Auth.isAdminSync;
+  this.getCurrentUser = Auth.getCurrentUserSync;
+  this.isActif = Auth.isActif;
+  this.status = {
+    isopen: false
+  };
+}
+}
 
 export default angular.module('directives.navbar', [])
   .component('navbar', {
