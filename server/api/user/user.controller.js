@@ -127,7 +127,7 @@ export function create(req, res) {
   newUser.urlToken = randtoken.generate(16);
   newUser.mailValid = false;
   newUser.isdemande = true;
-  newUser.authorPadID = 'coucou';
+  newUser.authorPadID = '';
   /**
    * Envoie du Mail de confirmation
    */

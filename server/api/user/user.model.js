@@ -213,9 +213,9 @@ UserSchema
   .pre('save', function(next) {
     //  console.log('pre2 '+this.uid+" "+this.authorPadID)
 
-    if(config.etherpad) {
-      if(this.authorPadID) return next();
-      etherpad.createAuthor(this.uid,
+    if(!config.etherpad) return next();  //always Create
+    if(this.authorPadID) return next();
+    global.etherpad.createAuthor(this.uid,
         (error, data) => {
           if(error) {
             console.log(`New pad User create ERROR : ${error.message}`);
@@ -227,8 +227,6 @@ UserSchema
             return next();
           }
         });
-    }
-    //return next()  //always Create
   });
 
 /**
