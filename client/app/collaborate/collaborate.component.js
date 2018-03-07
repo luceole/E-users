@@ -62,6 +62,9 @@ export class CollaborateComponent {
     if(appConfig.etherpad) {
       this.urlPad = appConfig.etherpad.url;
     }
+    if(appConfig.ethercalc) {
+      this.urlCal = appConfig.ethercalc.url;
+    }
     /* $scope.$on('$destroy', function () {
        socket.unsyncUpdates('thing');
      });*/
@@ -100,8 +103,8 @@ export class CollaborateComponent {
   }
 
   openCalc(grp) {
-    var url = `http://localhost:8000/${grp.name}?auth=${grp.digest}`;
-    console.log(url);
+    var url = `${this.urlCal}/${grp.name}?auth=${grp.digest}`;
+    //console.log(url);
     this.$window.open(url);
   }
 }

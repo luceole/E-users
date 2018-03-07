@@ -86,7 +86,10 @@ GroupSchema.pre('save', function(next) {
 
 //.pre(save) for EtherCalc
 GroupSchema.pre('save', function(next) {
-  const secret = 'secret'; // Mettre en fichier local.env.js
+  if(!config.ethercalc.key) return next();
+  var myKey = config.ethercalc.key;
+  console.log(myKey);
+  const secret = myKey;
   const hash = crypto.createHmac('sha256', secret)
     .update(this.name)
     .digest('hex');

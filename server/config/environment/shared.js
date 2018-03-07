@@ -13,7 +13,10 @@ exports = module.exports = {
    {glyphicon: 'glyphicon-certificate', url: 'https://chat.libre-communaute.fr', title: 'Chat Libre Communauté'}
   ],
 
-
+  ethercalc: {
+    key: 'mysecret',
+    url: 'http://localhost:8000'
+  },
   etherpad: {
     apikey: '10c8423ace54f0c1bc3c39f417fd2d73cfb3f2194e25b91bd29a5429e0ed961b',
     host: 'localhost',

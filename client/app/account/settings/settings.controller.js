@@ -72,7 +72,7 @@ export default class SettingsController {
         alert(`Erreur MAJ ${err.data}`);
         console.log(err);
       }
-      console.log(u);
+      //console.log(u);
       // Force =>  Read User
       this.user = this.Auth.getCurrentUserSync();
       this.groups = this.Group.listopengroups();
