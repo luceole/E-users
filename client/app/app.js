@@ -11,7 +11,7 @@ import ngMaterial from 'angular-material';
 import uiRouter from 'angular-ui-router';
 import uiBootstrap from 'angular-ui-bootstrap';
 import uiSelect from 'ui-select';
-import ckeditor from 'angular-ckeditor';
+import ckeditor from 'angular1-ckeditor';
 // import ngMessages from 'angular-messages';
 import ngValidationMatch from 'angular-validation-match';
 
@@ -38,7 +38,7 @@ import socket from '../components/socket/socket.service';
 import './app.scss';
 
 angular.module('E-userApp', [ngCookies, ngResource, ngSanitize, ngMaterial, 'btford.socket-io', ngValidationMatch, uiRouter,
-  uiBootstrap, uiSelect, ckeditor,
+  uiBootstrap, uiSelect, 'ckeditor',
   _Auth, account, groupes, collaborate, navbar, footer, main, constants, socket, util, demandes, users
 ])
   .config(routeConfig)
