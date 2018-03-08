@@ -2,10 +2,11 @@
 
 export default class LoginController {
   /*@ngInject*/
-  constructor(Auth, $state) {
+  constructor(Auth,appConfig, $state) {
     this.Auth = Auth;
-
     this.$state = $state;
+    this.TitreSite   = appConfig.TitreSite;
+    this.DeviseSite   = appConfig.DeviseSite;
   }
 
   login(form) {
