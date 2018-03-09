@@ -24,7 +24,7 @@ module.exports = {
   mail: {
   user: 'login SMTP',
   password : 'Password SMTP',
-  sender: 'admin@mydomaine" ,
+  sender: 'admin@mydomaine' ,
   host: 'Host SMTP',
   ssl: true,
   site: 'http://localhost:3000',

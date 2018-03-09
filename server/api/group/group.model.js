@@ -86,7 +86,7 @@ GroupSchema.pre('save', function(next) {
 
 //.pre(save) for EtherCalc
 GroupSchema.pre('save', function(next) {
-  if(!config.ethercalc.key) return next();
+  if(!config.ethercalc) return next();
   var myKey = config.ethercalc.key;
   console.log(myKey);
   const secret = myKey;
