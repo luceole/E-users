@@ -7,6 +7,7 @@ export default class LoginController {
     this.$state = $state;
     this.TitreSite   = appConfig.TitreSite;
     this.DeviseSite   = appConfig.DeviseSite;
+    this.OauthActif = appConfig.OauthActif;
   }
 
   login(form) {

@@ -11,7 +11,7 @@ import _ from 'lodash';
   return process.env[name];
 }*/
 
-process.env.OPENID_ISSUER = process.env.OPENID_ISSUER || 'http://localhost:3333/oidc';
+//process.env.OPENID_ISSUER = 'https://cas.libre-communaute.fr/auth/realms/sso/protocol/openid-connect';
 
 // All configurations will extend these options
 // ============================================
@@ -53,22 +53,23 @@ var all = {
     callbackURL: `${process.env.DOMAIN || ''}/auth/google/callback`
   },
 
-  openid: {
-    issuer: {
-      issuer: process.env.OPENID_ISSUER,
-      authorization_endpoint: `${process.env.OPENID_ISSUER}/auth`,
-      token_endpoint: `${process.env.OPENID_ISSUER}/token`,
-      userinfo_endpoint: `${process.env.OPENID_ISSUER}/me`,
-      jwks_uri: `${process.env.OPENID_ISSUER}/certs`,
-      end_session_endpoint: `${process.env.OPENID_ISSUER}/session/end`
-    },
-    client: {
-      client_id: process.env.OPENDID_CLIENT_ID || 'e-users',
-      client_secret: process.env.OPENDID_CLIENT_SECRET || 'NotSoSecret',
-      redirect_uris: [`${process.env.DOMAIN || ''}/auth/openid/callback`],
-    }
-  }
-};
+//   openid: {
+//     issuer: {
+//       issuer: process.env.OPENID_ISSUER,
+//       authorization_endpoint: `${process.env.OPENID_ISSUER}/auth`,
+//       token_endpoint: `${process.env.OPENID_ISSUER}/token`,
+//       userinfo_endpoint: `${process.env.OPENID_ISSUER}/userinfo`,
+//       jwks_uri: `${process.env.OPENID_ISSUER}/certs`,
+//       end_session_endpoint: `${process.env.OPENID_ISSUER}/logout`
+//     },
+//     client: {
+//       client_id: process.env.OPENDID_CLIENT_ID || 'e-users',
+//       client_secret: process.env.OPENDID_CLIENT_SECRET || 'NotSoSecret',
+//       redirect_uris: [`${process.env.DOMAIN || ''}/auth/openid/callback`],
+//     }
+//   }
+
+ };
 
 // Export the config object based on the NODE_ENV
 // ==============================================
