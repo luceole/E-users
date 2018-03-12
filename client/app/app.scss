@@ -24,6 +24,8 @@ $fa-font-path: '/assets/fonts/font-awesome/';
 
 @import 'admin/admin';
 
+@import 'adminpoll/adminpoll';
+
 @import 'collaborate/collaborate';
 
 @import 'demandes/demandes';
@@ -31,6 +33,8 @@ $fa-font-path: '/assets/fonts/font-awesome/';
 @import 'groupes/groupes';
 
 @import 'main/main';
+
+@import 'poll/poll';
 
 @import 'users/users';
 

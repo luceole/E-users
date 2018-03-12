@@ -1,0 +1,201 @@
+<div class="container">
+  <div ui-calendar="uiConfig.calendar" id="calendar" ng-model="propositions" calendar="cCalendar">
+    <div ui-calendar="uiConfig.calendar" class="span8 calendar" ></div>
+  </div>
+  <h3>Administrations des sondages</h3>
+  <form>
+    <input ng-model="search.$" placeholder="Recherche globale">
+  </form>
+  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="app/users/dirPagination.tpl.html">
+  </dir-pagination-controls>
+  <br>
+  <span>
+    <a href ng-click="adminpollCtrl.add(null)" rel="tooltip" title="Ajouter" class="trash">
+      <div class="glyphicon glyphicon-plus">Créer un sondage</div>
+    </a>
+  </span>
+
+  <table class="table table-striped ">
+    <tr dir-paginate="poll in adminpollCtrl.polls | orderBy:'name' | filter:search:strict | itemsPerPage :'12' ">
+      <td>
+        <span>
+        <button class="btn btn-warning btn-xs" type="button" ng-if="!poll.isActif" ng-click="active(poll)"rel="tooltip" title="Publier ce sondage">
+          <span class="glyphicon glyphicon-star"></span>Activer
+        </button>
+
+        <button type="button" class="btn btn-success btn-xs" ng-if="poll.isActif" ng-click="active(poll)" rel="tooltip" title="Suspendre ce sondage">Déactiver</button>
+
+        <a href ng-click="adminpollCtrl.add(poll)" ng-if="poll.resultats.length==0" rel="tooltip" title="Modifier" class="trash">
+          <div class="glyphicon glyphicon-pencil pull-right"></div>
+          <a href ng-click="adminpollCtrl.view(poll)" ng-if="poll.resultats.length>0" rel="tooltip" title="Résultat" class="trash">
+            <div class="glyphicon glyphicon-eye-open pull-right"></div>
+          </a>
+          </span>
+      </td>
+      <td>
+        <strong>{{poll.name}}</strong>
+      </td>
+      <td>
+        {{poll.info}}
+      </td>
+      <td>
+        {{poll.groupeInfo}}
+      </td>
+      <td>
+        Réponse(s): {{poll.resultats.length}}
+      </td>
+      <td>
+        <a href ng-click="delete(poll)" rel="tooltip" title="Effacer" class="trash">
+          <div class="glyphicon glyphicon-trash pull-right"></div>
+        </a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<script type="text/ng-template" id="modalAddAdminPoll.html">
+  <div class="modal-header">
+    <h3 class="modal-title">{{modalAddAdminPollCtrl.titre}} <button class="glyphicon glyphicon-remove pull-right" ng-click="modalAddAdminPollCtrl.cancel()">
+        </button></h3>
+  </div>
+  <div class="modal-body">
+    <tabset>
+      <tab heading="Informations" active="active.tab0" disabled="disable.tab0">
+        <form class="form" name="addForm" novalidate>
+          <div class="form-group" ng-class="{ 'has-success': addForm.name.$valid && submitted,
+                                    'has-error': addForm.$invalid && submitted }">
+            Nom
+            <input type="text" name="name" class="form-control" ng-model="modalAddAdminPollCtrl.poll.name" required style="width:350px" />
+            <p class="help-block" ng-show="addForm.name.$error.required && submitted">
+              Nom Obligatoire
+            </p>
+            Description
+            <input type="text" name="desc" class="form-control" ng-model="modalAddAdminPollCtrl.poll.info" style="width:350px" /> Groupe
+            <ui-select ng-model="modalAddAdminPollCtrl.grp.selected" name="groupe" ng-disable="disabled" required style="width: 300px;" title="Groupe">
+              <ui-select-match placeholder="Selection dans la liste...">{{$select.selected.info}}</ui-select-match>
+              <ui-select-choices repeat="grp in modalAddAdminPollCtrl.isadminOf  | filter: $select.search|orderBy:'info'">
+                <div ng-bind-html="grp.info  | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+            <p class="help-block" ng-show="addForm.groupe.$error.required && submitted">
+              Groupe Obligatoire
+            </p>
+          </div>
+        </form>
+        <button class="btn btn-primary " ng-click="modalAddAdminPollCtrl.ok1(addForm) ">Etape suivante</button>
+      </tab>
+      <tab heading="Propositions de dates" ng-click="modalAddAdminPollCtrl.initCalendar()" active="active.tab1" disabled="disable.tab1">
+        <div ui-calendar="uiConfig.calendar" id="calendar" ng-model="propositions" calendar="cCalendar">
+        </div>
+        <table class="table table-striped ">
+          <tr ng-repeat="p in propositions | orderBy:'stdate' | itemsPerPage :'10' ">
+            <td>
+              - {{p.stdate}}
+            </td>
+            <td>
+              <a href ng-click="modalAddAdminPollCtrl.delChx(p)" rel="tooltip" title="Effacer" class="trash">
+                <div class="glyphicon glyphicon-trash pull-right"></div>
+              </a>
+            </td>
+          </tr>
+        </table>
+        <button class="btn btn-primary " ng-show="(propositions.length>0)" ng-click="ok2() ">Etape suivante</button>
+      </tab>
+      <tab heading="Propositions d'horaires" ng-click="modalAddAdminPollCtrl.initTime()" active="active.tab2" disabled="disable.tab2">
+
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-condensed table-body-center">
+            <tr>
+              <th> Date</th>
+              <th> Horaire 1
+                <button ng-click="modalAddAdminPollCtrl.dup(0)">Dupliquer</button>
+              </th>
+              <th> Horaire 2
+                <button ng-click="modalAddAdminPollCtrl.dup(1)">Dupliquer</button>
+              </th>
+              <th> Horaire 3
+                <button ng-click="modalAddAdminPollCtrl.dup(2)">Dupliquer</button>
+              </th>
+              <th> Horaire 4
+                <button ng-click="modalAddAdminPollCtrl.dup(3)">Dupliquer</button>
+              </th>
+            </tr>
+            <tr ng-repeat="p in propositions | orderBy:'chx' |  itemsPerPage :'10' ">
+              <td>
+                {{p.stdate}}:
+              </td>
+              <td>
+                <input ng-model="p.sttime[0]" placeholder="ex 10h00-12h00" maxlength="11" size="14">
+              </td>
+              <td>
+                <input ng-model="p.sttime[1]" placeholder="11h30-12h45" maxlength="11" size="14">
+              </td>
+              <td>
+                <input ng-model="p.sttime[2]" placeholder=" 14h00-1600h " maxlength="11" size="14">
+              </td>
+              <td>
+                <input ng-model="p.sttime[3]" placeholder="16h00-18h00 " maxlength="11 " size="14">
+              </td>
+            </tr>
+          </table>
+          <button class="btn btn-primary " ng-click="ok()">Creer le sondage</button>
+      </tab>
+      </div>
+
+      <div class="modal-footer ">
+        <!--      <button class="btn btn-primary " ng-click="ok(addForm) ">OK</button>-->
+        <button class="btn btn-warning " ng-click="modalAddAdminPollCtrl.cancel() ">Abandon</button>
+      </div>
+    </tabset>
+</script>
+
+<script type="text/ng-template" id="modalViewPoll.html">
+  <div class="modal-header">
+    <h3 class="modal-title">Réponses au sondage <button class="glyphicon glyphicon-remove pull-right" ng-click="cancel()">
+        </button></h3>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-condensed table-body-center">
+      <thead>
+        <tr>
+          <th>Utilsateurs</th>
+          <th colspan="{{p.sttime.length}} " ng-repeat="p in propositions track by $index "> {{p.stdate}}</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th ng-repeat="x in subDate track by $index ">{{x}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+        </tr>
+        <tr ng-repeat="r in resultats track by $index  ">
+          <td>{{r.user.email}}</td>
+          <td ng-repeat="w in rep(r) track by $index" ng-init="doTxt(w,$index)">{{w|ouinon}}</td>
+        </tr>
+        <tr>
+          <td>Total</td>
+          <td ng-repeat="tx in totx track by $index ">{{tx}}
+          </td>
+        </tr>
+        <!--<tr>
+          <td>
+                        <input placeholder="Email " ng-model="email"> </input>
+            {{email}}
+          </td>
+          <td ng-repeat="t in subDate track by $index ">
+            <label>
+
+              <input type="checkbox" ng-model="repuser[$index]"> </label>
+          </td>
+        </tr>-->
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer ">
+    <!-- <button class="btn btn-primary " ng-click="ok() ">OK</button>-->
+    <button class="btn btn-warning" ng-click="cancel() ">Fermer</button>
+  </div>
+</script>
