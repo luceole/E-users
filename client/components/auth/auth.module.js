@@ -20,10 +20,12 @@ import {
 import {
   DemandeResource
 } from './demande.service';
-
 import {
   GroupResource
 } from './group.service';
+import {
+  MessageResource
+} from './message.service';
 
 import uiRouter from 'angular-ui-router';
 
@@ -39,5 +41,6 @@ export default angular.module('E-userApp.auth', [constants, util, ngCookies, uiR
   .factory('User', UserResource)
   .factory('Group', GroupResource)
   .factory('Demande', DemandeResource)
+  .factory('Message', MessageResource)
   .config(['$httpProvider', addInterceptor])
   .name;

@@ -35,5 +35,22 @@ module.exports = {
   secret: '1234567890',
   url: 'http://mydiscourse.domain.lan/session/sso_login?'
   }
+ openid: {
+    discover: 'https://server.mondomaine.fr/auth/realms/sso/',
+    issuer: {
+      issuer: 'https://cas.libre-communaute.fr/auth/realms/sso/',
+    //   authorization_endpoint: `${process.env.OPENID_ISSUER}/auth`,
+    //   token_endpoint: `${process.env.OPENID_ISSUER}/token`,
+    //   userinfo_endpoint: `${process.env.OPENID_ISSUER}/userinfo`,
+    //   jwks_uri: `${process.env.OPENID_ISSUER}/certs`,
+    //   end_session_endpoint: `${process.env.OPENID_ISSUER}/logout`
+    },
+    client: {
+      client_id: 'e-users',
+      client_secret: '...................................',
+      redirect_uris: [`${process.env.DOMAIN || ''}/auth/openid/callback`],
+    }
+  }
+
 
 };

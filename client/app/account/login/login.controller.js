@@ -2,14 +2,25 @@
 
 export default class LoginController {
   /*@ngInject*/
-  constructor(Auth,appConfig, $state) {
+  constructor(Auth, appConfig, Message, $state) {
     this.Auth = Auth;
+    this.Message = Message;
     this.$state = $state;
-    this.TitreSite   = appConfig.TitreSite;
-    this.DeviseSite   = appConfig.DeviseSite;
-    this.OauthActif = appConfig.OauthActif;
+
+
   }
 
+  $onInit() {
+    this.Message.get()
+      .$promise
+      .then(result => {
+        this.myconfig = result;
+      //  this.TitreSite = appConfig.TitreSite;
+        //this.DeviseSite = appConfig.DeviseSite;
+        this.OauthActif = this.myconfig.OauthActif;
+        console.log(this.myconfig)
+      });
+  }
   login(form) {
     this.submitted = true;
     this.msg = '';

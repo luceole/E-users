@@ -56,9 +56,9 @@ export class CollaborateComponent {
     this.getCurrentUser = Auth.getCurrentUserSync;
     this.isActif = Auth.isActif;
     this.$uibModal = $uibModal;
-    this.OauthActif = true;
-    this.DeviseSite = appConfig.DeviseSite || 'Eco-système Libre';
-    this.TitreSite = appConfig.TitreSite || 'Libre Communaute';
+    // this.OauthActif = true;
+    // this.DeviseSite = appConfig.DeviseSite || 'Eco-système Libre';
+    // this.TitreSite = appConfig.TitreSite || 'Libre Communauté';
     if(appConfig.etherpad) {
       this.urlPad = appConfig.etherpad.url;
     }

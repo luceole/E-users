@@ -1,4 +1,6 @@
+
 'use strict';
+
 /*eslint no-process-env:0*/
 
 import path from 'path';
@@ -11,7 +13,6 @@ import _ from 'lodash';
   return process.env[name];
 }*/
 
-//process.env.OPENID_ISSUER = 'https://cas.libre-communaute.fr/auth/realms/sso/protocol/openid-connect';
 
 // All configurations will extend these options
 // ============================================
@@ -69,7 +70,7 @@ var all = {
 //     }
 //   }
 
- };
+};
 
 // Export the config object based on the NODE_ENV
 // ==============================================
