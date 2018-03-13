@@ -63,22 +63,23 @@
     <uib-tabset>
       <uib-tab heading="Informations" active="modalAddAdminPollCtrl.active.tab0" disabled="modalAddAdminPollCtrl.disable.tab0">
         <form class="form" name="addForm" novalidate>
-          <div class="form-group" ng-class="{ 'has-success': addForm.name.$valid && submitted,
-                                    'has-error': addForm.$invalid && submitted }">
+          <div class="form-group" ng-class="{ 'has-success': addForm.name.$valid && modalAddAdminPollCtrl.submitted,
+                                    'has-error': addForm.$invalid && smodalAddAdminPollCtrl.submitted }">
             Nom
             <input type="text" name="name" class="form-control" ng-model="modalAddAdminPollCtrl.poll.name" required style="width:350px" />
-            <p class="help-block" ng-show="addForm.name.$error.required && submitted">
+            <p class="help-block" ng-show="addForm.name.$error.required && modalAddAdminPollCtrl.submitted">
               Nom Obligatoire
             </p>
             Description
-            <input type="text" name="desc" class="form-control" ng-model="modalAddAdminPollCtrl.poll.info" style="width:350px" /> Groupe
+            <input type="text" name="desc" class="form-control" ng-model="modalAddAdminPollCtrl.poll.info" style="width:350px" />
+            Groupe
             <ui-select ng-model="modalAddAdminPollCtrl.grp.selected" name="groupe" ng-disable="disabled" required style="width: 300px;" title="Groupe">
               <ui-select-match placeholder="Selection dans la liste...">{{$select.selected.info}}</ui-select-match>
               <ui-select-choices repeat="grp in modalAddAdminPollCtrl.isadminOf  | filter: $select.search|orderBy:'info'">
                 <div ng-bind-html="grp.info  | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
-            <p class="help-block" ng-show="addForm.groupe.$error.required && submitted">
+            <p class="help-block" ng-show="addForm.groupe.$error.required && modalAddAdminPollCtrl.submitted">
               Groupe Obligatoire
             </p>
           </div>
