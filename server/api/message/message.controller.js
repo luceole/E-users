@@ -12,6 +12,7 @@
 
 import jsonpatch from 'fast-json-patch';
 import Message from './message.model';
+import config from '../../config/environment';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -53,7 +54,9 @@ function handleEntityNotFound(res) {
       return null;
     }
     return entity;
-  };
+  };return Message.find().exec()
+    .then(respondWithResult(res))
+    .catch(handleError(res));
 }
 
 function handleError(res, statusCode) {
@@ -65,9 +68,10 @@ function handleError(res, statusCode) {
 
 // Gets a list of Messages
 export function index(req, res) {
-  return Message.find().exec()
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+    return res.status(200).json({OauthActif: config.OauthActif, ethercalcUrl: config.ethercalc.url, etherpadUrl: config.etherpad.url});
+    // return Message.find().exec()
+    //   .then(respondWithResult(res))
+    //   .catch(handleError(res));
 }
 
 // Gets a single Message from the DB
