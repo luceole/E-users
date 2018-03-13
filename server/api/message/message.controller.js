@@ -54,7 +54,7 @@ function handleEntityNotFound(res) {
       return null;
     }
     return entity;
-  };return Message.find().exec()
+  }; return Message.find().exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
@@ -68,7 +68,9 @@ function handleError(res, statusCode) {
 
 // Gets a list of Messages
 export function index(req, res) {
-    return res.status(200).json({OauthActif: config.OauthActif, ethercalcUrl: config.ethercalc.url, etherpadUrl: config.etherpad.url});
+  var ethercalcUrl = config.ethercalc ? config.ethercalc.url : '';
+  var etherpadUrl = config.etherpad ? config.etherpad.url : '';
+  return res.status(200).json({OauthActif: config.OauthActif, ethercalcUrl, etherpadUrl });
     // return Message.find().exec()
     //   .then(respondWithResult(res))
     //   .catch(handleError(res));
