@@ -24,6 +24,8 @@ import {
 import _Auth from '../components/auth/auth.module';
 import account from './account';
 //import admin from './admin';
+import adminpoll from './adminpoll/adminpoll.component';
+import poll from './poll/poll.component';
 import groupes from './groupes/groupes.component';
 import demandes from './demandes/demandes.component';
 import users from './users/users.component';
@@ -39,7 +41,7 @@ import './app.scss';
 
 angular.module('E-userApp', [ngCookies, ngResource, ngSanitize, ngMaterial, 'btford.socket-io', ngValidationMatch, uiRouter,
   uiBootstrap, uiSelect, 'ckeditor',
-  _Auth, account, groupes, collaborate, navbar, footer, main, constants, socket, util, demandes, users
+  _Auth, account, groupes, collaborate, navbar, footer, main, constants, socket, util, demandes, users, poll, adminpoll
 ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {

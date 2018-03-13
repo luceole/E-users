@@ -15,6 +15,7 @@
     </a>
   </span>
 
+
   <table class="table table-striped ">
     <tr dir-paginate="poll in adminpollCtrl.polls | orderBy:'name' | filter:search:strict | itemsPerPage :'12' ">
       <td>
@@ -59,8 +60,8 @@
         </button></h3>
   </div>
   <div class="modal-body">
-    <tabset>
-      <tab heading="Informations" active="active.tab0" disabled="disable.tab0">
+    <uib-tabset>
+      <uib-tab heading="Informations" active="modalAddAdminPollCtrl.active.tab0" disabled="modalAddAdminPollCtrl.disable.tab0">
         <form class="form" name="addForm" novalidate>
           <div class="form-group" ng-class="{ 'has-success': addForm.name.$valid && submitted,
                                     'has-error': addForm.$invalid && submitted }">
@@ -83,12 +84,12 @@
           </div>
         </form>
         <button class="btn btn-primary " ng-click="modalAddAdminPollCtrl.ok1(addForm) ">Etape suivante</button>
-      </tab>
-      <tab heading="Propositions de dates" ng-click="modalAddAdminPollCtrl.initCalendar()" active="active.tab1" disabled="disable.tab1">
-        <div ui-calendar="uiConfig.calendar" id="calendar" ng-model="propositions" calendar="cCalendar">
+      </uib-tab>
+      <uib-tab heading="Propositions de dates" ng-click="modalAddAdminPollCtrl.initCalendar()" active="modalAddAdminPollCtrl.active.tab1" disabled="modalAddAdminPollCtrl.disable.tab1">
+        <div ui-calendar="uiConfig.calendar" id="calendar" ng-model="modalAddAdminPollCtrl.propositions" calendar="cCalendar">
         </div>
-        <table class="table table-striped ">
-          <tr ng-repeat="p in propositions | orderBy:'stdate' | itemsPerPage :'10' ">
+         <table class="table table-striped d
+          <tr ng-repeat="p in modalAddAdminPollCtrl.propositions | orderBy:'stdate' | itemsPerPage :'10' ">
             <td>
               - {{p.stdate}}
             </td>
@@ -99,9 +100,9 @@
             </td>
           </tr>
         </table>
-        <button class="btn btn-primary " ng-show="(propositions.length>0)" ng-click="ok2() ">Etape suivante</button>
-      </tab>
-      <tab heading="Propositions d'horaires" ng-click="modalAddAdminPollCtrl.initTime()" active="active.tab2" disabled="disable.tab2">
+        <button class="btn btn-primary " ng-show="(modalAddAdminPollCtrl.propositions.length>0)" ng-click="ok2() ">Etape suivante</button>
+      </uib-tab>
+      <uib-tab heading="Propositions d'horaires" ng-click="modalAddAdminPollCtrl.initTime()" active="modalAddAdminPollCtrl.active.tab2" disabled="modalAddAdminPollCtrl.disable.tab2">
 
 
         <div class="table-responsive">
@@ -139,15 +140,15 @@
               </td>
             </tr>
           </table>
-          <button class="btn btn-primary " ng-click="ok()">Creer le sondage</button>
-      </tab>
+          <button class="btn btn-primary " ng-click="modalAddAdminPollCtrl.ok()">Creer le sondage</button>
+      </uib-tab>
       </div>
 
       <div class="modal-footer ">
-        <!--      <button class="btn btn-primary " ng-click="ok(addForm) ">OK</button>-->
+        <!--      <button class="btn btn-primary " ng-click="ok(addForm) ">OK</button>
         <button class="btn btn-warning " ng-click="modalAddAdminPollCtrl.cancel() ">Abandon</button>
       </div>
-    </tabset>
+    </uib-uib-tabset>
 </script>
 
 <script type="text/ng-template" id="modalViewPoll.html">
@@ -192,7 +193,7 @@
           </td>
         </tr>-->
       </tbody>
-    </table>
+    </table> -->
   </div>
   <div class="modal-footer ">
     <!-- <button class="btn btn-primary " ng-click="ok() ">OK</button>-->

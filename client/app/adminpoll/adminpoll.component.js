@@ -10,12 +10,15 @@ export class modalAddAdminPoll {
     this.Auth = Auth;
     this.$timeout = $timeout;
     this.getCurrentUser = Auth.getCurrentUserSync;
+    this.polls = Poll.query();
     this.poll = new Poll(selectedPoll);
     this.titre = 'Création d\'un sondage';
     this.$uibModalInstance = $uibModalInstance;
     this.isAdmin_grp = Auth.isAdmin_grp;
     this.user = Auth.getCurrentUserSync();
     this.isadminOf = this.user.adminOf;
+    this.disable = {};
+    this.active = {};
     this.uiConfig = {
       calendar: {
         lang: 'fr',
