@@ -25,6 +25,7 @@ export class NoteComponent {
     this.msg = '';
   }
 
+
   cancel() {
     this.$uibModalInstance.dismiss('cancel');
   }
@@ -44,30 +45,48 @@ export class NoteComponent {
 
 export class CollaborateComponent {
   /*@ngInject*/
-  constructor($http, $scope, $state, $stateParams, $cookies, $window, socket, appConfig, $uibModal, Auth, Group) {
+  constructor($http, $scope, $state, $stateParams, $cookies, $window, socket, appConfig, $uibModal, Auth, Group, Message) {
     this.$http = $http;
     this.$cookies = $cookies;
     this.$window = $window;
     this.socket = socket;
     this.Auth = Auth;
     this.Group = Group;
+    this.myconfig = {};
     this.isLoggedIn = Auth.isLoggedInSync;
     this.isAdmin = Auth.isAdminSync;
     this.getCurrentUser = Auth.getCurrentUserSync;
     this.isActif = Auth.isActif;
     this.$uibModal = $uibModal;
+    this.Message = Message;
     // this.OauthActif = true;
     // this.DeviseSite = appConfig.DeviseSite || 'Eco-système Libre';
     // this.TitreSite = appConfig.TitreSite || 'Libre Communauté';
-    if(appConfig.etherpad) {
-      this.urlPad = appConfig.etherpad.url;
-    }
-    if(appConfig.ethercalc) {
-      this.urlCal = appConfig.ethercalc.url;
-    }
+
+
+    this.urlPad = '';
+
+
+    this.urlCal = '';
+
     /* $scope.$on('$destroy', function () {
        socket.unsyncUpdates('thing');
      });*/
+  }
+
+  $onInit() {
+    this.Message.get()
+      .$promise
+      .then(result => {
+        this.myconfig = result;
+        if(this.myconfig.etherpadUrl) {
+          this.urlPad = this.myconfig.etherpadUrl;
+        }
+        if(this.myconfig.ethercalcUrl) {
+          this.urlCal = this.myconfig.ethercalcUrl;
+        }
+        console.log(this.myconfig);
+      });
   }
 
   openNote(grp) {

@@ -64,7 +64,7 @@ var GroupSchema = new Schema({
 GroupSchema.pre('save', function(next) {
   var grpId = this._id;
   if(this.isModified('adminby')) {
-      console.log("GROUP Pre-Save: "+this._id + " adminby: "+ this.adminby );
+    console.log('GROUP Pre-Save: ' + this._id + ' adminby: ' + this.adminby);
     this.adminby.forEach(function(id) {
       var query = {
         _id: id
@@ -87,7 +87,8 @@ GroupSchema.pre('save', function(next) {
 
 
 GroupSchema.pre('findOneAndUpdate', function(next) {
-  console.log("GROUP Pre-findOneAndUpdate: "+this._conditions._id+ " adminby: "+ this._update.adminby);
+  if(!this._update.adminby) return next();
+  console.log('GROUP Pre-findOneAndUpdate: ' + this._conditions._id + ' adminby: ' + this._update.adminby);
   //console.log(this._update);
   var grpId = this._conditions._id;
   this._update.adminby.forEach(function(id) {
@@ -100,7 +101,7 @@ GroupSchema.pre('findOneAndUpdate', function(next) {
         adminOf: grpId
       }
     };
-    console.log(update)
+    console.log(update);
     User.findOneAndUpdate(query, update, function(err, user) {
       if(err) {
         console.log(`erreur Adminby  : ${err}`);
@@ -159,6 +160,7 @@ GroupSchema.pre('save', function(next) {
 });
 
 GroupSchema.pre('remove', function(next) {
+//  console.log('pre remove ' + this.adminby);
   var grpId = this._id;
   this.adminby.forEach(function(id) {
     var query = {
@@ -166,15 +168,17 @@ GroupSchema.pre('remove', function(next) {
     };
     var update = {
       $addToSet: {
-        adminOf: grpIdadminOf
+        adminOf: grpId
       }
     };
     User.findOneAndUpdate(query, update, function(err, user) {
       if(err) {
         console.log(`erreur Adminby : ${err}`);
+        return next();
       }
-      return next(); // Always go on !
-    });adminOf
+      console.log(' ** ');
+      next(); // Always go on !
+    });
   });
 });
 /**
