@@ -15,8 +15,8 @@ export default class LoginController {
       .$promise
       .then(result => {
         this.myconfig = result;
-      //  this.TitreSite = appConfig.TitreSite;
-        //this.DeviseSite = appConfig.DeviseSite;
+        this.TitreSite = this.myconfig.TitreSite;
+        this.DeviseSite = this.myconfig.DeviseSite;
         this.OauthActif = this.myconfig.OauthActif;
         console.log(this.myconfig)
       });

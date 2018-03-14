@@ -64,6 +64,7 @@ var GroupSchema = new Schema({
 GroupSchema.pre('save', function(next) {
   var grpId = this._id;
   if(this.isModified('adminby')) {
+      console.log("GROUP Pre-Save: "+this._id + " adminby: "+ this.adminby );
     this.adminby.forEach(function(id) {
       var query = {
         _id: id
@@ -81,6 +82,32 @@ GroupSchema.pre('save', function(next) {
       });
     });
   }
+  return next(); // Always go on !
+});
+
+
+GroupSchema.pre('findOneAndUpdate', function(next) {
+  console.log("GROUP Pre-findOneAndUpdate: "+this._conditions._id+ " adminby: "+ this._update.adminby);
+  //console.log(this._update);
+  var grpId = this._conditions._id;
+  this._update.adminby.forEach(function(id) {
+    var query = {
+      _id: id
+    };
+    //console.log(id):
+    var update = {
+      $addToSet: {
+        adminOf: grpId
+      }
+    };
+    console.log(update)
+    User.findOneAndUpdate(query, update, function(err, user) {
+      if(err) {
+        console.log(`erreur Adminby  : ${err}`);
+      }
+      return next(); // Always go on !
+    });
+  });
   return next(); // Always go on !
 });
 
@@ -139,7 +166,7 @@ GroupSchema.pre('remove', function(next) {
     };
     var update = {
       $addToSet: {
-        adminOf: grpId
+        adminOf: grpIdadminOf
       }
     };
     User.findOneAndUpdate(query, update, function(err, user) {
@@ -147,7 +174,7 @@ GroupSchema.pre('remove', function(next) {
         console.log(`erreur Adminby : ${err}`);
       }
       return next(); // Always go on !
-    });
+    });adminOf
   });
 });
 /**
