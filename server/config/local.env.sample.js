@@ -22,23 +22,24 @@ module.exports = {
 
 
   mail: {
-  user: 'login SMTP',
-  password : 'Password SMTP',
-  sender: 'admin@mydomaine' ,
-  host: 'Host SMTP',
-  ssl: true,
-  site: 'http://localhost:3000',
-  url: 'http://localhost:3000/api/users/validate/'
-},
+    user: 'login SMTP',
+    password: 'Password SMTP',
+    sender: 'admin@mydomaine',
+    host: 'Host SMTP',
+    ssl: true,
+    site: 'http://localhost:3000',
+    url: 'http://localhost:3000/api/users/validate/'
+  },
 
-  discourse_sso : {
-  secret: '1234567890',
-  url: 'http://mydiscourse.domain.lan/session/sso_login?'
-  }
- openid: {
-    discover: 'https://server.mondomaine.fr/auth/realms/sso/',
+  discourse_sso: {
+    secret: '1234567890',
+    url: 'http://mydiscourse.domain.lan/session/sso_login?'
+  },
+  OauthActif: true,
+  openid: {
+    discover: 'https://server.mondomaine.fr/.well-known/openid-configuration',
     issuer: {
-      issuer: 'https://cas.libre-communaute.fr/auth/realms/sso/',
+      issuer: 'https://server.mondomaine.fr/auth/realms/sso/',
     //   authorization_endpoint: `${process.env.OPENID_ISSUER}/auth`,
     //   token_endpoint: `${process.env.OPENID_ISSUER}/token`,
     //   userinfo_endpoint: `${process.env.OPENID_ISSUER}/userinfo`,
