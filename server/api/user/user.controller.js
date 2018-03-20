@@ -131,12 +131,17 @@ export function create(req, res) {
   /**
    * Envoie du Mail de confirmation
    */
-  var server = email.server.connect({
-    user: config.mail.user,
-    password: config.mail.password,
-    host: config.mail.host,
-    ssl: config.mail.ssl
-  });
+  // var server = email.server.connect({
+  //   user: config.mail.user,
+  //   password: config.mail.password,
+  //   host: config.mail.host,
+  //   ssl: config.mail.ssl
+  // });
+  // var whiteDomain = /^ac\-[a-z\-]*\.fr/;
+  // var domaineMail = newUser.email.split('@')[1]
+  // console.log(whiteDomain.test(domaineMail) )
+  //  whiteDomain = /^[a-z\-]*\.gouv\.fr/;
+  //  console.log(whiteDomain.test(domaineMail) )
 
   newUser.save()
     .then(function(user) {
@@ -147,6 +152,12 @@ export function create(req, res) {
       });
       res.json({
         token
+      });
+      var server = email.server.connect({
+        user: config.mail.user,
+        password: config.mail.password,
+        host: config.mail.host,
+        ssl: config.mail.ssl
       });
       server.send({
         text: `Bonjour, Ceci est un courriel de confirmation d'inscription; Pour activer votre compte cliquez sur le lien : ${config.mail.url}${newUser.urlToken}`,
@@ -172,11 +183,12 @@ export function validEmail(req, res) {
     // Validation automatique si Domaine mail dans la liste blanche
     var domaineMail = user.email.split('@')[1];
     //Put  whiteDomain in config ?
-    var whiteDomain = /^ac-[a-z\-]*.fr/;
-    // console.log(whiteDomain.test(domaineMail));
-    if(whiteDomain.test(domaineMail)) {
+    var whiteDomain1 = /^ac-[a-z\-]*\.fr/;
+    var whiteDomain2 = /^[a-z\-]*\.gouv\.fr/;
+    if((whiteDomain1.test(domaineMail)) || (whiteDomain2.test(domaineMail))) {
       user.isdemande = false;
       user.isactif = true;
+      console.log("Validation auto :"+user.email);
     } else {
       var server = email.server.connect({
         user: config.mail.user,
