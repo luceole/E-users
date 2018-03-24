@@ -21,6 +21,8 @@ var EventSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   }]
+}, {
+  usePushEach: true
 });
 
 var GroupSchema = new Schema({
@@ -53,6 +55,8 @@ var GroupSchema = new Schema({
     ref: 'User'
   }],
   events: [EventSchema]
+}, {
+  usePushEach: true
 });
 
 /**

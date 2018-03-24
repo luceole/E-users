@@ -55,6 +55,8 @@ var UserSchema = new Schema({
   salt: String,
   google: {},
   github: {},
+}, {
+  usePushEach: true
 });
 
 /**
