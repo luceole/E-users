@@ -65,13 +65,48 @@ export class CollaborateComponent {
 
 
     this.urlPad = '';
-
-
+    this.hostPad = '';
     this.urlCal = '';
 
     /* $scope.$on('$destroy', function () {
        socket.unsyncUpdates('thing');
      });*/
+  }
+  extractHostname(url) {
+    var hostname;
+      //find & remove protocol (http, ftp, etc.) and get hostname
+
+    if(url.indexOf('://') > -1) {
+      hostname = url.split('/')[2];
+    }
+    else {
+      hostname = url.split('/')[0];
+    }
+
+      //find & remove port number
+    hostname = hostname.split(':')[0];
+      //find & remove "?"
+    hostname = hostname.split('?')[0];
+
+    return hostname;
+  }
+
+  extractRootDomain(url) {
+    var domain = this.extractHostname(url),
+      splitArr = domain.split('.'),
+      arrLen = splitArr.length;
+
+     //extracting the root domain here
+     //if there is a subdomain
+    if(arrLen > 2) {
+      domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
+         //check to see if it's using a Country Code Top Level Domain (ccTLD) (i.e. ".me.uk")
+      if(splitArr[arrLen - 2].length == 2 && splitArr[arrLen - 1].length == 2) {
+             //this is using a ccTLD
+        domain = splitArr[arrLen - 3] + '.' + domain;
+      }
+    }
+    return domain;
   }
 
   $onInit() {
@@ -82,9 +117,13 @@ export class CollaborateComponent {
         if(this.myconfig.etherpadUrl) {
           this.urlPad = this.myconfig.etherpadUrl;
         }
+        if(this.myconfig.etherpadHost) {
+          this.hostPad = this.myconfig.etherpadHost;
+        }
         if(this.myconfig.ethercalcUrl) {
           this.urlCal = this.myconfig.ethercalcUrl;
         }
+
         console.log(this.myconfig);
       });
   }
@@ -110,6 +149,9 @@ export class CollaborateComponent {
     }).success(data => {
       if(data) {
         this.$cookies.put('sessionID', data.sessionID);
+        var mydomain = this.extractRootDomain(this.urlPad);
+        console.log(mydomain);
+        this.$cookies.put('sessionID', data.sessionID, {domain: mydomain});
         var url = `${this.urlPad}/p/${grp.groupPadID}$${grp.name}?userName=${this.getCurrentUser().name}`;
         //this.$window.open('//localhost:9001/p/' + grp.groupPadID + "$" + grp.name + "?userName=" + this.getCurrentUser().name);
         this.$window.open(url);
