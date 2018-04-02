@@ -224,7 +224,7 @@ UserSchema
             this.authorPadID = '';
             return next(); // Alway Create even EtherPad error
           } else {
-            console.log(`${this.uid}: New Pad-User created `);
+        //    console.log(`${this.uid}: New Pad-User created `);
             this.authorPadID = data.authorID;
             return next();
           }

@@ -68,7 +68,7 @@ var GroupSchema = new Schema({
 GroupSchema.pre('save', function(next) {
   var grpId = this._id;
   if(this.isModified('adminby')) {
-    console.log('GROUP Pre-Save: ' + this._id + ' adminby: ' + this.adminby);
+    //console.log('GROUP Pre-Save: ' + this._id + ' adminby: ' + this.adminby);
     this.adminby.forEach(function(id) {
       var query = {
         _id: id
@@ -92,7 +92,7 @@ GroupSchema.pre('save', function(next) {
 
 GroupSchema.pre('findOneAndUpdate', function(next) {
   if(!this._update.adminby) return next();
-  console.log('GROUP Pre-findOneAndUpdate: ' + this._conditions._id + ' adminby: ' + this._update.adminby);
+//  console.log('GROUP Pre-findOneAndUpdate: ' + this._conditions._id + ' adminby: ' + this._update.adminby);
   //console.log(this._update);
   var grpId = this._conditions._id;
   this._update.adminby.forEach(function(id) {
@@ -105,7 +105,7 @@ GroupSchema.pre('findOneAndUpdate', function(next) {
         adminOf: grpId
       }
     };
-    console.log(update);
+  //  console.log(update);
     User.findOneAndUpdate(query, update, function(err, user) {
       if(err) {
         console.log(`erreur Adminby  : ${err}`);
@@ -120,7 +120,6 @@ GroupSchema.pre('findOneAndUpdate', function(next) {
 GroupSchema.pre('save', function(next) {
   if(!config.ethercalc) return next();
   var myKey = config.ethercalc.key;
-  console.log(myKey);
   const secret = myKey;
   const hash = crypto.createHmac('sha256', secret)
     .update(this.name)
@@ -180,7 +179,6 @@ GroupSchema.pre('remove', function(next) {
         console.log(`erreur Adminby : ${err}`);
         return next();
       }
-      console.log(' ** ');
       next(); // Always go on !
     });
   });

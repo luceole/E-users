@@ -1,10 +1,13 @@
 import passport from 'passport';
 import {Strategy} from 'openid-client';
 import config from '../../config/environment';
+
 export function setup(User, config) {
   const Issuer = require('openid-client').Issuer;
+
   if(config.OauthActif) {
-    Issuer.discover(config.openid.discover) // => Promise
+    var urlDiscover = `${config.openid.discover}.well-known/openid-configuration`;
+    Issuer.discover(urlDiscover) // => Promise
   .then(function(myIssuer) {
     console.log('OPenID: Discovered issuer %s', myIssuer.issuer);
     const client = new myIssuer.Client({
@@ -25,8 +28,12 @@ export function setup(User, config) {
         user.openid = {tokenSet, issuer: config.openid.issuer, client: config.openid.client };
         return done(null, user);
       })
-      .catch(err => done(err));
+         .catch(err => done(err));
     }));
+  })
+  .catch(err => {
+    console.log('Le serveur Oauth ne répond pas : ' + urlDiscover);
+    return err;
   });
   }
   else { console.log('Warning: OpenID not active ');}

@@ -14,7 +14,7 @@
       <ul class="nav navbar-nav">
         <li ng-show="$ctrl.isLoggedIn()">
       </ul>
-<ul class="nav navbar-nav">
+<ul class="nav navbar-nav"  ng-show="$ctrl.isLoggedIn()">
         <li ng-repeat="item in $ctrl.menu" ui-sref-active="active">
             <a ui-sref="{{item.state}}">{{item.title}}</a>
         </li>

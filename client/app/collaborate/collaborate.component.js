@@ -68,9 +68,9 @@ export class CollaborateComponent {
     this.hostPad = '';
     this.urlCal = '';
 
-    /* $scope.$on('$destroy', function () {
-       socket.unsyncUpdates('thing');
-     });*/
+    $scope.$on('$destroy', function() {
+      socket.unsyncUpdates('thing');
+    });
   }
   extractHostname(url) {
     var hostname;

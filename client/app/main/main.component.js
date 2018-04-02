@@ -4,10 +4,11 @@ import routing from './main.routes';
 
 export class MainController {
   /*@ngInject*/
-  constructor($http, $scope, $state, $stateParams, $window, socket, appConfig, Auth) {
+  constructor($http, $scope, $state, $stateParams, $window, socket, appConfig, Auth, Message) {
     this.w = $window;
     this.$http = $http;
     this.socket = socket;
+    this.Message = Message;
     this.isLoggedIn = Auth.isLoggedInSync;
     this.Auth = Auth;
     this.isAdmin = Auth.isAdminSync;
@@ -17,7 +18,8 @@ export class MainController {
     this.MSG = '';
     this.DeviseSite = appConfig.DeviseSite || 'Eco-système ';
     this.TitreSite = appConfig.TitreSite || 'Libre Communaute';
-    this.onlineServices = appConfig.onlineServices;
+    //this.onlineServices = appConfig.onlineServices;
+    this.onlineServices = [];
     this.OauthActif = appConfig.OauthActif || false;
     this.sso = this.$state.current.name == 'discoursesso';
 
@@ -32,6 +34,18 @@ export class MainController {
     //     this.awesomeThings = response.data;
     //     this.socket.syncUpdates('thing', this.awesomeThings);
     //   });
+    this.Message.get()
+      .$promise
+      .then(result => {
+        this.myconfig = result;
+        this.TitreSite = this.myconfig.TitreSite;
+        this.DeviseSite = this.myconfig.DeviseSite;
+        this.OauthActif = this.myconfig.OauthActif;
+        this.onlineServices = this.myconfig.onlineServices;
+        console.log(this.myconfig);
+      });
+
+
     if(this.$state.current.name == 'discoursesso') {
       this.MSG = ' ***  REDIRECTION Forum Discourse en cours ..';
       this.Auth.getCurrentUser()

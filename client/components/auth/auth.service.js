@@ -60,7 +60,7 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
     logout() {
       $cookies.remove('token');
       currentUser = new _User();
-      $window.location = '/logout';
+      //$window.location = '/logout';
     },
 
     /**
