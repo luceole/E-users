@@ -69,7 +69,7 @@ export function index(req, res) {
     .populate('adminOf', 'name info  groupPadID ')
     .exec()
     .then(users => {
-      res.status(200).json(users);
+      return res.status(200).json(users);
     })
     .catch(handleError(res));
 }
@@ -81,7 +81,7 @@ export function listadmgrp(req, res) {
     },
   }, '-salt -password', ).exec()
     .then(users => {
-      res.status(200).json(users);
+      return res.status(200).json(users);
     })
     .catch(handleError(res));
 }
@@ -93,7 +93,7 @@ export function listadmin(req, res) {
     },
   }, '-salt -password', ).exec()
     .then(users => {
-      res.status(200).json(users);
+      return res.status(200).json(users);
     })
     .catch(handleError(res));
 }
@@ -141,7 +141,7 @@ export function create(req, res) {
   // var domaineMail = newUser.email.split('@')[1]
   // console.log(whiteDomain.test(domaineMail) )
   //  whiteDomain = /^[a-z\-]*\.gouv\.fr/;
-  //  console.log(whiteDomain.test(domaineMail) )
+  //  console.log(whiteDomain.test(domaineMail) ).j
 
   newUser.save()
     .then(function(user) {
@@ -178,7 +178,6 @@ export function validEmail(req, res) {
   User.findOne({
     urlToken
   }, '-salt -hashedPassword', function(err, user) {
-    if(!user) return res.send(404);
     user.mailValid = true;
     // Validation automatique si Domaine mail dans la liste blanche
     var domaineMail = user.email.split('@')[1];
@@ -304,7 +303,7 @@ export function me(req, res, next) {
 export function destroy(req, res) {
   return User.findByIdAndRemove(req.params.id).exec()
     .then(function() {
-      res.status(204).end();
+      return res.status(204).end();
     })
     .catch(handleError(res));
 }
@@ -326,7 +325,7 @@ export function update(req, res) {
       return updated.save()
         .then(user => {
           //res.status(200).json(user);
-          res.status(204).end();
+          return res.status(204).end();
         })
         .catch(validationError(res));
     });
