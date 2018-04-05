@@ -1,5 +1,4 @@
-<div ng-hide="$ctrl.isLoggedIn()">
-  <header class="hero-unit" id="banner">
+ <header class="hero-unit" id="banner">
     <div class="container">
         <h1>{{vm.TitreSite}}</h1>
         <p class="lead">{{vm.DeviseSite}}</p>
@@ -21,8 +20,7 @@
                   8 caractères minimum.
                 </p>
               </div>
-
-              <div class="form-group">
+            <div class="form-group">
                 <label>Confirmez le mot de passe </label>
 
                 <input type="password" name="confirmPassword" class="form-control" ng-model="vm.user.confirmPassword" match="vm.newPassword" ng-minlength="8" required style="width:350px" />
@@ -36,9 +34,9 @@
             <br>
             <p>
           </div>
+          <br>
           <span class="alert alert-info" ng-show="vm.submitted ">{{vm.message}}</span>
 
         </div>
       </div>
     </div>
-  </div>
