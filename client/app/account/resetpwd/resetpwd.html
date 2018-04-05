@@ -1,11 +1,10 @@
 <div ng-hide="$ctrl.isLoggedIn()">
   <header class="hero-unit" id="banner">
     <div class="container">
-      <h1>Libre Communauté </h1>
-      <p class="lead">ECO-système Libre de l’Éducation</p>
-      {{banTitre}}
-      <img src="assets/images/LogoPLLPt.png " alt="Pôle Logiciels Libres">
-    </div>
+        <h1>{{vm.TitreSite}}</h1>
+        <p class="lead">{{vm.DeviseSite}}</p>
+        <img src="assets/images/LogoPLLPt.png " alt="Pôle Logiciels Libres">
+      </div>
   </header>
   <div class="container">
     <div class="row">

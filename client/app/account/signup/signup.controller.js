@@ -2,11 +2,22 @@
 import angular from 'angular';
 export default class SignupController {
   /*@ngInject*/
-  constructor(Auth, $state) {
+  constructor(Auth, Message, $state) {
     this.Auth = Auth;
+    this.Message = Message;
     this.$state = $state;
   }
 
+  $onInit() {
+    this.Message.get()
+      .$promise
+      .then(result => {
+        this.myconfig = result;
+        this.TitreSite = this.myconfig.TitreSite;
+        this.DeviseSite = this.myconfig.DeviseSite;
+        this.OauthActif = this.myconfig.OauthActif;
+      });
+  }
   myInit(form, field) {
     form[field].$setValidity('mongoose', true);
     if(!this.user.uid) this.user.uid = this.user.email;
