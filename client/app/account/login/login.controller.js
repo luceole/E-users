@@ -6,8 +6,6 @@ export default class LoginController {
     this.Auth = Auth;
     this.Message = Message;
     this.$state = $state;
-
-
   }
 
   $onInit() {
@@ -18,7 +16,7 @@ export default class LoginController {
         this.TitreSite = this.myconfig.TitreSite;
         this.DeviseSite = this.myconfig.DeviseSite;
         this.OauthActif = this.myconfig.OauthActif;
-        console.log(this.myconfig)
+      //  console.log(this.myconfig)
       });
   }
   login(form) {
