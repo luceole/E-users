@@ -10,7 +10,7 @@
         <div class="form-group">
           <label>Mot de passe actuel</label>
 
-          <input type="password" name="password" class="form-control" ng-model="vm.user.oldPassword" mongoose-error style="width:350px" />
+          <input type="password" name="password" class="form-control" ng-model="vm.user.oldPassword" mongoose-error style="width:250px" />
           <p class="help-block" ng-show="passwdForm.password.$error.mongoose">
             {{ vm.errors.other }}
           </p>
@@ -19,7 +19,7 @@
         <div class="form-group">
           <label>Nouveau mot de passe</label>
 
-          <input type="password" name="newPassword" class="form-control" ng-model="vm.user.newPassword" ng-minlength="8" required style="width:350px" />
+          <input type="password" name="newPassword" class="form-control" ng-model="vm.user.newPassword" ng-minlength="8" required style="width:250px" />
           <p class="help-block" ng-show="(passwdForm.newPassword.$error.minlength ||passwdForm.newPassword.$error.required) && (passwdForm.newPassword.$dirty || vm.submitted)">
             8 caractères minimum.
           </p>
@@ -28,7 +28,7 @@
         <div class="form-group">
           <label>Confirmez le mot de passe </label>
 
-          <input type="password" name="confirmPassword" class="form-control" ng-model="vm.user.confirmPassword" match="vm.user.newPassword" ng-minlength="8" required style="width:350px" />
+          <input type="password" name="confirmPassword" class="form-control" ng-model="vm.user.confirmPassword" match="vm.user.newPassword" ng-minlength="8" required style="width:250px" />
           <p class="help-block" ng-show="passwdForm.confirmPassword.$error.match">
             Mot de passe différent!
           </p>

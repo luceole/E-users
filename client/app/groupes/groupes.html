@@ -64,7 +64,7 @@
             <div ng-form="ModalEditAdminGroupCtrl.forms.tab1" class="form-group" ng-class="{ 'has-success': editerForm.name.$valid && ModalEditAdminGroupCtrl.submitted,
                                     'has-error': editerForm.name.$invalid && submitted }">
               Description
-              <input type="text" name="info" class="form-control" ng-model="ModalEditAdminGroupCtrl.groupe.info" required style="width:350px" />
+              <input type="text" name="info" class="form-control" ng-model="ModalEditAdminGroupCtrl.groupe.info" required style="width:250px" />
               <p class="help-block" ng-show="forms.tab1.info.$error.required && ModalEditAdminGroupCtrl.submitted">
                 Description Obligatoire
               </p>
@@ -138,13 +138,13 @@
         <div class="form-group" ng-class="{ 'has-success': addForm.name.$valid && submitted,
                                     'has-error': addForm.$invalid && ModalAddAdminGroupCtrl.submitted }">
           Nom (Doit être Unique)
-          <input type="text" name="name" class="form-control" ng-model="ModalAddAdminGroupCtrl.groupe.name" required style="width:350px" />
+          <input type="text" name="name" class="form-control" ng-model="ModalAddAdminGroupCtrl.groupe.name" required style="width:250px" />
           <p class="help-block" ng-show="addForm.name.$error.required && ModalAddAdminGroupCtrl.submitted">
             Nom Obligatoire
           </p>
 
           Description
-          <input type="text" name="desc" class="form-control" ng-model="ModalAddAdminGroupCtrl.groupe.info" required style="width:350px" />
+          <input type="text" name="desc" class="form-control" ng-model="ModalAddAdminGroupCtrl.groupe.info" required style="width:250px" />
           <p class="help-block" ng-show="addForm.desc.$error.required && ModalAddAdminGroupCtrl.submitted">
             Description Obligatoire
           </p>

@@ -45,7 +45,6 @@ export class MainController {
         console.log(this.myconfig);
       });
 
-
     if(this.$state.current.name == 'discoursesso') {
       this.MSG = ' ***  REDIRECTION Forum Discourse en cours ..';
       this.Auth.getCurrentUser()
@@ -65,19 +64,6 @@ export class MainController {
     }
     this.MSG = '';
   }
-
-  // addThing() {
-  //   if (this.newThing) {
-  //     this.$http.post('/api/things', {
-  //       name: this.newThing
-  //     });
-  //     this.newThing = '';
-  //   }
-  // }
-  //
-  // deleteThing(thing) {
-  //   this.$http.delete('/api/things/' + thing._id);
-  // }
 
   Formlogin(form) {
     this.submitted = true;

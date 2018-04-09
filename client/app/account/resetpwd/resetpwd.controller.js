@@ -2,10 +2,11 @@
 import angular from 'angular';
 export default class LostpwdController {
   /*@ngInject*/
-  constructor(Auth, Message, $state, $stateParams) {
+  constructor(Auth, $state, Message, $stateParams) {
     this.Auth = Auth;
     this.Message = Message;
     this.$state = $state;
+    this.Message = Message;
     this.newPassword = '';
     this.passcode = $stateParams.passcode;
     this.message = '';
@@ -19,7 +20,6 @@ export default class LostpwdController {
         this.TitreSite = this.myconfig.TitreSite;
         this.DeviseSite = this.myconfig.DeviseSite;
         this.OauthActif = this.myconfig.OauthActif;
-      //  console.log(this.myconfig)
       });
   }
   changeResetedPassword(form) {

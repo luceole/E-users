@@ -48,7 +48,7 @@ angular.module('E-userApp', [ngCookies, ngResource, ngSanitize, ngMaterial, 'btf
     $rootScope.$on('$stateChangeStart', function(event, next) {
       Auth.isLoggedIn(function(loggedIn) {
         if(next.authenticate && !loggedIn) {
-          $location.path('/main');
+          $location.path('/login');
         }
       });
     });

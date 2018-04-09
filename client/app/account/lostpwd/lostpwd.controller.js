@@ -6,6 +6,7 @@ export default class LostpwdController {
     this.Auth = Auth;
     this.Message = Message;
     this.$state = $state;
+    this.Message = Message;
     this.email = '';
     this.message = ' ';
   }
@@ -17,7 +18,6 @@ export default class LostpwdController {
         this.TitreSite = this.myconfig.TitreSite;
         this.DeviseSite = this.myconfig.DeviseSite;
         this.OauthActif = this.myconfig.OauthActif;
-      //  console.log(this.myconfig)
       });
   }
 
