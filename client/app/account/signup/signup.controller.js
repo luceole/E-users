@@ -31,7 +31,7 @@ export default class SignupController {
   //     });
   // }
 
-his.Structures = this.myconfig.Structures;
+
   myInit(form, field) {
     form[field].$setValidity('mongoose', true);
     if(!this.user.uid) this.user.uid = this.user.email;
