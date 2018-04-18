@@ -25,33 +25,63 @@
         </tr>
       </table>
       <div init-toolbar="coucou ">
-      <div class="alert alert-success " align="center " ng-if="alert.msg "> {{alert.msg}}</div>
+        <div class="alert alert-success " align="center " ng-if="alert.msg "> {{alert.msg}}</div>
+      </div>
+      <div class="alert alert-warning " ng-if="!collaborateCtrl.getCurrentUser().isactif "> Votre compte est en attende de validation par le modérateur </div>
     </div>
-    <div class="alert alert-warning " ng-if="!collaborateCtrl.getCurrentUser().isactif "> Votre compte est en attende de validation par le modérateur </div>
+    <div class="alert alert-info">
+      <div class="text-center">
+        <h4> Agenda de vos groupes</h4>
+
+        <p class="text-center">{{ collaborateCtrl.calendarTitle }}</p>
+
+        <div class="btn-group">
+          <label class="btn btn-primary" ng-model="collaborateCtrl.calendarView" uib-btn-radio="'year'" ng-click="collaborateCtrl.cellIsOpen = false">Année</label>
+          <label class="btn btn-primary" ng-model="collaborateCtrl.calendarView" uib-btn-radio="'month'" ng-click="collaborateCtrl.cellIsOpen = false">Mois</label>
+          <label class="btn btn-primary" ng-model="collaborateCtrl.calendarView" uib-btn-radio="'week'" ng-click="collaborateCtrl.cellIsOpen = false">Semaine</label>
+        </div>
+        <br>
+        <div class="btn-group">
+          <button class="btn btn-primary" mwl-date-modifier date="collaborateCtrl.viewDate" decrement="collaborateCtrl.calendarView" ng-click="collaborateCtrl.cellIsOpen = false">
+                 Précédent
+               </button>
+          <button class="btn btn-default" mwl-date-modifier date="collaborateCtrl.viewDate" set-to-today ng-click="collaborateCtrl.cellIsOpen = false">
+                 Aujourdhui
+               </button>
+          <button class="btn btn-primary" mwl-date-modifier date="collaborateCtrl.viewDate" increment="collaborateCtrl.calendarView" ng-click="collaborateCtrl.cellIsOpen = false">
+                 Suivant
+               </button>
+        </div>
+          <p class="alert {{collaborateCtrl.alert.type}}" align="center" ng-if="collaborateCtrl.alert.msg"> {{collaborateCtrl.alert.msg}}</p>
+        <mwl-calendar events="collaborateCtrl.eventSources" view="collaborateCtrl.calendarView" view-title="collaborateCtrl.calendarTitle" view-date="collaborateCtrl.viewDate" on-event-click="collaborateCtrl.eventClicked(calendarEvent)" on-event-times-changed="collaborateCtrl.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+          cell-is-open="collaborateCtrl.cellIsOpen" day-view-start="08:00" day-view-end="19:59" day-view-split="30" cell-modifier="collaborateCtrl.modifyCell(calendarCell)" cell-auto-open-disabled="false" on-timespan-click="collaborateCtrl.timespanClicked(calendarDate, calendarCell)">
+        </mwl-calendar>
+      </div>
+    </div>
   </div>
+  <div ng-include=" 'components/footer/footer.html' "></div>
 
-</div>
-<div ng-include=" 'components/footer/footer.html' "></div>
-</div>
 
-<script type="text/ng-template " id="modalNote.html ">
-   <h3 class="modal-title"> Note du groupe: {{NC.groupe.info}}
+  <script type="text/ng-template " id="modalNote.html ">
+    <h3 class="modal-title"> Note du groupe: {{NC.groupe.info}}
          <button class="glyphicon glyphicon-remove pull-right" ng-click="NC.cancel()">
         </button></h3>
+</div>
+<div class="modal-body ">
+  <div ng-show="NC.isAdminOf ">
+    <div ckeditor="options " ng-model="NC.groupe.note "> </div>
 
-  <div class="modal-body ">
-    <div ng-show="NC.isAdminOf ">
-      <div ckeditor="options " ng-model="NC.groupe.note "> </div>
-
-  <div class="modal-footer ">
-    <div class="alert alert-success " align="center " ng-if="NC.msg "> {{NC.msg}}
-    </div>
-    <button class="glyphicon glyphicon-save " ng-click="NC.save()">Sauver
+    <div class="modal-footer ">
+      <div class="alert alert-success " align="center " ng-if="NC.msg "> {{NC.msg}}
+      </div>
+      <button class="glyphicon glyphicon-save " ng-click="NC.save()">Sauver
         </button>
-  </div></div></div>
-
-  <div style="margin-left:10px;margin-right:10px" ng-show="!NC.isAdminOf ">
-    <div  ng-bind-html="NC.groupe.note "></div>
-
+    </div>
   </div>
+</div>
+
+<div style="margin-left:10px;margin-right:10px" ng-show="!NC.isAdminOf ">
+  <div ng-bind-html="NC.groupe.note "></div>
+
+</div>
 </script>

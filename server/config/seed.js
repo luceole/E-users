@@ -84,12 +84,23 @@ if(config.env !== 'production') {
               owner: UserAdmin._id,
               adminby: [UserAdmin._id],
               participants: [],
-              events: [{
-                title: 'The Dream Team',
-                start: '2015-04-2',
-                lieu: 'Dijon',
-                allDay: true
-              }]
+              events: [
+              //   {
+              //   title: 'The Dream Team',
+              //   startsAt: new Date('2018-04-17'),
+              //   endsAt: new Date('2018-04-17'),
+              //   lieu: 'Dijon',
+              //   allDay: true
+              // },
+                {
+                  title: 'The Dream Team back',
+                  startsAt: new Date('2018-04-20'),
+                  endsAt: new Date('2018-04-20'),
+                  lieu: 'Dijon',
+                  allDay: true
+                }
+
+              ]
             },
               {
                 name: 'eole',
@@ -99,6 +110,7 @@ if(config.env !== 'production') {
                 active: true,
                 owner: UserAdmin._id,
                 adminby: [UserAdmin._id],
+                source: {group: {_id: ''}},
                 participants: [],
                 events: []
               },
@@ -110,6 +122,7 @@ if(config.env !== 'production') {
                 active: true,
                 owner: UserAdmin._id,
                 adminby: [UserAdmin._id],
+                source: {group: {_id: ''}},
                 participants: [],
                 events: []
               });

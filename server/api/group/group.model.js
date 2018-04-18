@@ -8,10 +8,11 @@ import mongoose, {
 } from 'mongoose';
 const crypto = require('crypto');
 var config = require('../../config/environment');
+
 var EventSchema = new Schema({
   title: String,
-  start: Date,
-  end: Date,
+  startsAt: Date,
+  endsAt: Date,
   allDay: Boolean,
   info: String,
   lieu: String,

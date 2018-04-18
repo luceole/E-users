@@ -38,7 +38,7 @@ function removeEntity(res) {
     if(entity) {
       return entity.remove()
         .then(() => {
-        return res.status(204).end();
+          return res.status(204).end();
         });
     }
   };
@@ -84,7 +84,7 @@ export function byowner(req, res) {
     .catch(handleError(res));
 }
 
-// Get list of open groupes
+  // Get list of open groupes
 export function isopen(req, res) {
   Group.find({
     type: {
@@ -148,4 +148,71 @@ export function destroy(req, res) {
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));
+}
+
+
+export function eventsofgroup(req, res) {
+  var groupe = req.params.id;
+  console.log(groupe);
+  var events = [];
+  Group.findById(req.params.id).lean()
+  .populate('events.participants', 'uid')
+  .exec(function(err, groupe) {
+    if(err) {
+      return handleError(res, err);
+    }
+    if(!groupe) {
+      return res.send(404);
+    }
+    //events.push.apply(events, groupe.events);
+    return res.json(groupe.events);
+  });
+}
+
+export function eventparticipate(req, res) {
+//  console.log("eventparticipate");
+  /* if (req.body._id) {
+      delete req.body._id;
+  }*/
+  Group.findById(req.params.id, function(err, groupe) {
+    if(err) {
+      return handleError(res, err);
+    }
+    if(!groupe) {
+      return res.send(404);
+    }
+    var ev = groupe.events.id(req.body._id);
+    if(ev) { // inscription/Dé-inscription
+      var index = ev.participants.indexOf(req.body.UserId);
+      if(index === -1) // Pas inscrit
+      {
+        console.log('inscription ' + req.body.UserId);
+        ev.participants.push(req.body.UserId);
+      } else {
+        console.log('dé-inscription ' + req.body.UserId);
+        ev.participants.splice(index, 1);
+      }
+    } else {
+      return res.send(404);
+    }
+    groupe.save(function(err, groupe) {
+      if(err) {
+        return handleError(res, err);
+      }
+      console.log('Groupe Update ' + groupe.name);
+      return res.json(groupe.events);
+    });
+  });
+}
+
+export function events(req, res) {
+  //var events = [{title:'Prem'},{title:'deuxieme', start:'2015-02-25'}];
+  var events = [];
+  Group.find({}).lean().exec(function(err, groupes) {
+    groupes.forEach(function(groupe, index, tab) {
+      events.push.apply(events, groupe.events);
+      //console.log(index + " " + events);
+    });
+    return res.json(events);
+  });
 }
