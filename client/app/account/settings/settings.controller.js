@@ -1,16 +1,24 @@
 'use strict';
 export default class SettingsController {
   /*@ngInject*/
-  constructor(Auth, Group) {
+  constructor(Auth, Group, Message) {
     this.Auth = Auth;
     this.Group = Group;
+    this.Message = Message;
     this.getCurrentUser = Auth.getCurrentUser;
     this.user = Auth.getCurrentUserSync();
     //  this.errors = {};
     this.editMessage = '';
     this.groups = Group.listopengroups(); // Groupe OPEN
   }
-
+  $onInit() {
+    this.Message.get()
+      .$promise
+      .then(result => {
+        this.myconfig = result;
+        this.Structures = this.myconfig.Structures;
+      });
+  }
   edit(form) {
     this.submitted = true;
     this.editMessage = '';

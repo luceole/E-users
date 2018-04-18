@@ -16,20 +16,22 @@ export default class SignupController {
         this.TitreSite = this.myconfig.TitreSite;
         this.DeviseSite = this.myconfig.DeviseSite;
         this.OauthActif = this.myconfig.OauthActif;
-      //  console.log(this.myconfig)
+        this.Structures = this.myconfig.Structures;
       });
   }
 
-  $onInit() {
-    this.Message.get()
-      .$promise
-      .then(result => {
-        this.myconfig = result;
-        this.TitreSite = this.myconfig.TitreSite;
-        this.DeviseSite = this.myconfig.DeviseSite;
-        this.OauthActif = this.myconfig.OauthActif;
-      });
-  }
+  // $onInit() {
+  //   this.Message.get()
+  //     .$promise
+  //     .then(result => {
+  //       this.myconfig = result;
+  //       this.TitreSite = this.myconfig.TitreSite;
+  //       this.DeviseSite = this.myconfig.DeviseSite;
+  //       this.OauthActif = this.myconfig.OauthActif;his.Structures = this.myconfig.Structures;
+  //     });
+  // }
+
+his.Structures = this.myconfig.Structures;
   myInit(form, field) {
     form[field].$setValidity('mongoose', true);
     if(!this.user.uid) this.user.uid = this.user.email;

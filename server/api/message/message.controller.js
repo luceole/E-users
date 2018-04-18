@@ -74,7 +74,8 @@ export function index(req, res) {
   var DeviseSite = config.DeviseSite ? config.DeviseSite : 'DeviseSite';
   var TitreSite = config.TitreSite ? config.TitreSite : 'TitreSite';
   var onlineServices = config.onlineServices ? config.onlineServices : [];
-  return res.status(200).json({OauthActif: config.OauthActif, ethercalcUrl, etherpadUrl, etherHost, DeviseSite, TitreSite, onlineServices});
+  var Structures = config.Structures ? config. Structures: [];
+  return res.status(200).json({OauthActif: config.OauthActif, ethercalcUrl, etherpadUrl, etherHost, DeviseSite, TitreSite, onlineServices, Structures});
     // return Message.find().exec(),
     //   .then(respondWithResult(res))
     //   .catch(handleError(res));

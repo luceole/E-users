@@ -38,7 +38,7 @@
             <p class="help-block" ng-show="registerForm.email.$error.required && vm.submitted">
               Quel est votre adresse electronique?
             </p>
-            <p class="help-block" ng-show="registerForm.email.$error.mongoose">
+            <p class="help-block" ng- <option ng-repeat="option in vm.Options" value="{{option.id}}">{{option.name}}</option>show="registerForm.email.$error.mongoose">
               {{ vm.errors.email }}
             </p>
           </div>
@@ -80,14 +80,7 @@
                                      'has-error': registerForm.structure.$invalid && vm.submitted }">
             <span>Structure de rattachement : <br>
                <select ng-model="vm.user.structure" ng-init="vm.user.structure='Education'">
-                     <option value="Education"> Education </option>
-                     <option value="Collectivité"> Collectivité térritoriale</option>
-                     <option value="Ecologie"> Ecologie </option>
-                     <option value="Affaires Etrangères"> Affaires Etrangères </option>
-                     <option value="Affaires Sociales"> Affaires Sociales </option>
-                     <option value="Intérieur"> Intérieur </option>
-                     <option value="Finance"> Finances </option>
-                     <option value="Autre"> Autre </option>
+                  <option ng-repeat="option in vm.Structures" value="{{option.id}}">{{option.value}}</option>
                </select>
                </span>
             <p class="help-block" ng-show="registerForm.structure.$error.required && vm.submitted">

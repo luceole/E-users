@@ -27,17 +27,10 @@
             <div class="form-group" ng-class="{ 'has-success': modifForm.structure.$valid && vm.submitted,
                                     'has-error': modifForm.structure.$invalid && vm.submitted }">
               <span>Structure de rattachement :
-<select ng-model="vm.user.structure" ng-init="vm.user.structure">
-         <option value="Education"> Education </option>
-         <option value="Ecologie"> Ecologie </option>
-         <option value="Affaires Etrangères"> Affaires Etrangères </option>
-         <option value="Affaires Sociales"> Affaires Sociales </option>
-         <option value="Intérieur"> Intérieur </option>
-         <option value="Finance"> Finances </option>
-         <option value="Collectivité"> Collectivité </option>
-         <option value="Autre"> Autre </option>
-</select>
-</span>
+                <select ng-model="vm.user.structure" ng-init="vm.user.structure='Education'">
+                   <option ng-repeat="option in vm.Structures" value="{{option.id}}">{{option.value}}</option>
+                </select>
+             </span>
               <p class="help-block" ng-show="modifForm.structure.$error.required && vm.submitted">
                 Structure de rattachement Obligatoire
               </p>
