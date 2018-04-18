@@ -7,7 +7,7 @@ import ngResource from 'angular-resource';
 import ngSanitize from 'angular-sanitize';
 import 'angular-socket-io';
 import ngMaterial from 'angular-material';
-
+import mwlCalendar from 'angular-bootstrap-calendar';
 import uiRouter from 'angular-ui-router';
 import uiBootstrap from 'angular-ui-bootstrap';
 import uiSelect from 'ui-select';
@@ -37,10 +37,16 @@ import socket from '../components/socket/socket.service';
 
 import './app.scss';
 
-angular.module('E-userApp', [ngCookies, ngResource, ngSanitize, ngMaterial, 'btford.socket-io', ngValidationMatch, uiRouter,
+angular.module('E-userApp', [ngCookies, ngResource, ngSanitize, ngMaterial,  mwlCalendar,'btford.socket-io', ngValidationMatch, uiRouter,
   uiBootstrap, uiSelect, 'ckeditor',
   _Auth, account, groupes, collaborate, navbar, footer, main, constants, socket, util, demandes, users
 ])
+.config(['calendarConfig', function(calendarConfig) {
+
+    calendarConfig.dateFormatter = 'moment'; // use moment to format dates
+    calendarConfig.dateFormats.hour = 'HH:mm';
+
+  }])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {
     'ngInject';

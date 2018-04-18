@@ -4,7 +4,7 @@ import routing from './main.routes';
 
 export class MainController {
   /*@ngInject*/
-  constructor($http, $scope, $state, $stateParams, $window, socket, appConfig, Auth, Message) {
+  constructor($http, $scope, $state, $stateParams, $window, socket, appConfig, Auth, calendarConfig, moment,  Message) {
     this.w = $window;
     this.$http = $http;
     this.socket = socket;
@@ -22,6 +22,13 @@ export class MainController {
     this.onlineServices = [];
     this.OauthActif = appConfig.OauthActif || false;
     this.sso = this.$state.current.name == 'discoursesso';
+    moment.locale('fr')
+    this.calendarView = 'week';
+    this.cellIsOpen=true;
+    this.calendarConfig=calendarConfig;
+    this.viewDate = moment();
+    //console.log(this.calendarConfig)
+    this.calendarConfig.i18nStrings.weekNumber = 'Semaine {week}';
 
     //   $scope.$on('$destroy', function() {
     //     socket.unsyncUpdates('thing');

@@ -8,6 +8,7 @@
     "angular-aria": "~1.5.5",
     "angular-cookies": "~1.5.5",
     "angular-material": "^1.1.1",
+    "angular-bootstrap-calendar": "^1.0.0",
     "angular-resource": "~1.5.5",
     "angular-sanitize": "~1.5.5",
     "angular-socket-io": "~0.7.0",
@@ -146,6 +147,11 @@
   "engines": {
     "node": "^6.2.2",
     "npm": "^3.9.5"
+  },
+   "module": {
+      "noParse": [
+          "./node_modules/interactjs/dist/interact.js"
+      ]
   },
   "scripts": {
     "test": "gulp test",

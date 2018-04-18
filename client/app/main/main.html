@@ -3,7 +3,7 @@
 <div ng-show="$ctrl.sso" class="alert alert-info">
   <center> Authentification SSO en cours ...</center>
 </div>
-<div class="container" ng-if="!$ctrl.isLoggedIn()">  
+<div class="container" ng-if="!$ctrl.isLoggedIn()">
 </div>
 
 <div class="container" ng-if="$ctrl.isLoggedIn()&& !$ctrl.sso " ng-init="CalInit()">
@@ -20,6 +20,7 @@
     </div>
     <div class="alert alert-success" ng-if="$ctrl.getCurrentUser().isactif">
       <h3 ng-if="$ctrl.MSG">Informations:</h3> {{$ctrl.MSG }}
+
       <h3>Vos services en lignes</h3>
       <!-- <p><span class="glyphicon glyphicon-bullhorn"></span><a href="https://forum.libre-communaute.fr"> Forum Libre Communauté</a>
         <p><span class="glyphicon glyphicon-certificate"></span><a href="https://chat.libre-communaute.fr"> Chat Libre Communauté</a> -->
@@ -27,7 +28,65 @@
       <div ng-repeat="service in $ctrl.onlineServices">
         <span class="glyphicon {{service.glyphicon}}"></span><a href="{{service.url}}"> {{service.title}}</a>
       </div>
+      <h3> Votre Agenda</h3>
 
+
+        <div class="text-center">
+            <h2 class="text-center">{{ $ctrl.calendarTitle }}</h2>
+            <div class="text-center">
+                 <div class="btn-group">
+                   <label class="btn btn-primary" ng-model="$ctrl.calendarView" uib-btn-radio="'month'" ng-click="$ctrl.cellIsOpen = false">Mois</label>
+                   <label class="btn btn-primary" ng-model="$ctrl.calendarView" uib-btn-radio="'week'" ng-click="$ctrl.cellIsOpen = false">Semaine</label>
+                 </div>
+               </div>
+           <div class="btn-group">
+
+             <button
+               class="btn btn-primary"
+               mwl-date-modifier
+               date="$ctrl.viewDate"
+               decrement="$ctrl.calendarView"
+               ng-click="$ctrl.cellIsOpen = false">
+               Précédent
+             </button>
+             <button
+               class="btn btn-default"
+               mwl-date-modifier
+               date="$ctrl.viewDate"
+               set-to-today
+               ng-click="$ctrl.cellIsOpen = false">
+               Aujourdhui
+             </button>
+             <button
+               class="btn btn-primary"
+               mwl-date-modifier
+               date="$ctrl.viewDate"
+               increment="$ctrl.calendarView"
+               ng-click="$ctrl.cellIsOpen = false">
+               Suivant
+             </button>
+
+</div>
+<br><br>
+    <mwl-calendar
+    events="$ctrl.events"
+    view="$ctrl.calendarView"
+    view-title="$ctrl.calendarTitle"
+    view-date="$ctrl.viewDate"
+    on-event-click="$ctrl.eventClicked(calendarEvent)"
+    on-event-times-changed="$ctrl.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+    cell-is-open="$ctrl.cellIsOpen"
+    day-view-start="06:00"
+    day-view-end="22:59"
+    day-view-split="30"
+    cell-modifier="$ctrl.modifyCell(calendarCell)"
+    cell-auto-open-disabled="true"
+    on-timespan-click="$ctrl.timespanClicked(calendarDate, calendarCell)">
+    </mwl-calendar>
+
+
+
+    </div>
     </div>
   </div>
 
