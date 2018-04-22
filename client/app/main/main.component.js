@@ -17,39 +17,13 @@ export class MainController {
     this.$state = $state;
     this.$stateParams = $stateParams;
     this.MSG = '';
-    // this.alert = {
-    //   type: 'success',
-    //   msg: 'cliquez sur un évément pour vous inscrire ou dé-inscrire.'
-    // };
+
     this.DeviseSite = appConfig.DeviseSite || 'Eco-système ';
     this.TitreSite = appConfig.TitreSite || 'Libre Communaute';
-    //this.onlineServices = appConfig.onlineServices;
+
     this.onlineServices = [];
     this.OauthActif = appConfig.OauthActif || false;
     this.sso = this.$state.current.name == 'discoursesso';
-    // moment.locale('fr');
-    // this.calendarView = 'week';
-    // this.cellIsOpen = false;
-    //
-    // this.calendarConfig = calendarConfig;
-    // this.viewDate = moment();
-    // //console.log(this.calendarConfig)
-    // this.calendarConfig.i18nStrings.weekNumber = 'Semaine {week}';
-    // this.eventSources = [{
-    //   title: 'Réunion !',
-    //   color: this.calendarConfig.colorTypes.info,
-    //   startsAt: moment().add(1, 'days').toDate(),
-    //   //startsAt: moment().startOf('week').subtract(2, 'days').add(8, 'hours').toDate(),
-    //   endsAt: moment().add(1, 'days').add(1, 'hours').toDate(),
-    //   allDay: false,
-    //   draggable: false,
-    //   resizable: false
-    // }
-    // ];
-
-    //   $scope.$on('$destroy', function() {
-    //     socket.unsyncUpdates('thing');
-    //   });
   }
   // eventClicked(event) {
   //   var message = '';
@@ -124,6 +98,7 @@ export class MainController {
   //   });
   // }
 
+
   $onInit() {
     // this.$http.get('/api/things')
     //   .then(response => {
@@ -138,7 +113,6 @@ export class MainController {
         this.DeviseSite = this.myconfig.DeviseSite;
         this.OauthActif = this.myconfig.OauthActif;
         this.onlineServices = this.myconfig.onlineServices;
-        //this.refreshEvents();
         //console.log(this.myconfig);
       });
 

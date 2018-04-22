@@ -182,7 +182,18 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
                return safeCb(callback)(err);
              }).$promise;
     },
-
+    eventupdate(id, ev, callback) {
+      var cb = callback || angular.noop;
+      return Group.eventupdate({
+        id
+      }, ev,
+        function(data) {
+          return safeCb(callback)(null, data);
+        },
+        function(err) {
+          return safeCb(callback)(err);
+        }).$promise;
+    },
 
     userAdmingroup(idgrp, listusers, callback) {
       var cb = callback || angular.noop;

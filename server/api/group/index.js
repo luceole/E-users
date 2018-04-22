@@ -13,7 +13,7 @@ router.get('/:id', auth.isAuthenticated(), controller.show);
 router.get('/events', controller.events);
 router.get('/:id/eventsofgroup', auth.isAuthenticated(), controller.eventsofgroup);
 router.put('/:id/eventparticipate', auth.isAuthenticated(), controller.eventparticipate);
-//router.put('/:id/eventupdate', auth.hasRole('admin_grp'), controller.eventupdate);
+router.put('/:id/eventupdate', auth.hasRole('admin_grp'), controller.eventupdate);
 //router.put('/:id/eventdelete', auth.hasRole('admin_grp'), controller.eventdelete);
 
 router.post('/', auth.hasRole('admin'), controller.create);

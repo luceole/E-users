@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="col-md-12">
+    <h3>Groupes</h3>
+    <div class="alert alert-success" ng-if="eventsCtrl.getCurrentUser().adminOf.length > 0">Vous administrez :
+      <ul>
+        <li ng-repeat=" grp in eventsCtrl.getCurrentUser().adminOf;">
+          {{grp.info}}
+        </li>
+      </ul>
+    </div>
+    <div class="alert alert-info">
+      <div class="text-center">
+        <h4> Organisez vos Réunions</h4>
+        <p class="text-center">{{ eventsCtrl.calendarTitle }}</p>
+        <div class="btn-group">
+          <label class="btn btn-primary" ng-model="eventsCtrl.calendarView" uib-btn-radio="'year'" ng-click="eventsCtrl.cellIsOpen = false">Année</label>
+          <label class="btn btn-primary" ng-model="eventsCtrl.calendarView" uib-btn-radio="'month'" ng-click="eventsCtrl.cellIsOpen = false">Mois</label>
+          <label class="btn btn-primary" ng-model="eventsCtrl.calendarView" uib-btn-radio="'week'" ng-click="eventsCtrl.cellIsOpen = false">Semaine</label>
+        </div>
+        <br>
+        <div class="btn-group">
+          <button class="btn btn-primary" mwl-date-modifier date="eventsCtrl.viewDate" decrement="eventsCtrl.calendarView" ng-click="eventsCtrl.cellIsOpen = false">
+                 Précédent
+               </button>
+          <button class="btn btn-default" mwl-date-modifier date="eventsCtrl.viewDate" set-to-today ng-click="eventsCtrl.cellIsOpen = false">
+                 Aujourdhui
+               </button>
+          <button class="btn btn-primary" mwl-date-modifier date="eventsCtrl.viewDate" increment="eventsCtrl.calendarView" ng-click="eventsCtrl.cellIsOpen = false">
+                 Suivant
+               </button>
+        </div>
+          <p class="alert {{eventsCtrl.alert.type}}" align="center" ng-if="eventsCtrl.alert.msg"> {{eventsCtrl.alert.msg}}</p>
+        <mwl-calendar events="eventsCtrl.eventSources" view="eventsCtrl.calendarView" view-title="eventsCtrl.calendarTitle" view-date="eventsCtrl.viewDate" on-event-click="eventsCtrl.eventClicked(calendarEvent)" on-event-times-changed="calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd; eventsCtrl.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+          cell-is-open="eventsCtrl.cellIsOpen" day-view-start="08:00" day-view-end="19:59" day-view-split="30" cell-modifier="eventsCtrl.modifyCell(calendarCell)" cell-auto-open-disabled="false" on-timespan-click="eventsCtrl.timespanClicked(calendarDate, calendarCell)">
+        </mwl-calendar>
+      </div>
+    </div>
+  </div>
+  <span> {{alertMessage}}</span>
+</div>

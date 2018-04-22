@@ -27,6 +27,7 @@ import account from './account';
 import groupes from './groupes/groupes.component';
 import demandes from './demandes/demandes.component';
 import users from './users/users.component';
+import events from './events/events.component';
 import collaborate from './collaborate/collaborate.component';
 import navbar from '../components/navbar/navbar.component';
 import footer from '../components/footer/footer.component';
@@ -37,16 +38,14 @@ import socket from '../components/socket/socket.service';
 
 import './app.scss';
 
-angular.module('E-userApp', [ngCookies, ngResource, ngSanitize, ngMaterial,  mwlCalendar,'btford.socket-io', ngValidationMatch, uiRouter,
+angular.module('E-userApp', [ngCookies, ngResource, ngSanitize, ngMaterial, mwlCalendar, 'btford.socket-io', ngValidationMatch, uiRouter,
   uiBootstrap, uiSelect, 'ckeditor',
-  _Auth, account, groupes, collaborate, navbar, footer, main, constants, socket, util, demandes, users
+  _Auth, account, groupes, collaborate, navbar, footer, main, constants, socket, util, demandes, users, events
 ])
 .config(['calendarConfig', function(calendarConfig) {
-
-    calendarConfig.dateFormatter = 'moment'; // use moment to format dates
-    calendarConfig.dateFormats.hour = 'HH:mm';
-
-  }])
+  calendarConfig.dateFormatter = 'moment'; // use moment to format dates
+  calendarConfig.dateFormats.hour = 'HH:mm';
+}])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {
     'ngInject';

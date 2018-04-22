@@ -66,7 +66,7 @@ export class UsersComponent {
 
   deactive(user) {
     if(user.role === 'admin') {
-      if(!confirm('Déactivation d\'un utilisateur avec role  ADMIN A: Etes vous sur ?')) {
+      if(!confirm('Déactivation d\'un utilisateur avec role  ADMIN: Etes vous sur ?')) {
         return;
       }
     }

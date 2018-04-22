@@ -187,7 +187,7 @@ export function validEmail(req, res) {
     if((whiteDomain1.test(domaineMail)) || (whiteDomain2.test(domaineMail))) {
       user.isdemande = false;
       user.isactif = true;
-      console.log("Validation auto :"+user.email);
+      console.log('Validation auto :' + user.email);
     } else {
       var server = email.server.connect({
         user: config.mail.user,
@@ -286,6 +286,7 @@ export function me(req, res, next) {
     _id: userId
   }, '-salt -password')
     .populate('memberOf', 'name info note digest groupPadID')
+    .populate('adminOf', 'info name')
     .exec()
     .then(user => { // don't ever give out the password or salt
       if(!user) {

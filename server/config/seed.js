@@ -94,8 +94,8 @@ if(config.env !== 'production') {
               // },
                 {
                   title: 'The Dream Team back',
-                  startsAt: new Date('2018-04-20'),
-                  endsAt: new Date('2018-04-20'),
+                  startsAt: new Date('2018-04-23'),
+                  endsAt: new Date('2018-04-23'),
                   lieu: 'Dijon',
                   allDay: true
                 }

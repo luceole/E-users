@@ -150,7 +150,6 @@ export function destroy(req, res) {
     .catch(handleError(res));
 }
 
-
 export function eventsofgroup(req, res) {
   var groupe = req.params.id;
   console.log(groupe);
@@ -170,10 +169,6 @@ export function eventsofgroup(req, res) {
 }
 
 export function eventparticipate(req, res) {
-//  console.log("eventparticipate");
-  /* if (req.body._id) {
-      delete req.body._id;
-  }*/
   Group.findById(req.params.id, function(err, groupe) {
     if(err) {
       return handleError(res, err);
@@ -197,6 +192,7 @@ export function eventparticipate(req, res) {
     }
     groupe.save(function(err, groupe) {
       if(err) {
+        console.log(err);
         return handleError(res, err);
       }
       console.log('Groupe Update ' + groupe.name);
@@ -204,6 +200,80 @@ export function eventparticipate(req, res) {
     });
   });
 }
+
+// Create or Updates Events an existing groupe in the DB.
+export function eventupdate(req, res) {
+    /* if (req.body._id) {
+         delete req.body._id;
+     }*/
+  if((req.user.role !== 'admin') && (req.user.adminOf.indexOf(req.params.id) === -1)) {
+    return res.send(403);
+  }
+  Group.findById(req.params.id, function(err, groupe) {
+    if(err) {
+      return handleError(res, err);
+    }
+    if(!groupe) {
+      return res.send(404);
+    }
+    var ev = groupe.events.id(req.body._id);
+    if(ev) { // Drag and Drop
+      console.log('Drag/Drop');
+      ev.startsAt = req.body.startsAt;
+      ev.allDay = req.body.allDay;
+      if(req.body.end) {
+        ev.endsAt = req.body.endsAt;
+      }
+      else {
+        ev.endsAt = req.body.startsAt;
+      }
+      //console.log(ev);
+      groupe.save(function(err, groupe) {
+        if(err) {
+          console.log('**');
+          console.log(err);
+          return handleError(res, err);
+        }
+        console.log('Groupe EventUpdate ' + groupe.name);
+        return res.json(groupe.events);
+      });
+    } else {
+        // PAD
+      var args = {
+        groupID: groupe.groupPadID,
+        padName: req.body.start + '-' + req.body.end,
+        text: 'Bienvenu sur le PAD  ' + req.body.title + ' - ' + req.body.start
+      };
+      etherpad.createGroupPad(args, function(error, data) {
+        if(error) console.error('Error creating pad: ' + error.message);
+        else {
+          console.log('New pad created: ' + data.padID);
+          req.body.eventPadID = data.padID;
+        }
+        groupe.events.push(req.body);
+        groupe.save(function(err, groupe) {
+          if(err) {
+            console.log(err);
+            return handleError(res, err);
+          }
+          console.log('Groupe EventCreate ' + groupe.name);
+          console.log(req.body);
+          return res.json(groupe.events);
+        });
+      });
+    }
+      /*    groupe.save(function (err, groupe) {
+            if (err) {
+              console.log(err);
+              return handleError(res, err);
+            }
+            console.log("Groupe EventUpdate " + groupe.name);
+            console.log(req.body);
+            return res.json(groupe.events);
+          });*/
+  });
+}
+
 
 export function events(req, res) {
   //var events = [{title:'Prem'},{title:'deuxieme', start:'2015-02-25'}];
