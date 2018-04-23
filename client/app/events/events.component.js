@@ -3,11 +3,40 @@ const angular = require('angular');
 const uiRouter = require('angular-ui-router');
 import routes from './events.routes';
 
+
+export class ModalEditEvComponent {
+  constructor(Auth, Group, $uibModalInstance, moment,updateEvent,refreshEvents) {
+    'ngInject';
+    this.$uibModalInstance = $uibModalInstance;
+    this.Auth = Auth;
+    this.Group = Group;
+    this.event = angular.copy(updateEvent);
+    this.libDate = moment(updateEvent.startsAt).format('LLLL');
+    this.formats = ['dd-MMMM-yyyy', 'yyyy-MM-dd', 'dd.MM.yyyy', 'short'];
+    this.format = this.formats[2];
+    this.dateOptions = {
+      formatYear: 'yy',
+      startingDay: 1
+    };
+}
+openDD($event) {
+  $event.preventDefault();
+  $event.stopPropagation();
+  this.openedDD = true;
+};
+    cancel() {
+        this.$uibModalInstance.dismiss('cancel');
+    }
+
+} // End class
+
+
 export class EventsComponent {
   /*@ngInject*/
-  constructor($timeout, Auth, Group, User, calendarConfig, calendarEventTitle, Message, moment) {
+  constructor($timeout,$uibModal,  Auth, Group, User, calendarConfig, calendarEventTitle, Message, moment) {
   //  'ngInject';
     this.$timeout = $timeout;
+    this.$uibModal = $uibModal;
     this.Auth = Auth;
     this.Group = Group;
     this.Message = Message;
@@ -44,10 +73,11 @@ export class EventsComponent {
   }
 
   refreshEvents(raz) {
+    console.log("refreshEvents")
     var eventsGroupe = {};
     var Auth = this.Auth;
     var calendarConfig = this.calendarConfig;
-    var self = this;
+    self = this;
     if(raz) this.eventSources = [];
         //var workEvents = [];
         //var couleur = ['DotgerBlue', 'chocolate', 'ForestGreen', 'DarkRed', 'FireBrick', 'Tan', 'Peru', 'oliveDrab', 'Lavender', 'GoldenRod', 'CornFlowerBlue', 'LightSkyBlue', 'grey'];
@@ -73,14 +103,14 @@ export class EventsComponent {
                 //   }
                   ev.startsAt = new Date(ev.startsAt);
                   ev.endsAt = new Date(ev.endsAt);
-                  ev.draggable = true;
+             ev.draggable = true;
                   ev.group = {
                     _id: grp._id,
                     info: grp.info
                   };
                 });
 
-                // eventsGroupe.events = angular.copy(data);
+           // eventsGroupe.events = angular.copy(data);
                 // eventsGroupe.index = index;
               //   eventsGroupe.events.group_id = grp._id;
               //   // eventsGroupe.startsAt = new Date(eventsGroupe.startsAt);
@@ -106,6 +136,26 @@ export class EventsComponent {
       });
   }
 
+eventClicked(ev) {
+  self = this;
+  var uibModalInstance = this.$uibModal.open({
+        controller: ModalEditEvComponent,
+        controllerAs :'modalEditEvCtrl',
+        templateUrl: 'modalEv.html',
+          backdrop: 'static',
+        resolve: {
+          Sdate: function () {
+            return ev.startsAt;
+          },
+          updateEvent: function () {
+            return ev;
+          },
+          refreshEvents : function(){
+            return self.refreshEvents
+          }
+        }
+      });
+    }
 
   eventTimesChanged(event) {
     self = this;
