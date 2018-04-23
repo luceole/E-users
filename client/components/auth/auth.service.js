@@ -169,6 +169,18 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
           return safeCb(callback)(err);
         }).$promise;
     },
+    eventdelete(id, ev, callback) {
+      var cb = callback || angular.noop;
+      return Group.eventdelete({
+        id
+      }, ev,
+        function(data) {
+          return safeCb(callback)(null, data);
+        },
+        function(err) {
+          return safeCb(callback)(err);
+        }).$promise;
+    },
 
     eventsofgroup(id, callback) {
       var cb = callback || angular.noop;

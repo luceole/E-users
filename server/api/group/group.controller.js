@@ -274,6 +274,37 @@ export function eventupdate(req, res) {
   });
 }
 
+export function eventdelete(req, res) {
+  console.log('eventdelete');
+  //console.log(req.user);
+  if(req.body._id) {
+    delete req.body._id;
+  }
+  if((req.user.role !== 'admin') && (req.user.adminOf.indexOf(req.params.id) === -1)) {
+    return res.send(403);
+  }
+  Group.findById(req.params.id, function(err, groupe) {
+    if(err) {
+      return handleError(res, err);
+    }
+    if(!groupe) {
+      return res.send(404);
+    }
+    var ev = groupe.events.id(req.body.id);
+    if(!ev) {
+      return res.send(404);
+    }
+    ev.remove(function(err) {
+      groupe.save(function(err, groupe) {
+        if(err) {
+          return handleError(res, err);
+        }
+        console.log('Groupe Update ' + groupe.name);
+        return res.json(groupe.events);
+      });
+    });
+  });
+}
 
 export function events(req, res) {
   //var events = [{title:'Prem'},{title:'deuxieme', start:'2015-02-25'}];

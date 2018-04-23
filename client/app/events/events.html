@@ -1,7 +1,23 @@
+<script id="customMonthCell.html" type="text/ng-template">
+  <div class="cal-month-day {{day.cssClass}}">
+
+    <span
+      class="pull-right"
+      data-cal-date
+      ng-click="vm.calendarCtrl.dateClicked(day.date)"
+      ng-bind="day.label">
+    </span>
+
+    <small style="position: absolute; bottom: 10px; left: 5px">
+      There are {{ day.events.length }} events on this day
+    </small>
+  </div>
+</script>
+
 <div class="container">
   <div class="col-md-12">
     <h3>Groupes</h3>
-    <div class="alert alert-success" ng-if="eventsCtrl.getCurrentUser().adminOf.length > 0">Vous administrez :
+    <div class="alert alert-success" ng-if="eventsCtrl.getCurrentUser().adminOf.length > 0">
       <ul>
         <li ng-repeat=" grp in eventsCtrl.getCurrentUser().adminOf;">
           {{grp.info}}
@@ -30,8 +46,16 @@
                </button>
         </div>
           <p class="alert {{eventsCtrl.alert.type}}" align="center" ng-if="eventsCtrl.alert.msg"> {{eventsCtrl.alert.msg}}</p>
-        <mwl-calendar events="eventsCtrl.eventSources" view="eventsCtrl.calendarView" view-title="eventsCtrl.calendarTitle" view-date="eventsCtrl.viewDate" on-event-click="eventsCtrl.eventClicked(calendarEvent)" on-event-times-changed="calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd; eventsCtrl.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
-          cell-is-open="eventsCtrl.cellIsOpen" day-view-start="08:00" day-view-end="19:59" day-view-split="30" cell-modifier="eventsCtrl.modifyCell(calendarCell)" cell-auto-open-disabled="false" on-timespan-click="eventsCtrl.timespanClicked(calendarDate, calendarCell)">
+        <mwl-calendar events="eventsCtrl.eventSources"
+        view="eventsCtrl.calendarView" view-title="eventsCtrl.calendarTitle"
+        view-date="eventsCtrl.viewDate"
+        on-event-click="eventsCtrl.eventClicked(calendarEvent)"
+        on-event-times-changed="calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd; eventsCtrl.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+        cell-is-open="eventsCtrl.cellIsOpen" day-view-start="08:00" day-view-end="19:59" day-view-split="30"
+        cell-modifier="eventsCtrl.modifyCell(calendarCell)"
+
+        cell-auto-open-disabled="false"
+        on-timespan-click="eventsCtrl.timespanClicked(calendarDate, calendarCell)">
         </mwl-calendar>
       </div>
     </div>
@@ -137,7 +161,7 @@
 
           <!--<button class="btn btn-primary" ng-click="ok(editerForm)">OK</button>
         <button class="btn btn-warning" ng-click="cancel()">Abandon</button>-->
-          <button ng-if="!newEv" class="btn btn-danger pull-rigth" ng-click="delete(editerForm)">Supprimer l'événement</button>
+          <button ng-if="!newEv" class="btn btn-danger pull-rigth" ng-click="modalEditEvCtrl.delete()">Supprimer l'événement</button>
         </uib-tab>
         <uib-tab heading="Participants">
           Listes des participants:

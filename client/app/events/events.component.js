@@ -5,11 +5,12 @@ import routes from './events.routes';
 
 
 export class ModalEditEvComponent {
-  constructor(Auth, Group, $uibModalInstance, moment,updateEvent,refreshEvents) {
+  constructor(Auth, Group, $uibModalInstance, moment, updateEvent, refreshEvents) {
     'ngInject';
     this.$uibModalInstance = $uibModalInstance;
     this.Auth = Auth;
     this.Group = Group;
+    this.updateEvent = updateEvent;
     this.event = angular.copy(updateEvent);
     this.libDate = moment(updateEvent.startsAt).format('LLLL');
     this.formats = ['dd-MMMM-yyyy', 'yyyy-MM-dd', 'dd.MM.yyyy', 'short'];
@@ -18,22 +19,42 @@ export class ModalEditEvComponent {
       formatYear: 'yy',
       startingDay: 1
     };
-}
-openDD($event) {
-  $event.preventDefault();
-  $event.stopPropagation();
-  this.openedDD = true;
-};
-    cancel() {
-        this.$uibModalInstance.dismiss('cancel');
-    }
+  }
+  openDD($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    this.openedDD = true;
+  }
+  cancel() {
+    this.$uibModalInstance.dismiss('cancel');
+  }
 
+  delete() {
+    self = this;
+    if(this.event.participants.length > 0) {
+      if(!confirm('Attention des participants sont inscrits \nConfirmez vous la suppression?')) {
+        return;
+      }
+    }
+    this.Auth.eventdelete(this.event.group._id, {
+      id: this.event._id
+    })
+        .then(function(data) {
+          self.$uibModalInstance.close();
+        })
+        .catch(function(err) {
+          err = err.data;
+          //$window.alert("Maj Erreur " + err);
+          console.log(err);
+          self.$uibModalInstance.close();
+        });
+  }
 } // End class
 
 
 export class EventsComponent {
   /*@ngInject*/
-  constructor($timeout,$uibModal,  Auth, Group, User, calendarConfig, calendarEventTitle, Message, moment) {
+  constructor($timeout, $uibModal, Auth, Group, User, calendarConfig, calendarEventTitle, Message, moment) {
   //  'ngInject';
     this.$timeout = $timeout;
     this.$uibModal = $uibModal;
@@ -55,7 +76,7 @@ export class EventsComponent {
     //console.log(this.calendarConfig);
     this.calendarConfig.i18nStrings.weekNumber = 'Semaine {week}';
     this.calendarConfig.allDateFormats.moment.title = {
-      day: 'EEEE d MMMM, yyyy',
+      day: 'dddd LL',
       week: ' {year} - Semaine {week} ',
       month: 'MMMM YYYY',
       year: 'YYYY'
@@ -73,10 +94,11 @@ export class EventsComponent {
   }
 
   refreshEvents(raz) {
-    console.log("refreshEvents")
+    console.log('refreshEvents');
     var eventsGroupe = {};
     var Auth = this.Auth;
     var calendarConfig = this.calendarConfig;
+    console.log(calendarConfig);
     self = this;
     if(raz) this.eventSources = [];
         //var workEvents = [];
@@ -93,17 +115,9 @@ export class EventsComponent {
               if(data.length > 0) {
                 //eventsGroupe.events = data;
                 angular.forEach(data, function(ev, ind) {
-                //   console.log(ev.participants);
-                //   if(ev.participants.filter(function(item) {
-                //     return ((item) && item._id == myUid);
-                //   }).length) {
-                //     ev.color = calendarConfig.colorTypes.info;
-                //   } else {
-                //     ev.color = calendarConfig.colorTypes.important;
-                //   }
                   ev.startsAt = new Date(ev.startsAt);
                   ev.endsAt = new Date(ev.endsAt);
-             ev.draggable = true;
+                  ev.draggable = true;
                   ev.group = {
                     _id: grp._id,
                     info: grp.info
@@ -136,27 +150,30 @@ export class EventsComponent {
       });
   }
 
-eventClicked(ev) {
-  self = this;
-  var uibModalInstance = this.$uibModal.open({
-        controller: ModalEditEvComponent,
-        controllerAs :'modalEditEvCtrl',
-        templateUrl: 'modalEv.html',
-          backdrop: 'static',
-        resolve: {
-          Sdate: function () {
-            return ev.startsAt;
-          },
-          updateEvent: function () {
-            return ev;
-          },
-          refreshEvents : function(){
-            return self.refreshEvents
-          }
+  eventClicked(ev) {
+    self = this;
+    var uibModalInstance = this.$uibModal.open({
+      controller: ModalEditEvComponent,
+      controllerAs: 'modalEditEvCtrl',
+      templateUrl: 'modalEv.html',
+      backdrop: 'static',
+      resolve: {
+        Sdate() {
+          return ev.startsAt;
+        },
+        updateEvent() {
+          return ev;
+        },
+        refreshEvents() {
+          return self.refreshEvents;
         }
-      });
-    }
-
+      }
+    });
+  }
+  timespanClicked(calendarDate, calendarCell) {
+    console.log(calendarDate);
+    console.log(calendarCell);
+  }
   eventTimesChanged(event) {
     self = this;
     this.viewDate = event.startsAt;
