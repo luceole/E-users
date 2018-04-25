@@ -5,14 +5,37 @@ import routes from './events.routes';
 
 
 export class ModalEditEvComponent {
-  constructor(Auth, Group, $uibModalInstance, moment, updateEvent, refreshEvents) {
+  constructor(Auth, Group, $uibModalInstance, moment, updateEvent) {
     'ngInject';
     this.$uibModalInstance = $uibModalInstance;
     this.Auth = Auth;
     this.Group = Group;
+    this.getCurrentUser = Auth.getCurrentUserSync;
     this.updateEvent = updateEvent;
+    if (updateEvent.group)  {
+      this.titre = "Modification: ";
+      this.libDate = moment(updateEvent.startsAt).format('LLLL');
+      this.newEv= false;
+    }
+      else {
+        this.titre = "Création: ";
+        this.libDate ="";
+        this.newEv = true;
+        this.updateEvent =   {
+              title: "",
+              startsAt: new Date(),
+            //  endsAt: new Date(),
+              allDay: true,
+              info: "",
+              lieu: "",
+              groupe: "",
+              participants:new Array()
+          }
+
+    }
+    this.submitted=false;
+    this.grp='';
     this.event = angular.copy(updateEvent);
-    this.libDate = moment(updateEvent.startsAt).format('LLLL');
     this.formats = ['dd-MMMM-yyyy', 'yyyy-MM-dd', 'dd.MM.yyyy', 'short'];
     this.format = this.formats[2];
     this.dateOptions = {
@@ -24,6 +47,12 @@ export class ModalEditEvComponent {
     $event.preventDefault();
     $event.stopPropagation();
     this.openedDD = true;
+  }
+
+  openFF($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    this.openedFF = true;
   }
   cancel() {
     this.$uibModalInstance.dismiss('cancel');
@@ -49,6 +78,46 @@ export class ModalEditEvComponent {
           self.$uibModalInstance.close();
         });
   }
+
+  ok(form) {
+    var message = '';
+    var self = this;
+    self.submitted = true;
+    self.editMessage = '';
+    console.log(form.$valid)
+    if (self.newEv)  self.event.group=self.grp;
+    console.log(self.event)
+    if(form.$valid) {
+      return self.Auth.eventupdate(self.event.group._id,
+        {
+          title: self.event.title,
+          startsAt: new Date(self.event.startsAt),
+          endsAt: new Date(self.event.startsAt),
+          allDay: self.event.allDay,
+          info: self.event.info,
+          lieu: self.event.lieu,
+          groupe: self.event.group.info,
+          //eventPadID: String,
+          participants:  self.event.participants
+      })
+        .then(() => {
+          this.editMessage = 'Mise à jour prise en compte';
+            self.$uibModalInstance.close();
+
+        })
+        .catch(err => {
+          err = err.data;
+          this.errors = {};
+          // Update validity of form fields that match the mongoose errors
+          angular.forEach(err.errors, (error, field) => {
+            form[field].$setValidity('mongoose', false);
+            form[field].$setDirty();
+            this.errors[field] = error.message;
+          });
+        });
+    }
+  }
+
 } // End class
 
 
@@ -63,7 +132,6 @@ export class EventsComponent {
     this.Message = Message;
     this.isLoggedIn = Auth.isLoggedInSync;
     this.isAdmin = Auth.isAdminSync;
-    this.getCurrentUser = Auth.getCurrentUserSync;
     this.getCurrentUser = Auth.getCurrentUserSync;
     this.admGroupes = [];
     this.adminOf = [];
@@ -98,7 +166,7 @@ export class EventsComponent {
     var eventsGroupe = {};
     var Auth = this.Auth;
     var calendarConfig = this.calendarConfig;
-    console.log(calendarConfig);
+    //console.log(calendarConfig);
     self = this;
     if(raz) this.eventSources = [];
         //var workEvents = [];
@@ -157,15 +225,13 @@ export class EventsComponent {
       controllerAs: 'modalEditEvCtrl',
       templateUrl: 'modalEv.html',
       backdrop: 'static',
+
       resolve: {
         Sdate() {
           return ev.startsAt;
         },
         updateEvent() {
           return ev;
-        },
-        refreshEvents() {
-          return self.refreshEvents;
         }
       }
     });

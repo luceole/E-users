@@ -237,29 +237,43 @@ export function eventupdate(req, res) {
         console.log('Groupe EventUpdate ' + groupe.name);
         return res.json(groupe.events);
       });
-    } else {
+    }
+
+
+    else {
         // PAD
-      var args = {
-        groupID: groupe.groupPadID,
-        padName: req.body.start + '-' + req.body.end,
-        text: 'Bienvenu sur le PAD  ' + req.body.title + ' - ' + req.body.start
-      };
-      etherpad.createGroupPad(args, function(error, data) {
-        if(error) console.error('Error creating pad: ' + error.message);
-        else {
-          console.log('New pad created: ' + data.padID);
-          req.body.eventPadID = data.padID;
+      // var args = {
+      //   groupID: groupe.groupPadID,
+      //   padName: req.body.start + '-' + req.body.end,
+      //   text: 'Bienvenu sur le PAD  ' + req.body.title + ' - ' + req.body.start
+      // };
+      // etherpad.createGroupPad(args, function(error, data) {
+      //   if(error) console.error('Error creating pad: ' + error.message);
+      //   else {
+      //     console.log('New pad created: ' + data.padID);
+      //     req.body.eventPadID = data.padID;
+      //   }
+      //   groupe.events.push(req.body);
+      //   groupe.save(function(err, groupe) {
+      //     if(err) {
+      //       console.log(err);
+      //       return handleError(res, err);
+      //     }
+      //     console.log('Groupe EventCreate ' + groupe.name);
+      //     console.log(req.body);
+      //     return res.json(groupe.events);
+      //   });
+      // });
+      console.log(req.body)
+      groupe.events.push(req.body);
+      groupe.save(function(err, groupe) {
+        if(err) {
+          console.log('**');
+          console.log(err);
+          return handleError(res, err);
         }
-        groupe.events.push(req.body);
-        groupe.save(function(err, groupe) {
-          if(err) {
-            console.log(err);
-            return handleError(res, err);
-          }
-          console.log('Groupe EventCreate ' + groupe.name);
-          console.log(req.body);
-          return res.json(groupe.events);
-        });
+        console.log('Groupe EventUpdate ' + groupe.name);
+        return res.json(groupe.events);
       });
     }
       /*    groupe.save(function (err, groupe) {

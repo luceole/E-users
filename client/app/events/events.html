@@ -29,23 +29,30 @@
         <h4> Organisez vos Réunions</h4>
         <p class="text-center">{{ eventsCtrl.calendarTitle }}</p>
         <div class="btn-group">
-          <label class="btn btn-primary" ng-model="eventsCtrl.calendarView" uib-btn-radio="'year'" ng-click="eventsCtrl.cellIsOpen = false">Année</label>
-          <label class="btn btn-primary" ng-model="eventsCtrl.calendarView" uib-btn-radio="'month'" ng-click="eventsCtrl.cellIsOpen = false">Mois</label>
-          <label class="btn btn-primary" ng-model="eventsCtrl.calendarView" uib-btn-radio="'week'" ng-click="eventsCtrl.cellIsOpen = false">Semaine</label>
+          <label class="btn btn-primary  btn-sm"  ng-model="eventsCtrl.calendarView" uib-btn-radio="'year'" ng-click="eventsCtrl.cellIsOpen = false">Année</label>
+          <label class="btn btn-primary btn-sm " ng-model="eventsCtrl.calendarView" uib-btn-radio="'month'" ng-click="eventsCtrl.cellIsOpen = false">Mois</label>
+          <label class="btn btn-primary btn-sm " ng-model="eventsCtrl.calendarView" uib-btn-radio="'week'" ng-click="eventsCtrl.cellIsOpen = false">Semaine</label>
         </div>
         <br>
         <div class="btn-group">
-          <button class="btn btn-primary" mwl-date-modifier date="eventsCtrl.viewDate" decrement="eventsCtrl.calendarView" ng-click="eventsCtrl.cellIsOpen = false">
+          <button class="btn btn-primary  btn-sm " mwl-date-modifier date="eventsCtrl.viewDate" decrement="eventsCtrl.calendarView" ng-click="eventsCtrl.cellIsOpen = false">
                  Précédent
                </button>
-          <button class="btn btn-default" mwl-date-modifier date="eventsCtrl.viewDate" set-to-today ng-click="eventsCtrl.cellIsOpen = false">
+          <button class="btn btn-default  btn-sm" mwl-date-modifier date="eventsCtrl.viewDate" set-to-today ng-click="eventsCtrl.cellIsOpen = false">
                  Aujourdhui
                </button>
-          <button class="btn btn-primary" mwl-date-modifier date="eventsCtrl.viewDate" increment="eventsCtrl.calendarView" ng-click="eventsCtrl.cellIsOpen = false">
+          <button class="btn btn-primary btn-sm " mwl-date-modifier date="eventsCtrl.viewDate" increment="eventsCtrl.calendarView" ng-click="eventsCtrl.cellIsOpen = false">
                  Suivant
                </button>
         </div>
-          <p class="alert {{eventsCtrl.alert.type}}" align="center" ng-if="eventsCtrl.alert.msg"> {{eventsCtrl.alert.msg}}</p>
+          <p class="alert {{eventsCtrl.alert.type}}"  ng-if="eventsCtrl.alert.msg"> {{eventsCtrl.alert.msg}}
+
+          <label class="btn btn-success  btn-sm pull-right"    ng-click="eventsCtrl.eventClicked({})">
+                 Ajouter
+        </label> </div>
+
+
+
         <mwl-calendar events="eventsCtrl.eventSources"
         view="eventsCtrl.calendarView" view-title="eventsCtrl.calendarTitle"
         view-date="eventsCtrl.viewDate"
@@ -67,50 +74,50 @@
 <script type="text/ng-template" id="modalEv.html">
   <div class="modal-header">
     <h3 class="modal-title">{{modalEditEvCtrl.titre}} {{modalEditEvCtrl.libDate}}</h3>
-    <div ng-if="!newEv"> Groupe : {{modalEditEvCtrl.event.group.info}}</div>
+    <div ng-if="!modalEditEvCtrl.newEv"> Groupe : {{modalEditEvCtrl.event.group.info}}</div>
   </div>
   <div class="modal-body">
     <form class="form" name="editerForm" ng-submit="modalEditEvCtrl.editer(editerForm)" novalidate>
       <uib-tabset>
         <uib-tab heading="Evenement">
 
-          <div ng-form="forms.tab1" class="form-group" ng-class="{ 'has-success': modalEditEvCtrl.editerForm.name.$valid && submitted,
-                                  'has-error': editerForm.name.$invalid && submitted }">
-            <div ng-if="!modalEditEvCtrl.event"> 1
+          <div ng-form="forms.tab1" class="form-group" ng-class="{ 'has-success': editerForm.name.$valid && modalEditEvCtrl.submitted,
+                                  'has-error': editerForm.name.$invalid && modalEditEvCtrl.submitted }">
+            <div ng-if="modalEditEvCtrl.newEv">
               Groupe
-              <ui-select ng-model="grp.selected" ng-disable="disabled" style="width: 300px;" title="Groupe">
+              <ui-select ng-model="modalEditEvCtrl.grp" ng-disable="disabled" style="width: 300px;" title="Groupe">
                 <ui-select-match placeholder="Selection dans la liste...">{{$select.selected.info}}</ui-select-match>
-                <ui-select-choices repeat="grp in isadminGroupes  | filter: $select.search|orderBy:'info'">
+                <ui-select-choices repeat="grp in  modalEditEvCtrl.getCurrentUser().adminOf | filter: $select.search|orderBy:'info'">
                   <div ng-bind-html="grp.info  | highlight: $select.search"></div>
-                </ui-select-choices>
+                </ui-select-choices></ui-select>
                 Titre
                 <input type="text" name="title" class="form-control" ng-model="modalEditEvCtrl.event.title" ng-init="modalEditEvCtrl.event.title=grp.selected.info" required style="width:450px" />
-                <p class="help-block" ng-show="forms.tab1.title.$error.required && submitted">
+                <p class="help-block" ng-show="forms.tab1.title.$error.required && modalEditEvCtrl.submitted">
                   Titre Obligatoire
                 </p>
-              </ui-select>
+
               Description
               <input type="text" name="info" class="form-control" ng-model="modalEditEvCtrl.event.info" ng-init="modalEditEvCtrl.event.info='REUNION'" required style="width:450px" />
-              <p class="help-block" ng-show="forms.tab1.title.$error.required && submitted">
+              <p class="help-block" ng-show="forms.tab1.title.$error.required && modalEditEvCtrl.submitted">
                 Info Obligatoire
               </p>
 
             </div>
-            <div ng-if="modalEditEvCtrl.event"> 2
+            <div ng-if="!modalEditEvCtrl.newEv">
               Titre
               <input type="text" name="title" class="form-control" ng-model="modalEditEvCtrl.event.title" required style="width:450px" />
-              <p class="help-block" ng-show="editerForm.title.$error.required && submitted">
+              <p class="help-block" ng-show="editerForm.title.$error.required && modalEditEvCtrl.submitted">
                 Titre Obligatoire
               </p>
               Description
               <input type="text" name="info" class="form-control" ng-model="modalEditEvCtrl.event.info" required style="width:450px" />
-              <p class="help-block" ng-show="editerForm.title.$error.required && submitted">
+              <p class="help-block" ng-show="editerForm.title.$error.required && modalEditEvCtrl.submitted">
                 Info Obligatoire
               </p>
             </div>
             Lieu
             <textarea row=2 type="text" name="lieu" class="form-control" ng-model="modalEditEvCtrl.event.lieu" required style="width:450px" />
-            <p class="help-block" ng-show="forms.tab1.lieu.$error.required && submitted">
+            <p class="help-block" ng-show="forms.tab1.lieu.$error.required && modalEditEvCtrl.submitted">
               Lieu Obligatoire
             </p>
 
@@ -128,7 +135,7 @@
                    uib-datepicker-options="modalEditEvCtrl.dateOptions" date-disabled="modalEditEvCtrl.disabled(date, mode)" ng-required="false" close-text="Close" />
                   <button type="button" class="btn btn-default" ng-click="modalEditEvCtrl.openDD($event)"> <i class="glyphicon glyphicon-calendar"></i>
                   </button>
-                  <p class="help-block" ng-show="forms.tab1.lieu.$error.required && submitted">
+                  <p class="help-block" ng-show="forms.tab1.lieu.$error.required && modalEditEvCtrl.submitted">
                     Date Obligatoire
                   </p>
 
@@ -142,10 +149,10 @@
                     Date Fin
                     <p class="input-group">
                       <input type="text" class="form-control" style="width:350px" uib-datepicker-popup="{{format}}" ng-model="modalEditEvCtrl.event.endsAt" is-open="openedDF" min-date=modalEditEvCtrl.event.startsAt uib-datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="false" close-text="Close" />
-                      <button type="button" class="btn btn-default" ng-click="openDF($event)"><i class="glyphicon glyphicon-calendar"></i>
+                      <button type="button" class="btn btn-default" ng-click="editerForm.openDF($event)"><i class="glyphicon glyphicon-calendar"></i>
                       </button>
                       <div> Heure de Fin :
-                        <timepicker ng-model="calEvent.end" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="false"></uib-timepicker>
+                        <timepicker ng-model="calEvent.end" ng-change="editerForm.changed()" hour-step="hstep" minute-step="mstep" show-meridian="false"></uib-timepicker>
                       </div>
 
 
@@ -161,7 +168,7 @@
 
           <!--<button class="btn btn-primary" ng-click="ok(editerForm)">OK</button>
         <button class="btn btn-warning" ng-click="cancel()">Abandon</button>-->
-          <button ng-if="!newEv" class="btn btn-danger pull-rigth" ng-click="modalEditEvCtrl.delete()">Supprimer l'événement</button>
+          <button ng-if="!modalEditEvCtrl.newEv" class="btn btn-danger pull-rigth" ng-click="modalEditEvCtrl.delete()">Supprimer l'événement</button>
         </uib-tab>
         <uib-tab heading="Participants">
           Listes des participants:
