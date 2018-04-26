@@ -221,7 +221,10 @@ export function eventupdate(req, res) {
       console.log('Drag/Drop');
       ev.startsAt = req.body.startsAt;
       ev.allDay = req.body.allDay;
-      if(req.body.end) {
+      if(req.body.title) ev.title = req.body.title;
+      if(req.body.info) ev.info = req.body.info;
+      if(req.body.lieu) ev.lieu = req.body.lieu;
+      if(req.body.endsAt) {
         ev.endsAt = req.body.endsAt;
       }
       else {
@@ -264,7 +267,7 @@ export function eventupdate(req, res) {
       //     return res.json(groupe.events);
       //   });
       // });
-      console.log(req.body)
+
       groupe.events.push(req.body);
       groupe.save(function(err, groupe) {
         if(err) {

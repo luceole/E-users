@@ -10,38 +10,44 @@ export class ModalEditEvComponent {
     this.$uibModalInstance = $uibModalInstance;
     this.Auth = Auth;
     this.Group = Group;
+    this.moment = moment;
     this.getCurrentUser = Auth.getCurrentUserSync;
     this.updateEvent = updateEvent;
-    if (updateEvent.group)  {
-      this.titre = "Modification: ";
+    if(updateEvent.group) {
+      this.titre = 'Modification: ';
       this.libDate = moment(updateEvent.startsAt).format('LLLL');
-      this.newEv= false;
+      this.newEv = false;
     }
-      else {
-        this.titre = "Création: ";
-        this.libDate ="";
-        this.newEv = true;
-        this.updateEvent =   {
-              title: "",
-              startsAt: new Date(),
-            //  endsAt: new Date(),
-              allDay: true,
-              info: "",
-              lieu: "",
-              groupe: "",
-              participants:new Array()
-          }
-
+    else {
+      this.titre = 'Création: ';
+      this.libDate = '';
+      this.newEv = true;
+      this.updateEvent = {
+        title: 'Réunion',
+        startsAt: new Date(),
+        endsAt: new Date(),
+        allDay: true,
+        info: '',
+        lieu: '',
+        groupe: '',
+        participants: new Array()
+      };
     }
-    this.submitted=false;
-    this.grp='';
-    this.event = angular.copy(updateEvent);
+    this.submitted = false;
+    this.grp = '';
+    //this.event = angular.copy(this.updateEvent);
+    this.event = this.updateEvent;
     this.formats = ['dd-MMMM-yyyy', 'yyyy-MM-dd', 'dd.MM.yyyy', 'short'];
     this.format = this.formats[2];
     this.dateOptions = {
       formatYear: 'yy',
-      startingDay: 1
+      startingDay: 1,
+      showWeeks: true,
+      minDate: new Date()
     };
+    this.format = 'dd/MM/yyyy';
+    this.hstep = 1;
+    this.mstep = 15;
   }
   openDD($event) {
     $event.preventDefault();
@@ -49,17 +55,22 @@ export class ModalEditEvComponent {
     this.openedDD = true;
   }
 
-  openFF($event) {
+  openDF($event) {
     $event.preventDefault();
     $event.stopPropagation();
-    this.openedFF = true;
+    this.openedDF = true;
   }
   cancel() {
+    var self = this;
     this.$uibModalInstance.dismiss('cancel');
   }
 
+  change() {
+
+  }
+
   delete() {
-    self = this;
+    var self = this;
     if(this.event.participants.length > 0) {
       if(!confirm('Attention des participants sont inscrits \nConfirmez vous la suppression?')) {
         return;
@@ -68,7 +79,7 @@ export class ModalEditEvComponent {
     this.Auth.eventdelete(this.event.group._id, {
       id: this.event._id
     })
-        .then(function(data) {
+        .then(function() {
           self.$uibModalInstance.close();
         })
         .catch(function(err) {
@@ -84,30 +95,31 @@ export class ModalEditEvComponent {
     var self = this;
     self.submitted = true;
     self.editMessage = '';
-    console.log(form.$valid)
-    if (self.newEv)  self.event.group=self.grp;
-    console.log(self.event)
+    //console.log(form.$valid);
     if(form.$valid) {
+      if(self.newEv) self.event.group = self.grp;
+      //console.log(self.event);
       return self.Auth.eventupdate(self.event.group._id,
         {
+          _id: self.event._id,
           title: self.event.title,
           startsAt: new Date(self.event.startsAt),
-          endsAt: new Date(self.event.startsAt),
+          endsAt: new Date(self.event.endsAt),
           allDay: self.event.allDay,
           info: self.event.info,
           lieu: self.event.lieu,
           groupe: self.event.group.info,
           //eventPadID: String,
-          participants:  self.event.participants
-      })
+          participants: self.event.participants
+        })
         .then(() => {
           this.editMessage = 'Mise à jour prise en compte';
-            self.$uibModalInstance.close();
-
+          self.$uibModalInstance.close();
         })
         .catch(err => {
           err = err.data;
           this.errors = {};
+          console.log(err.data);
           // Update validity of form fields that match the mongoose errors
           angular.forEach(err.errors, (error, field) => {
             form[field].$setValidity('mongoose', false);
@@ -135,6 +147,7 @@ export class EventsComponent {
     this.getCurrentUser = Auth.getCurrentUserSync;
     this.admGroupes = [];
     this.adminOf = [];
+    this.moment = moment;
     moment.locale('fr');
     this.calendarView = 'week';
     this.cellIsOpen = false;
@@ -157,7 +170,7 @@ export class EventsComponent {
 
     this.calendarEventTitle.monthViewTooltip = this.calendarEventTitle.weekViewTooltip = this.calendarEventTitle.dayViewTooltip = function(event) {
       var msg = 'Participants : ' + event.participants.length;
-      return event.title + '<br>' + 'Lieu :' + event.lieu + '<br> ' + msg;
+      return 'Groupe : ' + event.group.info + '<br>' + event.title + '<br>' + 'Lieu :' + event.lieu + '<br> ' + msg;
     };
   }
 
@@ -184,6 +197,10 @@ export class EventsComponent {
                 //eventsGroupe.events = data;
                 angular.forEach(data, function(ev, ind) {
                   ev.startsAt = new Date(ev.startsAt);
+
+                  //if(self.moment(ev.endsAt).isbefore(self.moment(ev.startsAt))) ev.endsAt = ev.startsAt;
+                  if(!ev.endsAt) ev.endsAt = ev.startsAt;
+                  if(ev.allDay) ev.endsAt = ev.startsAt;
                   ev.endsAt = new Date(ev.endsAt);
                   ev.draggable = true;
                   ev.group = {
@@ -234,6 +251,10 @@ export class EventsComponent {
           return ev;
         }
       }
+    });
+    uibModalInstance.closed.then(function()
+    {
+      self.refreshEvents(true);
     });
   }
   timespanClicked(calendarDate, calendarCell) {
