@@ -79,7 +79,7 @@ export class CollaborateComponent {
     this.calendarConfig = calendarConfig;
     this.calendarEventTitle = calendarEventTitle;
     this.viewDate = moment();
-    console.log(this.calendarConfig);
+    //console.log(this.calendarConfig);
     this.calendarConfig.i18nStrings.weekNumber = 'Semaine {week}';
     this.calendarConfig.allDateFormats.moment.title = {
       day: 'EEEE d MMMM, yyyy',
@@ -175,7 +175,6 @@ export class CollaborateComponent {
               if(data.length > 0) {
                 //eventsGroupe.events = data;
                 angular.forEach(data, function(ev, ind) {
-                  console.log(ev.participants);
                   if(ev.participants.filter(function(item) {
                     return ((item) && item._id == myUid);
                   }).length) {
@@ -286,7 +285,6 @@ export class CollaborateComponent {
       if(data) {
         this.$cookies.put('sessionID', data.sessionID);
         var mydomain = this.extractRootDomain(this.urlPad);
-        console.log(mydomain);
         this.$cookies.put('sessionID', data.sessionID, {domain: mydomain});
         var url = `${this.urlPad}/p/${grp.groupPadID}$${grp.name}?userName=${this.getCurrentUser().name}`;
         //this.$window.open('//localhost:9001/p/' + grp.groupPadID + "$" + grp.name + "?userName=" + this.getCurrentUser().name);

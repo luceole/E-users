@@ -101,7 +101,7 @@
           <form>
             <input ng-model="search.$" placeholder="Recherche globale">
           </form>
-          <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="app/users/dirPagination.tpl.html"></dir-pagination-controls>
+          <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html"></dir-pagination-controls>
           <br>
           <table class="table table-striped ">
             <tr dir-paginate="group in vm.groups | orderBy:'name' | filter:search:strict | itemsPerPage :'12' ">

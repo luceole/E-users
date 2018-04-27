@@ -37,7 +37,7 @@ import util from '../components/util/util.module';
 import socket from '../components/socket/socket.service';
 
 import './app.scss';
-
+import '../assets/dirPagination';
 angular.module('E-userApp', [ngCookies, ngResource, ngSanitize, ngMaterial, mwlCalendar, 'btford.socket-io', ngValidationMatch, uiRouter,
   uiBootstrap, uiSelect, 'ckeditor',
   _Auth, account, groupes, collaborate, navbar, footer, main, constants, socket, util, demandes, users, events

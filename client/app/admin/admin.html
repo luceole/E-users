@@ -7,10 +7,11 @@
   </form>
   <p class="text-warning" ng-if="users.length==0"> Chargement ...</p>
 
-  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="app/utilisateurs/dirPagination.tpl.html"></dir-pagination-controls>
+  <!-- <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"
+  template-url="app/utilisateurs/dirPagination.tpl.html"></dir-pagination-controls> -->
   <br>
   <table class="table table-striped ">
-    <tr dir-paginate="user in users | orderBy:'name' | filter:search:strict | itemsPerPage :'12' ">
+    <tr dir-paginate="user in users | orderBy:'name' | filter:search:strict | itemsPerPage :'1O' ">
       <td>
         <button class="btn btn-warning btn-xs" type="button" ng-if="!user.isactif" ng-click="active(user)">
           <span class="glyphicon glyphicon-star"></span>Activer

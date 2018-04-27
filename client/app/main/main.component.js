@@ -1,7 +1,6 @@
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import routing from './main.routes';
-
 export class MainController {
   /*@ngInject*/
   constructor($http, $timeout, $state, $stateParams, $window, socket, appConfig, Auth, calendarConfig, moment, Message) {
@@ -173,7 +172,7 @@ export class MainController {
   }
 }
 
-export default angular.module('E-userApp.main', [uiRouter])
+export default angular.module('E-userApp.main', [uiRouter, 'angularUtils.directives.dirPagination'])
   .config(routing)
   .component('main', {
     template: require('./main.html'),
