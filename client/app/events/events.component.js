@@ -24,8 +24,8 @@ export class ModalEditEvComponent {
       this.newEv = true;
       this.updateEvent = {
         title: 'Réunion',
-        startsAt: new Date(),
-        endsAt: new Date(),
+        startsAt: moment().startOf('hour').toDate(),
+        endsAt: moment().startOf('hour').add(1, 'hours').toDate(),
         allDay: true,
         info: '',
         lieu: '',
@@ -43,7 +43,7 @@ export class ModalEditEvComponent {
       formatYear: 'yy',
       startingDay: 1,
       showWeeks: true,
-      minDate: new Date()
+      minDate: this.event.startsAt
     };
     this.format = 'dd/MM/yyyy';
     this.hstep = 1;
@@ -95,10 +95,13 @@ export class ModalEditEvComponent {
     var self = this;
     self.submitted = true;
     self.editMessage = '';
-    //console.log(form.$valid);
     if(form.$valid) {
-      if(self.newEv) self.event.group = self.grp;
-      //console.log(self.event);
+      if(self.newEv) {
+        self.event.group = self.grp;
+        self.event.title = self.grp.info;
+      }
+      if(this.moment(self.event.endsAt).isBefore(self.event.startsAt)) {
+        self.event.endsAt = self.event.startsAt;}
       return self.Auth.eventupdate(self.event.group._id,
         {
           _id: self.event._id,
@@ -170,7 +173,7 @@ export class EventsComponent {
 
     this.calendarEventTitle.monthViewTooltip = this.calendarEventTitle.weekViewTooltip = this.calendarEventTitle.dayViewTooltip = function(event) {
       var msg = 'Participants : ' + event.participants.length;
-      return 'Groupe : ' + event.group.info + '<br>' + event.title + '<br>' + 'Lieu :' + event.lieu + '<br> ' + msg;
+      return event.info + '<br>Lieu :' + event.lieu + '<br> ' + msg;
     };
   }
 
@@ -197,12 +200,12 @@ export class EventsComponent {
                 //eventsGroupe.events = data;
                 angular.forEach(data, function(ev, ind) {
                   ev.startsAt = new Date(ev.startsAt);
-
                   //if(self.moment(ev.endsAt).isbefore(self.moment(ev.startsAt))) ev.endsAt = ev.startsAt;
                   if(!ev.endsAt) ev.endsAt = ev.startsAt;
-                  if(ev.allDay) ev.endsAt = ev.startsAt;
+                  //if(ev.allDay) ev.endsAt = ev.startsAt;
                   ev.endsAt = new Date(ev.endsAt);
                   ev.draggable = true;
+                  ev.resizable = true;
                   ev.group = {
                     _id: grp._id,
                     info: grp.info

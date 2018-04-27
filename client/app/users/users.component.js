@@ -6,15 +6,27 @@ import routes from './users.routes';
 import modal from 'angular-ui-bootstrap/src/modal';
 
 export class UsersModalComponent {
-  constructor(User, $uibModalInstance, socket, usr) {
+  constructor(User, Message, $uibModalInstance, socket, usr) {
     'ngInject';
     this.User = User;
+    this.Message = Message;
     this.user = new User(usr);
     this.socket = socket;
     this.Save_user = usr;
+    this.Structures = [];
     this.$uibModalInstance = $uibModalInstance;
   }
-
+  $onInit() {
+    this.Message.get()
+      .$promise
+      .then(result => {
+        this.myconfig = result;
+        // this.TitreSite = this.myconfig.TitreSite;
+        // this.DeviseSite = this.myconfig.DeviseSite;
+        // this.OauthActif = this.myconfig.OauthActif;
+        this.Structures = this.myconfig.Structures;
+      });
+  }
   ok() {
     this.user.isdemande = false;
     this.User.update(this.user._id, this.user, () => {

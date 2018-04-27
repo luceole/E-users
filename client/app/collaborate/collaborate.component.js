@@ -17,7 +17,15 @@ export class NoteComponent {
     };
     this.isAdmin = Auth.isAdmin;
     this.isAdmin_grp = Auth.isAdmin_grp;
-    this.isAdminOf = this.Auth.getCurrentUserSync().adminOf.find(o => o === this.groupe._id);
+    // console.log(this.Auth.getCurrentUserSync().adminOf);
+    // console.log(this.groupe._id);
+    // this.isAdminOf = this.Auth.getCurrentUserSync().adminOf.find(o => {
+    //   return o._id === this.groupe._id;
+      // });
+    var r = this.Auth.getCurrentUserSync().adminOf.filter(o => o._id === this.groupe._id);
+    this.isAdminOf = r.length;
+
+
     //this.isAdminOf = this.Auth.getCurrentUserSync().adminOf == this.groupe._id;
     this.$uibModalInstance = $uibModalInstance;
     this.msg = '';
@@ -80,10 +88,10 @@ export class CollaborateComponent {
       year: 'YYYY'
     };
     this.calendarEventTitle.monthViewTooltip = this.calendarEventTitle.weekViewTooltip = this.calendarEventTitle.dayViewTooltip = function(event) {
-      var msg = 'Participation: Oui';
+      var msg = '<br>Participation: Oui';
       if(event.color == calendarConfig.colorTypes.important)
         msg = 'Participation: Non';
-      return event.lieu + ': ' + event.title + ' ' + msg;
+      return event.info + '<br>' + event.lieu + msg;
     };
     this.eventSources = [
     //   {

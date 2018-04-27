@@ -1,8 +1,10 @@
 <div class="container">
 
   <div class="col-lg-10">
-    <h3>Groupes</h3>
-    <div ng-if="collaborateCtrl.getCurrentUser().isactif">
+
+    <uib-tabset>
+    <uib-tab heading="Services">
+
       <span ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0">Vous êtes inscrit dans : {{collaborateCtrl.getCurrentUser().memberOf.length}} groupe(s) </span>
       <form>
         <input ng-model="search.$" placeholder="Recherche globale">
@@ -24,15 +26,12 @@
           </td>
         </tr>
       </table>
-      <div init-toolbar="coucou ">
-        <div class="alert alert-success " align="center " ng-if="alert.msg "> {{alert.msg}}</div>
-      </div>
-      <div class="alert alert-warning " ng-if="!collaborateCtrl.getCurrentUser().isactif "> Votre compte est en attende de validation par le modérateur </div>
-    </div>
-    <div class="alert alert-info">
-      <div class="text-center">
-        <h4> Agenda de vos groupes</h4>
 
+     </uib-tab>
+    <uib-tab heading="Agenda">
+    <div class="alert alert-info">
+    <div class="text-center">
+        <h4> Agenda de vos groupes</h4>
         <p class="text-center">{{ collaborateCtrl.calendarTitle }}</p>
 
         <div class="btn-group">
@@ -58,7 +57,10 @@
         </mwl-calendar>
       </div>
     </div>
-  </div>
+  </uib-tab>
+  </uib-tabset>
+</div>
+
   <div ng-include=" 'components/footer/footer.html' "></div>
 
 
@@ -68,7 +70,7 @@
         </button></h3>
 </div>
 <div class="modal-body ">
-  <div ng-show="NC.isAdminOf ">
+  <div ng-show="NC.isAdminOf">
     <div ckeditor="options " ng-model="NC.groupe.note "> </div>
 
     <div class="modal-footer ">

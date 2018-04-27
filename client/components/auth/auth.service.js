@@ -376,6 +376,9 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
     isAdmin() {
       return Auth.hasRole(...[].concat.apply(['admin'], arguments));
     },
+    isAdmin_grp() {
+      return Auth.hasRole(...[].concat.apply(['admin_grp'], arguments));
+    },
 
     /**
        * Check if a user is an admin
@@ -384,6 +387,9 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
        */
     isAdminSync() {
       return Auth.hasRoleSync('admin');
+    },
+    isAdmin_grpSync() {
+      return Auth.hasRoleSync('admin_grp');
     },
     isActif() {
       return currentUser.isactif;

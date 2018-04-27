@@ -12,14 +12,14 @@
 
 <div class="container">
   <div class="col-md-12">
-    <h3>Groupes</h3>
-    <div class="alert alert-info" ng-if="eventsCtrl.getCurrentUser().adminOf.length > 0">
-      <ul>
-        <li ng-repeat=" grp in eventsCtrl.getCurrentUser().adminOf;">
-          {{grp.info}}
-        </li>
-      </ul>
-    </div>
+      <!-- <h3>Groupes</h3>
+      <div class="alert alert-info" ng-if="eventsCtrl.getCurrentUser().adminOf.length > 0">
+        <ul>
+          <li ng-repeat=" grp in eventsCtrl.getCurrentUser().adminOf;">
+            {{grp.info}}
+          </li>
+        </ul>
+      </div> -->
     <div class="alert alert-info">
       <div class="text-center">
         <h4> Organisez vos Réunions</h4>
@@ -52,9 +52,6 @@
       </mwl-calendar>
     </div>
   </div>
-
-
-
   <script type="text/ng-template" id="modalEv.html">
     <div class="modal-header">
       <h3 class="modal-title">{{modalEditEvCtrl.titre}} {{modalEditEvCtrl.libDate}}</h3>
@@ -62,7 +59,6 @@
     </div>
     <div class="modal-body">
       <form class="form" name="editerForm" ng-submit="modalEditEvCtrl.editer(editerForm)" novalidate>
-
         <uib-tabset>
           <uib-tab heading="Evenement">
             <div class="form-group" ng-class="{ 'has-success': editerForm.name.$valid && modalEditEvCtrl.submitted,
@@ -80,12 +76,14 @@
                   Groupe Obligatoire
                 </p>
               </div>
+              <div ng-if="!modalEditEvCtrl.newEv">
+
               Titre
               <input type="text" name="title" class="form-control" ng-model="modalEditEvCtrl.event.title" required style="width:450px" />
               <p class="help-block" ng-show="editerForm.title.$error.required && modalEditEvCtrl.submitted">
                 Titre Obligatoire
               </p>
-
+            </div>
               Description
               <input type="text" name="info" class="form-control" ng-model="modalEditEvCtrl.event.info" ng-init="modalEditEvCtrl.event.info" required style="width:450px" />
               <p class="help-block" ng-show="editerForm.info.$error.required && modalEditEvCtrl.submitted">
@@ -100,9 +98,12 @@
               <br>Date Début
               <p class="input-group">
                 <input type="texte" name="dateD" class="form-control" style="width:150px"
-                uib-datepicker-popup="{{modalEditEvCtrl.format}}" ng-model="modalEditEvCtrl.event.startsAt"
-                is-open="modalEditEvCtrl.openedDD" datepicker-options="modalEditEvCtrl.dateOptions" uib-date-disabled="modalEditEvCtrl.disabled(date, mode)"
-                  ng-required="true" close-text="Fermer" />
+                uib-datepicker-popup="{{modalEditEvCtrl.format}}"
+                ng-model="modalEditEvCtrl.event.startsAt"
+                is-open="modalEditEvCtrl.openedDD"
+                datepicker-options="modalEditEvCtrl.dateOptions"
+                uib-date-disabled="modalEditEvCtrl.disabled(date, mode)"
+                ng-required="true" close-text="Fermer" />
                 <button type="button" class="btn btn-default" ng-click="modalEditEvCtrl.openDD($event)"> <i class="glyphicon glyphicon-calendar"></i>
                 </button>
                 <p class="help-block" ng-show="editerForm.dateD.$error.required && modalEditEvCtrl.submitted">

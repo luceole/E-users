@@ -81,15 +81,8 @@
 			<div class="form-group" ng-class="{ 'has-success': editerForm.structure.$valid && submitted,
                                     'has-error': editerForm.structure.$invalid && submitted }">
 				<span>Structure de rattachement :
-            <select ng-model="ModalEditCtrl.user.structure">
-              <option value="Education"> Education </option>
-              <option value="Ecologie"> Ecologie </option>
-              <option value="Affaires Etrangères"> Affaires Etrangères </option>
-              <option value="Affaires Sociales"> Affaires Sociales </option>
-              <option value="Intérieur"> Intérieur </option>
-              <option value="Finance"> Finances </option>
-              <option value="Collectivité"> Collectivité </option>
-              <option value="Autre"> Autre </option>
+							<select ng-model="ModalEditCtrl.user.structure" ng-init="ModalEditCtrl.user.structure='Education'">
+	 							<option ng-repeat="option in ModalEditCtrl.Structures" value="{{option.id}}">{{option.value}}</option>
               </select>
             </span>
 				<p class="help-block" ng-show="editerForm.structure.$error.required && submitted">

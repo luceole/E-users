@@ -33,17 +33,17 @@ module.exports = {
   onlineServices: [
     {glyphicon: 'glyphicon-bullhorn', url: 'https://forum.domain.fr', title: ' Forum Libre Communauté'},
     {glyphicon: 'glyphicon-certificate', url: 'https://chat.domain.fr', title: 'Chat Libre Communauté'}
-   ],
-  Structures:[
-    {id:"Education" value:"Education"},
-    {id:"Ecologie" value:"Ecologie"},
-    {id:"Affaires Etrangères" value:"Affaires Etrangères"},
-    {id:"Intérieur" value:"Intérieur"},
-    {id:"Affaires Sociales" value:"Affaires Sociales"},
-    {id:"Finance" value:"Finance"},
-    {id:"Justice" value:"Justice"},
-    {id:"Collectivité" value:"Collectivité"},
-    {id:"Autre" value:"Autre"}
+  ],
+  Structures: [
+      {id: 'Education', value: 'Education'},
+      {id: 'Ecologie', value: 'Ecologie'},
+      {id: 'Affaires Etrangères', value: 'Affaires Etrangères'},
+      {id: 'Intérieur', value: 'Intérieur'},
+      {id: 'Affaires Sociales', value: 'Affaires Sociales'},
+      {id: 'Finance', value: 'Finance'},
+      {id: 'Justice', value: 'Justice'},
+      {id: 'Collectivité', value: 'Collectivité'},
+      {id: 'Autre', value: 'Autre'}
   ],
   discourse_sso: {
     secret: '1234567890',
