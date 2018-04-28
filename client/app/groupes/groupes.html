@@ -4,7 +4,8 @@
     <input ng-model="search.name" placeholder="Recherche nom du groupe">
     <input ng-model="search.adminby.uid" placeholder="Recherche administrateur">
   </form>
-  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="app/users/dirPagination.tpl.html"></dir-pagination-controls>
+  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"
+  template-url="/assets/dirPagination.tpl.html"></dir-pagination-controls>
   <br>
   <span>
     <a href ng-click="groupesCtrl.add()" rel="tooltip" title="Ajouter" class="trash">
@@ -24,7 +25,7 @@
         <strong>{{groupe.name}}</strong>
       </td>
       <td>
-        {{groupe.info}}  
+        {{groupe.info}}
       </td>
       <td ng-switch="groupe.type">
         <strong ng-switch-when="0">Ouvert</strong>
@@ -64,7 +65,7 @@
             <div ng-form="ModalEditAdminGroupCtrl.forms.tab1" class="form-group" ng-class="{ 'has-success': editerForm.name.$valid && ModalEditAdminGroupCtrl.submitted,
                                     'has-error': editerForm.name.$invalid && submitted }">
               Description
-              <input type="text" name="info" class="form-control" ng-model="ModalEditAdminGroupCtrl.groupe.info" required style="width:350px" />
+              <input type="text" name="info" class="form-control" ng-model="ModalEditAdminGroupCtrl.groupe.info" required style="width:250px" />
               <p class="help-block" ng-show="forms.tab1.info.$error.required && ModalEditAdminGroupCtrl.submitted">
                 Description Obligatoire
               </p>
@@ -138,13 +139,13 @@
         <div class="form-group" ng-class="{ 'has-success': addForm.name.$valid && submitted,
                                     'has-error': addForm.$invalid && ModalAddAdminGroupCtrl.submitted }">
           Nom (Doit être Unique)
-          <input type="text" name="name" class="form-control" ng-model="ModalAddAdminGroupCtrl.groupe.name" required style="width:350px" />
+          <input type="text" name="name" class="form-control" ng-model="ModalAddAdminGroupCtrl.groupe.name" required style="width:250px" />
           <p class="help-block" ng-show="addForm.name.$error.required && ModalAddAdminGroupCtrl.submitted">
             Nom Obligatoire
           </p>
 
           Description
-          <input type="text" name="desc" class="form-control" ng-model="ModalAddAdminGroupCtrl.groupe.info" required style="width:350px" />
+          <input type="text" name="desc" class="form-control" ng-model="ModalAddAdminGroupCtrl.groupe.info" required style="width:250px" />
           <p class="help-block" ng-show="addForm.desc.$error.required && ModalAddAdminGroupCtrl.submitted">
             Description Obligatoire
           </p>

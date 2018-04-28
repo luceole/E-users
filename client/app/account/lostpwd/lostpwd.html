@@ -1,11 +1,9 @@
-<div ng-hide="$ctrl.isLoggedIn()">
-  <header class="hero-unit" id="banner">
-    <div class="container">
-      <h1>Libre Communauté </h1>
-      <p class="lead">ECO-système Libre de l’Éducation</p>
-      {{banTitre}}
-      <img src="assets/images/LogoPLLPt.png " alt="Pôle Logiciels Libres">
-    </div>
+ <header class="hero-unit" id="banner">
+      <div class="container">
+        <h1>{{vm.TitreSite}} &nbsp;</h1>
+      <p class="lead">{{vm.DeviseSite}}&nbsp;</p>
+        <img src="assets/images/LogoPLLPt.png " alt="Pôle Logiciels Libres">
+      </div>
   </header>
   <div class="container">
     <div class="row">
@@ -16,7 +14,7 @@
           <form class="form" name="lostpwdForm" ng-submit="vm.register(lostpwdForm)" novalidate>
             <div class="form-group" ng-class="{ 'has-success': lostpwdForm.email.$valid && vm.submitted,
                                     'has-error': registerForm.email.$invalid  && vm.submitted}">
-              <input type="email" name="email" class="form-control" ng-model="vm.email" placeholder="Votre courriel" required; mongoose-error style="width:350px" />
+              <input type="email" name="email" class="form-control" ng-model="vm.email" placeholder="Votre courriel" required; mongoose-error style="width:250px" />
               <p class="help-block" ng-show="lostpwdForm.email.$error.email && vm.submitted">
                 Adresse electronique invalide.
               </p>
@@ -26,17 +24,18 @@
               <p class="help-block" ng-show="lostpwdForm.email.$error.mongoose">
                 {{ vm.errors.email }}
               </p>
+          <br>
 
-          &nbsp
-            <p>
               <button class="btn  btn-default btn-lg btn-login" type="submit">
                 Envoyez
               </button>
 
         </form>
-          <br><p>    </div>
+          <br>
+          </div>
           <span class="alert alert-info" ng-show="vm.submitted ">{{vm.message}}</span>
 
-    </div>
+
   </div>
+</div>
 </div>

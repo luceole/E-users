@@ -2,7 +2,7 @@ const angular = require('angular');
 
 const uiRouter = require('angular-ui-router');
 
-import './dirPagination';
+//import './dirPagination';
 
 import routes from './demandes.routes';
 
@@ -85,7 +85,7 @@ export class DemandesComponent {
   }
 } // Class
 
-export default angular.module('E-userApp.demandes', [uiRouter, 'angularUtils.directives.dirPagination'])
+export default angular.module('E-userApp.demandes', [uiRouter])
   .config(routes)
   .component('demandes', {
     template: require('./demandes.html'),

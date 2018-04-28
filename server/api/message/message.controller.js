@@ -70,8 +70,13 @@ function handleError(res, statusCode) {
 export function index(req, res) {
   var ethercalcUrl = config.ethercalc ? config.ethercalc.url : '';
   var etherpadUrl = config.etherpad ? config.etherpad.url : '';
-  return res.status(200).json({OauthActif: config.OauthActif, ethercalcUrl, etherpadUrl });
-    // return Message.find().exec()
+  var etherHost = config.etherpad ? config.etherpad.host : '';
+  var DeviseSite = config.DeviseSite ? config.DeviseSite : 'DeviseSite';
+  var TitreSite = config.TitreSite ? config.TitreSite : 'TitreSite';
+  var onlineServices = config.onlineServices ? config.onlineServices : [];
+  var Structures = config.Structures ? config. Structures: [];
+  return res.status(200).json({OauthActif: config.OauthActif, ethercalcUrl, etherpadUrl, etherHost, DeviseSite, TitreSite, onlineServices, Structures});
+    // return Message.find().exec(),
     //   .then(respondWithResult(res))
     //   .catch(handleError(res));
 }

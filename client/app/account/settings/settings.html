@@ -10,7 +10,7 @@
             <div class="form-group" ng-class="{ 'has-success': modifForm.name.$valid && vm.submitted,
                                     'has-error': modifForm.name.$invalid && vm.submitted }">
               Nom
-              <input type="text" name="name" class="form-control" ng-model="vm.user.name" required style="width:350px" />
+              <input type="text" name="name" class="form-control" ng-model="vm.user.name" required style="width:250px" />
               <p class="help-block" ng-show="modifForm.name.$error.required && vm.submitted">
                 Nom Obligatoire
               </p>
@@ -19,7 +19,7 @@
                                     'has-error': modifForm.surname.$invalid && vm.submitted }">
 
               Prénom
-              <input type="text" name="surname" class="form-control" ng-model="vm.user.surname" placeholder="Votre prénom" required style="width:350px" />
+              <input type="text" name="surname" class="form-control" ng-model="vm.user.surname" placeholder="Votre prénom" required style="width:250px" />
               <p class="help-block" ng-show="modifForm.surname.$error.required && vm.submitted">
                 Prénom Obligatoire
               </p>
@@ -27,17 +27,10 @@
             <div class="form-group" ng-class="{ 'has-success': modifForm.structure.$valid && vm.submitted,
                                     'has-error': modifForm.structure.$invalid && vm.submitted }">
               <span>Structure de rattachement :
-<select ng-model="vm.user.structure" ng-init="vm.user.structure">
-         <option value="Education"> Education </option>
-         <option value="Ecologie"> Ecologie </option>
-         <option value="Affaires Etrangères"> Affaires Etrangères </option>
-         <option value="Affaires Sociales"> Affaires Sociales </option>
-         <option value="Intérieur"> Intérieur </option>
-         <option value="Finance"> Finances </option>
-         <option value="Collectivité"> Collectivité </option>
-         <option value="Autre"> Autre </option>
-</select>
-</span>
+                <select ng-model="vm.user.structure" ng-init="vm.user.structure='Education'">
+                   <option ng-repeat="option in vm.Structures" value="{{option.id}}">{{option.value}}</option>
+                </select>
+             </span>
               <p class="help-block" ng-show="modifForm.structure.$error.required && vm.submitted">
                 Structure de rattachement Obligatoire
               </p>
@@ -45,7 +38,7 @@
             <div class="form-group" ng-class="{ 'has-success': modifForm.email.$valid && vm.submitted,
                                     'has-error': modifForm.email.$invalid && vm.submitted }">
               Courriel
-              <input type="email" name="email" class="form-control" ng-model="vm.user.email" ng-focus="vm.myInit(modifForm,'email')" placeholder="Votre courriel" required mongoose-error style="width:350px" />
+              <input type="email" name="email" class="form-control" ng-model="vm.user.email" ng-focus="vm.myInit(modifForm,'email')" placeholder="Votre courriel" required mongoose-error style="width:250px" />
               <p class="help-block" ng-show="modifForm.email.$error.email ">
                 Adresse electronique invalide.
               </p>
@@ -75,7 +68,7 @@
               <form class="form" name="passwdForm" ng-submit="vm.changePassword(passwdForm)" novalidate>
                 <div class="form-group">
                   <label>Mot de passe actuel</label>
-                  <input type="password" name="password" class="form-control" ng-model="vm.user.oldPassword" ng-focus="vm.myInit(passwdForm,'password')" mongoose-error style="width:350px" />
+                  <input type="password" name="password" class="form-control" ng-model="vm.user.oldPassword" ng-focus="vm.myInit(passwdForm,'password')" mongoose-error style="width:250px" />
                   <p class="help-block" ng-show="passwdForm.password.$error.mongoose">
                     {{ vm.errors.other }}
                   </p>
@@ -83,7 +76,7 @@
                 <div class="form-group">
                   <label>Nouveau mot de passe</label>
 
-                  <input type="password" name="newPassword" class="form-control" ng-model="vm.user.newPassword" ng-minlength="8" required style="width:350px" />
+                  <input type="password" name="newPassword" class="form-control" ng-model="vm.user.newPassword" ng-minlength="8" required style="width:250px" />
                   <p class="help-block" ng-show="(passwdForm.newPassword.$error.minlength ||passwdForm.newPassword.$error.required) && (passwdForm.newPassword.$dirty || vm.submitted)">
                     8 caractères minimum.
                   </p>
@@ -92,7 +85,7 @@
                 <div class="form-group">
                   <label>Confirmez le mot de passe </label>
 
-                  <input type="password" name="confirmPassword" class="form-control" ng-model="vm.user.confirmPassword" match="vm.user.newPassword" ng-minlength="8" required style="width:350px" />
+                  <input type="password" name="confirmPassword" class="form-control" ng-model="vm.user.confirmPassword" match="vm.user.newPassword" ng-minlength="8" required style="width:250px" />
                   <p class="help-block" ng-show="passwdForm.confirmPassword.$error.match">
                     Mot de passe différent!
                   </p>
@@ -108,7 +101,7 @@
           <form>
             <input ng-model="search.$" placeholder="Recherche globale">
           </form>
-          <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="app/users/dirPagination.tpl.html"></dir-pagination-controls>
+          <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html"></dir-pagination-controls>
           <br>
           <table class="table table-striped ">
             <tr dir-paginate="group in vm.groups | orderBy:'name' | filter:search:strict | itemsPerPage :'12' ">

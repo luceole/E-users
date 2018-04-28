@@ -52,7 +52,7 @@
 
 	<script type="text/ng-template" id="modalEdit.html">
 		<div class="modal-header">
-			<h3 class="modal-title">Modification de {{user.uid}}</h3>
+			<h3 class="modal-title">Modification de {{ModalEditCtrl.user.uid}}</h3>
 		</div>
 		<div class="modal-body">
 			<uib-tabset>
@@ -63,7 +63,7 @@
 						<div class="form-group" ng-class="{ 'has-success': editerForm.name.$valid && submitted,
                                     'has-error': editerForm.name.$invalid && submitted }">
 							Nom
-							<input type="text" name="name" class="form-control" ng-model="ModalEditCtrl.user.name" required style="width:350px" />
+							<input type="text" name="name" class="form-control" ng-model="ModalEditCtrl.user.name" required style="width:250px" />
 							<p class="help-block" ng-show="editerForm.name.$error.required && submitted">
 								Nom Obligatoire
 							</p>
@@ -73,7 +73,7 @@
                                     'has-error': editerForm.surname.$invalid && submitted }">
 
 			Prénom
-			<input type="text" name="surname" class="form-control" ng-model="ModalEditCtrl.user.surname" placeholder="Votre prénom" required style="width:350px" />
+			<input type="text" name="surname" class="form-control" ng-model="ModalEditCtrl.user.surname" placeholder="Votre prénom" required style="width:250px" />
 			<p class="help-block" ng-show="editerForm.surname.$error.required && submitted">
 				Prénom Obligatoire
 			</p>
@@ -81,15 +81,8 @@
 			<div class="form-group" ng-class="{ 'has-success': editerForm.structure.$valid && submitted,
                                     'has-error': editerForm.structure.$invalid && submitted }">
 				<span>Structure de rattachement :
-            <select ng-model="ModalEditCtrl.user.structure">
-              <option value="Education"> Education </option>
-              <option value="Ecologie"> Ecologie </option>
-              <option value="Affaires Etrangères"> Affaires Etrangères </option>
-              <option value="Affaires Sociales"> Affaires Sociales </option>
-              <option value="Intérieur"> Intérieur </option>
-              <option value="Finance"> Finances </option>
-              <option value="Collectivité"> Collectivité </option>
-              <option value="Autre"> Autre </option>
+							<select ng-model="ModalEditCtrl.user.structure" ng-init="ModalEditCtrl.user.structure='Education'">
+	 							<option ng-repeat="option in ModalEditCtrl.Structures" value="{{option.id}}">{{option.value}}</option>
               </select>
             </span>
 				<p class="help-block" ng-show="editerForm.structure.$error.required && submitted">
@@ -100,7 +93,7 @@
 <div class="form-group" ng-class="{ 'has-success': editerForm.email.$valid && submitted,
                                     'has-error': editerForm.email.$invalid && submitted }">
 	Courriel
-	<input type="email" name="email" class="form-control" ng-model="ModalEditCtrl.user.email" placeholder="Votre courriel" required mongoose-error style="width:350px" />
+	<input type="email" name="email" class="form-control" ng-model="ModalEditCtrl.user.email" placeholder="Votre courriel" required mongoose-error style="width:250px" />
 	<p class="help-block" ng-show="editerForm.email.$error.email && submitted">
 		Adresse electronique invalide.
 	</p>

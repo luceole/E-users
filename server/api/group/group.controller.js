@@ -38,7 +38,7 @@ function removeEntity(res) {
     if(entity) {
       return entity.remove()
         .then(() => {
-          res.status(204).end();
+          return res.status(204).end();
         });
     }
   };
@@ -84,7 +84,7 @@ export function byowner(req, res) {
     .catch(handleError(res));
 }
 
-// Get list of open groupes
+  // Get list of open groupes
 export function isopen(req, res) {
   Group.find({
     type: {
@@ -148,4 +148,189 @@ export function destroy(req, res) {
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));
+}
+
+export function eventsofgroup(req, res) {
+  var groupe = req.params.id;
+  console.log(groupe);
+  var events = [];
+  Group.findById(req.params.id).lean()
+  .populate('events.participants', 'uid')
+  .exec(function(err, groupe) {
+    if(err) {
+      return handleError(res, err);
+    }
+    if(!groupe) {
+      return res.send(404);
+    }
+    //events.push.apply(events, groupe.events);
+    return res.json(groupe.events);
+  });
+}
+
+export function eventparticipate(req, res) {
+  Group.findById(req.params.id, function(err, groupe) {
+    if(err) {
+      return handleError(res, err);
+    }
+    if(!groupe) {
+      return res.send(404);
+    }
+    var ev = groupe.events.id(req.body._id);
+    if(ev) { // inscription/Dé-inscription
+      var index = ev.participants.indexOf(req.body.UserId);
+      if(index === -1) // Pas inscrit
+      {
+        console.log('inscription ' + req.body.UserId);
+        ev.participants.push(req.body.UserId);
+      } else {
+        console.log('dé-inscription ' + req.body.UserId);
+        ev.participants.splice(index, 1);
+      }
+    } else {
+      return res.send(404);
+    }
+    groupe.save(function(err, groupe) {
+      if(err) {
+        console.log(err);
+        return handleError(res, err);
+      }
+      console.log('Groupe Update ' + groupe.name);
+      return res.json(groupe.events);
+    });
+  });
+}
+
+// Create or Updates Events an existing groupe in the DB.
+export function eventupdate(req, res) {
+    /* if (req.body._id) {
+         delete req.body._id;
+     }*/
+  if((req.user.role !== 'admin') && (req.user.adminOf.indexOf(req.params.id) === -1)) {
+    return res.send(403);
+  }
+  Group.findById(req.params.id, function(err, groupe) {
+    if(err) {
+      return handleError(res, err);
+    }
+    if(!groupe) {
+      return res.send(404);
+    }
+    var ev = groupe.events.id(req.body._id);
+    if(ev) { // Drag and Drop
+      console.log('Drag/Drop');
+      ev.startsAt = req.body.startsAt;
+      ev.allDay = req.body.allDay;
+      if(req.body.title) ev.title = req.body.title;
+      if(req.body.info) ev.info = req.body.info;
+      if(req.body.lieu) ev.lieu = req.body.lieu;
+      if(req.body.endsAt) {
+        ev.endsAt = req.body.endsAt;
+      }
+      else {
+        ev.endsAt = req.body.startsAt;
+      }
+      //console.log(ev);
+      groupe.save(function(err, groupe) {
+        if(err) {
+          console.log('**');
+          console.log(err);
+          return handleError(res, err);
+        }
+        console.log('Groupe EventUpdate ' + groupe.name);
+        return res.json(groupe.events);
+      });
+    }
+
+
+    else {
+        // PAD
+      // var args = {
+      //   groupID: groupe.groupPadID,
+      //   padName: req.body.start + '-' + req.body.end,
+      //   text: 'Bienvenu sur le PAD  ' + req.body.title + ' - ' + req.body.start
+      // };
+      // etherpad.createGroupPad(args, function(error, data) {
+      //   if(error) console.error('Error creating pad: ' + error.message);
+      //   else {
+      //     console.log('New pad created: ' + data.padID);
+      //     req.body.eventPadID = data.padID;
+      //   }
+      //   groupe.events.push(req.body);
+      //   groupe.save(function(err, groupe) {
+      //     if(err) {
+      //       console.log(err);
+      //       return handleError(res, err);
+      //     }
+      //     console.log('Groupe EventCreate ' + groupe.name);
+      //     console.log(req.body);
+      //     return res.json(groupe.events);
+      //   });
+      // });
+
+      groupe.events.push(req.body);
+      groupe.save(function(err, groupe) {
+        if(err) {
+          console.log('**');
+          console.log(err);
+          return handleError(res, err);
+        }
+        console.log('Groupe EventUpdate ' + groupe.name);
+        return res.json(groupe.events);
+      });
+    }
+      /*    groupe.save(function (err, groupe) {
+            if (err) {
+              console.log(err);
+              return handleError(res, err);
+            }
+            console.log("Groupe EventUpdate " + groupe.name);
+            console.log(req.body);
+            return res.json(groupe.events);
+          });*/
+  });
+}
+
+export function eventdelete(req, res) {
+  console.log('eventdelete');
+  //console.log(req.user);
+  if(req.body._id) {
+    delete req.body._id;
+  }
+  if((req.user.role !== 'admin') && (req.user.adminOf.indexOf(req.params.id) === -1)) {
+    return res.send(403);
+  }
+  Group.findById(req.params.id, function(err, groupe) {
+    if(err) {
+      return handleError(res, err);
+    }
+    if(!groupe) {
+      return res.send(404);
+    }
+    var ev = groupe.events.id(req.body.id);
+    if(!ev) {
+      return res.send(404);
+    }
+    ev.remove(function(err) {
+      groupe.save(function(err, groupe) {
+        if(err) {
+          return handleError(res, err);
+        }
+        console.log('Groupe Update ' + groupe.name);
+        return res.json(groupe.events);
+      });
+    });
+  });
+}
+
+export function events(req, res) {
+  //var events = [{title:'Prem'},{title:'deuxieme', start:'2015-02-25'}];
+  var events = [];
+  Group.find({}).lean().exec(function(err, groupes) {
+    groupes.forEach(function(groupe, index, tab) {
+      events.push.apply(events, groupe.events);
+      //console.log(index + " " + events);
+    });
+    return res.json(events);
+  });
 }

@@ -60,7 +60,7 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
     logout() {
       $cookies.remove('token');
       currentUser = new _User();
-      $window.location = '/logout';
+      //$window.location = '/logout';
     },
 
     /**
@@ -156,6 +156,55 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
       function(err) {
         return safeCb(callback)(err);
       }).$promise;
+    },
+    eventparticipate(id, ev, callback) {
+      var cb = callback || angular.noop;
+      return Group.eventparticipate({
+        id
+      }, ev,
+        function(data) {
+          return safeCb(callback)(null, data);
+        },
+        function(err) {
+          return safeCb(callback)(err);
+        }).$promise;
+    },
+    eventdelete(id, ev, callback) {
+      var cb = callback || angular.noop;
+      return Group.eventdelete({
+        id
+      }, ev,
+        function(data) {
+          return safeCb(callback)(null, data);
+        },
+        function(err) {
+          return safeCb(callback)(err);
+        }).$promise;
+    },
+
+    eventsofgroup(id, callback) {
+      var cb = callback || angular.noop;
+      return Group.eventsofgroup({
+        id
+      },
+             function(data) {
+               return safeCb(callback)(null, data);
+             },
+             function(err) {
+               return safeCb(callback)(err);
+             }).$promise;
+    },
+    eventupdate(id, ev, callback) {
+      var cb = callback || angular.noop;
+      return Group.eventupdate({
+        id
+      }, ev,
+        function(data) {
+          return safeCb(callback)(null, data);
+        },
+        function(err) {
+          return safeCb(callback)(err);
+        }).$promise;
     },
 
     userAdmingroup(idgrp, listusers, callback) {
@@ -327,6 +376,9 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
     isAdmin() {
       return Auth.hasRole(...[].concat.apply(['admin'], arguments));
     },
+    isAdmin_grp() {
+      return Auth.hasRole(...[].concat.apply(['admin_grp'], arguments));
+    },
 
     /**
        * Check if a user is an admin
@@ -335,6 +387,9 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
        */
     isAdminSync() {
       return Auth.hasRoleSync('admin');
+    },
+    isAdmin_grpSync() {
+      return Auth.hasRoleSync('admin_grp');
     },
     isActif() {
       return currentUser.isactif;

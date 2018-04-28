@@ -52,7 +52,7 @@ export class ModalEditGroupComponent {
       var Nadm = [];
       var Supp = [];
       angular.forEach(this.groupe.adminby, function(user) {
-        Nadm.push(user._id);
+        if(Nadm.indexOf(user._id) === -1) Nadm.push(user._id);
       });
       angular.forEach(this.adminbyOld, function(u) {
         if(Nadm.indexOf(u) === -1) Supp.push(u);
@@ -70,7 +70,7 @@ export class ModalEditGroupComponent {
           //console.log("supp="+Supp)
           if(Supp.length) {
             this.Auth.userAdmingroup(this.groupe._id, Supp).then(
-              console.log('MAj adminby ')
+              // console.log('MAj adminby ')
             );
           }
           /*  Sgroupe.info = r.info;
@@ -175,7 +175,7 @@ export class ModalAddGroupComponent {
 
 export class GroupesComponent {
   /*@ngInject*/
-  constructor(User, Group, $uibModal, socket) {
+  constructor(User, Group, $uibModal) {
     'ngInject';
     this.Group = Group;
     this.groups = Group.query();

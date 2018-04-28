@@ -1,23 +1,18 @@
 import passport from 'passport';
 import {Strategy} from 'openid-client';
+import config from '../../config/environment';
 
 export function setup(User, config) {
-  //console.log(config.openid);
-  //const issuer = new Issuer(config.openid.issuer);
-  //const client = new issuer.Client(config.openid.client);
-
   const Issuer = require('openid-client').Issuer;
+
   if(config.OauthActif) {
-    Issuer.discover(config.openid.discover) // => Promise
+    var urlDiscover = `${config.openid.discover}.well-known/openid-configuration`;
+    Issuer.discover(urlDiscover) // => Promise
   .then(function(myIssuer) {
     console.log('OPenID: Discovered issuer %s', myIssuer.issuer);
     const client = new myIssuer.Client({
-    // client_id: 'e-users',
-    // client_secret: '4428b8ef-7aac-4f92-aa51-b83d6bf30d92'
       client_id: config.openid.client.client_id,
-      client_secret: config.openid.client.client_secret
-
-
+      client_secret: config.openid.client.client_secret,
     }); // => Client
 
     passport.use('openid', new Strategy({
@@ -33,8 +28,13 @@ export function setup(User, config) {
         user.openid = {tokenSet, issuer: config.openid.issuer, client: config.openid.client };
         return done(null, user);
       })
-      .catch(err => done(err));
+         .catch(err => done(err));
     }));
+  })
+  .catch(err => {
+    console.log('Le serveur Oauth ne répond pas : ' + urlDiscover);
+    return err;
   });
   }
+  else { console.log('Warning: OpenID not active ');}
 }

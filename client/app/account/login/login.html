@@ -1,8 +1,8 @@
 <div ng-hide="vm.isLoggedIn()">
   <header class="hero-unit" id="banner">
     <div class="container">
-      <h1>{{vm.TitreSite}}</h1>
-      <p class="lead">{{vm.DeviseSite}}</p>
+      <h1>{{vm.TitreSite}} &nbsp;</h1>
+      <p class="lead">{{vm.DeviseSite}}&nbsp;</p>
       {{banTitre}}
       <img src="assets/images/LogoPLLPt.png " alt="Pôle Logiciels Libres">
     </div>
@@ -20,13 +20,13 @@
               <div class="form-group">
                 <label>Identifiant</label>
 
-                <input name="uid" class="form-control" ng-model="vm.user.uid" required style="width:350px">
+                <input name="uid" class="form-control" ng-model="vm.user.uid" required style="width:250px">
               </div>
 
               <div class="form-group">
                 <label>Mot de Passe</label>
 
-                <input type="password" name="password" class="form-control" ng-model="vm.user.password" required style="width:350px">
+                <input type="password" name="password" class="form-control" ng-model="vm.user.password" required style="width:250px">
               </div>
 
               <div class="form-group has-error">
@@ -49,9 +49,9 @@
             <br> {{vm.MSG}}
             <br>
             <br>
-            <span class="alert alert-info"><a href="/signup"> Pour créer votre compte : Inscrivez vous.</a></span>
+            <span class="alert alert-info"><a href="/signup"> Inscrivez vous.</a></span>
           </p>
-        </div> 
+        </div>
               <div class="col-md-6" ng-if="vm.OauthActif" >
             <h3>Se connecter avec</h3>
             <a href="/auth/openid" target="_self" class="btn btn-default"><img src="assets/images/openid-wordmark.svg" style="max-width:150px"/></a>

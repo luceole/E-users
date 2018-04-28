@@ -6,7 +6,23 @@
 import config from '../config/environment';
 import User from '../api/user/user.model';
 import Group from '../api/group/group.model';
+import Param from '../api/param/param.model';
+
 if(config.env !== 'production') {
+  Param.find({}).remove()
+  .then(() => {
+    Param.create({
+      DeviseSite: 'Eco-système Logiciels Libres ',
+      TitreSite: 'Libre Communauté',
+      // List of user roles
+      userRoles: ['guest', 'user', 'admin_grp', 'admin'],
+      onlineServices: [
+       {glyphicon: 'glyphicon-bullhorn', url: 'https://forum.libre-communaute.fr', title: ' Forum Libre Communauté'},
+       {glyphicon: 'glyphicon-certificate', url: 'https://chat.libre-communaute.fr', title: 'Chat Libre Communauté'}
+      ]
+    });
+  });
+
   User.find({}).remove()
     .then(() => {
       User.create({
@@ -59,24 +75,34 @@ if(config.env !== 'production') {
           User.findOne({
             uid: 'admin'
           }, function(err, UserAdmin) {
-            Group.create(
-	    {
-                name: 'dream',
-                info: 'The Dream Team',
-                note: 'Bonjour le groupe Dream Team',
-                type: 0,
-                active: true,
-                owner: UserAdmin._id,
-                adminby: [UserAdmin._id],
-                participants: [],
-                events: [{
-                  title: 'The Dream Team',
-                  start: '2015-04-2',
+            Group.create({
+              name: 'dream',
+              info: 'The Dream Team',
+              note: 'Bonjour le groupe Dream Team',
+              type: 0,
+              active: true,
+              owner: UserAdmin._id,
+              adminby: [UserAdmin._id],
+              participants: [],
+              events: [
+              //   {
+              //   title: 'The Dream Team',
+              //   startsAt: new Date('2018-04-17'),
+              //   endsAt: new Date('2018-04-17'),
+              //   lieu: 'Dijon',
+              //   allDay: true
+              // },
+                {
+                  title: 'The Dream Team back',
+                  startsAt: new Date('2018-04-23'),
+                  endsAt: new Date('2018-04-23'),
                   lieu: 'Dijon',
                   allDay: true
-                }]
-              },
-	   {
+                }
+
+              ]
+            },
+              {
                 name: 'eole',
                 info: ' Eole Team',
                 note: 'Bonjour le groupe Eole Team',
@@ -84,6 +110,7 @@ if(config.env !== 'production') {
                 active: true,
                 owner: UserAdmin._id,
                 adminby: [UserAdmin._id],
+                source: {group: {_id: ''}},
                 participants: [],
                 events: []
               },
@@ -95,6 +122,7 @@ if(config.env !== 'production') {
                 active: true,
                 owner: UserAdmin._id,
                 adminby: [UserAdmin._id],
+                source: {group: {_id: ''}},
                 participants: [],
                 events: []
               });
@@ -102,19 +130,31 @@ if(config.env !== 'production') {
         }); // Fin Groups
       });
     });
-} else { // Mode Production Create first Admin if empty User
+} else { // Mode Production Create Params and first Admin if empty User
+  Param.count({}, function(err, count) {
+    if(count == 0) {
+      Param.create({
+        DeviseSite: 'Eco-système Logiciels Libres ',
+        TitreSite: 'Libre Communauté',
+      // List of user roles
+        userRoles: ['guest', 'user', 'admin_grp', 'admin'],
+        onlineServices: [
+ {glyphicon: 'glyphicon-bullhorn', url: 'https://forum.libre-communaute.fr', title: ' Forum Libre Communauté'},
+       {glyphicon: 'glyphicon-certificate', url: 'https://chat.libre-communaute.fr', title: 'Chat Libre Communauté'}
+        ]
+      });
+    }
+  });
   User.count({}, function(err, count) {
     if(count == 0) {
       User.create({
         provider: 'local',
         role: 'admin',
-	  uid: 'admin',
         name: 'Administrator',
-        surname: 'Alfred',
+        surname: 'The',
         urlToken: '',
-	  email: 'admin.local.lan',
         mailValid: true,
-        structure: 'MEN',
+        structure: 'Autre',
         isactif: true,
         password: 'admin'
       })

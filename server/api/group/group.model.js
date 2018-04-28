@@ -8,10 +8,11 @@ import mongoose, {
 } from 'mongoose';
 const crypto = require('crypto');
 var config = require('../../config/environment');
+
 var EventSchema = new Schema({
   title: String,
-  start: Date,
-  end: Date,
+  startsAt: Date,
+  endsAt: Date,
   allDay: Boolean,
   info: String,
   lieu: String,
@@ -21,6 +22,8 @@ var EventSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   }]
+}, {
+  usePushEach: true
 });
 
 var GroupSchema = new Schema({
@@ -53,6 +56,8 @@ var GroupSchema = new Schema({
     ref: 'User'
   }],
   events: [EventSchema]
+}, {
+  usePushEach: true
 });
 
 /**
@@ -64,6 +69,7 @@ var GroupSchema = new Schema({
 GroupSchema.pre('save', function(next) {
   var grpId = this._id;
   if(this.isModified('adminby')) {
+    //console.log('GROUP Pre-Save: ' + this._id + ' adminby: ' + this.adminby);
     this.adminby.forEach(function(id) {
       var query = {
         _id: id
@@ -84,11 +90,37 @@ GroupSchema.pre('save', function(next) {
   return next(); // Always go on !
 });
 
+
+GroupSchema.pre('findOneAndUpdate', function(next) {
+  if(!this._update.adminby) return next();
+//  console.log('GROUP Pre-findOneAndUpdate: ' + this._conditions._id + ' adminby: ' + this._update.adminby);
+  //console.log(this._update);
+  var grpId = this._conditions._id;
+  this._update.adminby.forEach(function(id) {
+    var query = {
+      _id: id
+    };
+    //console.log(id):
+    var update = {
+      $addToSet: {
+        adminOf: grpId
+      }
+    };
+  //  console.log(update);
+    User.findOneAndUpdate(query, update, function(err, user) {
+      if(err) {
+        console.log(`erreur Adminby  : ${err}`);
+      }
+      return next(); // Always go on !
+    });
+  });
+  return next(); // Always go on !
+});
+
 //.pre(save) for EtherCalc
 GroupSchema.pre('save', function(next) {
   if(!config.ethercalc) return next();
   var myKey = config.ethercalc.key;
-  console.log(myKey);
   const secret = myKey;
   const hash = crypto.createHmac('sha256', secret)
     .update(this.name)
@@ -132,6 +164,7 @@ GroupSchema.pre('save', function(next) {
 });
 
 GroupSchema.pre('remove', function(next) {
+//  console.log('pre remove ' + this.adminby);
   var grpId = this._id;
   this.adminby.forEach(function(id) {
     var query = {
@@ -145,8 +178,9 @@ GroupSchema.pre('remove', function(next) {
     User.findOneAndUpdate(query, update, function(err, user) {
       if(err) {
         console.log(`erreur Adminby : ${err}`);
+        return next();
       }
-      return next(); // Always go on !
+      next(); // Always go on !
     });
   });
 });
