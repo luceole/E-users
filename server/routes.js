@@ -15,6 +15,7 @@ export default function(app) {
   app.use('/api/messages', require('./api/message'));
   app.use('/api/things', require('./api/thing'));
   app.use('/api/users', require('./api/user'));
+  app.use('/api/polls', require('./api/poll'));
   //  app.use('/api/demandes', require('./api/demande'));
 
   //

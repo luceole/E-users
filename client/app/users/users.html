@@ -121,7 +121,7 @@
 			<input ng-model="search.name" placeholder="Recherche sur le nom">
 		</form>
 
-		<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"  pagination-id="grp" template-url="app/users/dirPagination.tpl.html"></dir-pagination-controls>
+		<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"  pagination-id="grp" template-url="/assets/dirPagination.tpl.html"></dir-pagination-controls>
 		<br>
 		<table class="table table-striped ">
 			<tr dir-paginate="group in ModalEditCtrl.user.memberOf | orderBy:'name' | filter:search:strict | itemsPerPage :'6' "  pagination-id="grp">
@@ -141,7 +141,7 @@
 	</div>
 	<div class="modal-footer">
 		<button class="btn btn-primary" ng-click="ModalEditCtrl.ok(editerForm)">OK</button>
-		<button class="btn btn-warning" ng-click="ModalEditCtrl.cancel()">Cancel</button>
+		<button class="btn btn-warning" ng-click="ModalEditCtrl.cancel()">Annuler</button>
 	</div>
 	</script>
 	</div>

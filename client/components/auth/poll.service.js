@@ -14,7 +14,7 @@ export function PollResource($resource) {
       }
     },
     mypolls: {
-      method: 'GETt',
+      method: 'GET',
       params: {
         controller: 'mypolls'
       }

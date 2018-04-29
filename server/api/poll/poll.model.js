@@ -26,7 +26,7 @@ var PollSchema = new mongoose.Schema({
       name: String,
       email: {
         type: String,
-        unique: true
+        //unique: true
       }
     },
     reponses: []

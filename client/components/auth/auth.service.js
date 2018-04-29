@@ -2,7 +2,7 @@
 
 class _User {}
 
-export function AuthService($window, $location, $http, $cookies, $q, appConfig, Util, User, Group) {
+export function AuthService($window, $location, $http, $cookies, $q, appConfig, Util, User, Group, Poll) {
   'ngInject';
 
   var safeCb = Util.safeCb;
@@ -206,6 +206,56 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
           return safeCb(callback)(err);
         }).$promise;
     },
+    // Create Poll
+    createPoll(poll, callback) {
+      var cb = callback || angular.noop;
+      return Poll.save(poll,
+        function(data) {
+          return safeCb(callback)(null, data);
+        },
+        function(err) {
+          return safeCb(callback)(err);
+        }).$promise;
+    },
+
+    updatePoll(id, poll, callback) {
+      var cb = callback || angular.noop;
+      return Poll.update({
+        id
+      }, poll,
+        function(data) {
+          return safeCb(callback)(null, data);
+        },
+        function(err) {
+          return safeCb(callback)(err);
+        }).$promise;
+    },
+
+    votePoll(id, poll, callback) {
+      var cb = callback || angular.noop;
+      console.log(poll);
+      return Poll.vote({
+        id
+      }, poll,
+        function(data) {
+          return safeCb(callback)(null, data);
+        },
+        function(err) {
+          return safeCb(callback)(err);
+        }).$promise;
+    },
+
+    mypoll(mygrp, callback) {
+      var cb = callback || angular.noop;
+      console.log(mygrp);
+      return Mypolls(mygrp,
+        function(data) {
+          return safeCb(callback)(null, data);
+        },
+        function(err) {
+          return safeCb(callback)(err);
+        }).$promise;
+    },
 
     userAdmingroup(idgrp, listusers, callback) {
       var cb = callback || angular.noop;
@@ -266,8 +316,7 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
         return safeCb(callback)(null);
       }, function(err) {
         return safeCb(callback)(err);
-      })
-        .$promise;
+      }).$promise;
     },
 
     ResetPassword(pwdToken, newPassword, callback) {

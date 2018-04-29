@@ -10,6 +10,7 @@
 
 'use strict';
 
+
 import jsonpatch from 'fast-json-patch';
 import Poll from './poll.model';
 
@@ -93,13 +94,15 @@ export function show(req, res) {
 
 // Creates a new Poll in the DB
 export function create(req, res) {
-  return Poll.create(req.body)
-    .then(respondWithResult(res, 201))
-    .catch(handleError(res));
+  console.log('create');
+  console.log(req.body);
+  return Poll.create(req.body).then(respondWithResult(res, 201))
+      .catch(handleError(res));
 }
 
 // Upserts the given Poll in the DB at the specified ID
 export function upsert(req, res) {
+  console.log('upsert');
   if(req.body._id) {
     Reflect.deleteProperty(req.body, '_id');
   }

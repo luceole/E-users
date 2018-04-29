@@ -3,7 +3,7 @@
   <form>
     <input ng-model="search.$" placeholder="Recherche globale">
   </form>
-  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="app/users/dirPagination.tpl.html">
+  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html">
   </dir-pagination-controls>
   <br>
   <table class="table table-striped ">
@@ -69,7 +69,6 @@
           </td>
           <td ng-repeat="t in subDate track by $index ">
             <label>
-
               <input type="checkbox" ng-model="repuser[$index]"> </label>
           </td>
         </tr>
@@ -78,6 +77,6 @@
   </div>
   <div class="modal-footer ">
     <button class="btn btn-primary " ng-click="pollCtrl.ok() ">OK</button>
-    <button class="btn btn-warning" ng-click="pollCtrl.cancel() ">Abandon</button>
+    <button class="btn btn-warning" ng-click="pollCtrl.cancel() ">Annuler</button>
   </div>
 </script>
