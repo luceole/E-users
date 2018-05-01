@@ -59,17 +59,48 @@
       </div>
     </div>
   </uib-tab>
+
+<uib-tab heading="Sondage">
+  <form>
+    <input ng-model="search.$" placeholder="Recherche globale">
+  </form>
+  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html">
+  </dir-pagination-controls>
+  <br>
+  <table class="table table-striped ">
+    <tr dir-paginate="poll in collaborateCtrl.polls |  itemsPerPage :'12' ">
+      <td>
+        <button class="btn btn-warning btn-xs"  ng_if="!collaborateCtrl.rep(poll)" type="button" ng-click="collaborateCtrl.openPoll(poll)" rel="tooltip" title="Répondre au sondage">
+          <span class="glyphicon glyphicon-star"></span>Répondre
+        </button>
+        <button class="btn btn-success btn-xs" ng_if="collaborateCtrl.rep(poll)" type="button" ng-click="collaborateCtrl.openPoll(poll)" rel="tooltip" title="Répondre au sondage">
+          <span class="glyphicon glyphicon-star"></span>Modifier&nbsp&nbsp
+        </button>
+        {{poll.groupeInfo}}
+      </td>
+      <td>
+        <strong>{{poll.name}}</strong>
+      </td>
+      <td>
+        {{poll.info}}
+      </td>
+      <td>
+        {{poll.resultats.length}}
+      </td>
+    </tr>
+  </table>
+  </uib-tab>
   </uib-tabset>
 </div>
 
   <div ng-include=" 'components/footer/footer.html' "></div>
-
+</div>
 
   <script type="text/ng-template " id="modalNote.html ">
     <h3 class="modal-title"> Note du groupe: {{NC.groupe.info}}
          <button class="glyphicon glyphicon-remove pull-right" ng-click="NC.cancel()">
         </button></h3>
-</div>
+
 <div class="modal-body ">
   <div ng-show="NC.isAdminOf">
     <div ckeditor="options " ng-model="NC.groupe.note "> </div>
@@ -87,4 +118,59 @@
   <div ng-bind-html="NC.groupe.note "></div>
 
 </div>
+</script>
+
+<script type="text/ng-template" id="modalRepPoll.html">
+  <div class="modal-header">
+    <h3 class="modal-title">Répondre au sondage <button class="glyphicon glyphicon-remove pull-right" ng-click="NP.cancel()">
+        </button></h3>
+  </div>
+  <!-- <table>
+    <tr ng-repeat="(k, v) in rep() track by $index ">
+      <td>{{k}} - {{v}}</td>
+    </tr>
+  </table>-->
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-condensed table-body-center">
+      <thead>
+        <tr>resultats
+          <th>Utilsateurs</th>
+          <th colspan="{{p.sttime.length}} " ng-repeat="p in NP.propositions track by $index "> {{p.stdate}}</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th ng-repeat="x in NP.subDate track by $index ">{{x}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+        </tr>
+        <tr ng-repeat="r in NP.resultats track by $index  ">
+          <td>{{r.user.email}}</td>
+          <td ng-repeat="w in NP.rep(r) track by $index" ng-init="NP.doTxt(w,$index)">{{w|ouinon}}</td>
+        </tr>
+        <tr>
+          <td>Total</td>
+          <td ng-repeat="tx in NP.totx track by $index ">{{tx}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <!--            <input placeholder="Email " ng-model="email"> </input>-->
+            {{NP.user.email}}
+          </td>
+          <td ng-repeat="t in NP.subDate track by $index ">
+            <label>
+
+              <input type="checkbox" ng-model="NP.repuser[$index]"> </label>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer ">
+    <button class="btn btn-primary " ng-click="NP.ok() ">OK</button>
+    <button class="btn btn-warning" ng-click="NP.cancel() ">Abandon</button>
+  </div>
 </script>

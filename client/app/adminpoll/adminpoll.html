@@ -153,3 +153,52 @@
     <button class="btn btn-warning" ng-click="modalAddAdminPollCtrl.cancel() ">Annuler</button>
   </div>
 </script>
+<script type="text/ng-template" id="modalViewPoll.html">
+  <div class="modal-header">
+    <h3 class="modal-title">Réponses au sondage <button class="glyphicon glyphicon-remove pull-right" ng-click="modalViewPollCtrl.cancel()">
+        </button></h3>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-condensed table-body-center">
+      <thead>
+        <tr>
+          <th>Utilsateurs</th>
+          <th colspan="{{p.sttime.length}} " ng-repeat="p in modalViewPollCtrl.propositions track by $index "> {{p.stdate}}</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th ng-repeat="x in modalViewPollCtrl.subDate track by $index ">{{x}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+        </tr>
+        <tr ng-repeat="r in modalViewPollCtrl.resultats track by $index  ">
+          <td>{{r.user.email}}</td>
+          <td ng-repeat="w in modalViewPollCtrl.rep(r) track by $index" ng-init="modalViewPollCtrl.doTxt(w,$index)">{{w|ouinon}}</td>
+        </tr>
+        <tr>
+          <td>Total</td>
+          <td ng-repeat="tx in modalViewPollCtrl.totx track by $index ">{{tx}}
+          </td>
+        </tr>
+        <!--<tr>
+          <td>
+                        <input placeholder="Email " ng-model="email"> </input>
+            {{email}}
+          </td>
+          <td ng-repeat="t in subDate track by $index ">
+            <label>
+
+              <input type="checkbox" ng-model="repuser[$index]"> </label>
+          </td>
+        </tr>-->
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer ">
+    <!-- <button class="btn btn-primary " ng-click="ok() ">OK</button>-->
+    <button class="btn btn-warning" ng-click="modalViewPollCtrl.cancel() ">Fermer</button>
+  </div>
+</script>

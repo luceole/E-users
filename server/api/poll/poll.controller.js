@@ -9,10 +9,10 @@
  */
 
 'use strict';
-
-
 import jsonpatch from 'fast-json-patch';
 import Poll from './poll.model';
+var _ = require('lodash');
+//var ObjectId = require('mongoose').Types.ObjectId;
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -72,16 +72,17 @@ export function index(req, res) {
     .catch(handleError(res));
 }
 
-exports.mypolls = function(req, res) {
-  //console.log(req.query);
-  returnPoll.find({
-    isActif: true,
-    groupeName: {
-      $in: req.query.mygrp
-    }}).exec()
-    .then(respondWithResult(res))
-    .catch(handleError(res));
-};
+// exports.mypolls = function(req, res) {
+//   console.log(req.query);
+//   return Poll.find({
+//     isActif: true,
+//     groupeName: {
+//       $in: req.query.mygrp
+//     }
+//   }).exec()
+//     .then(respondWithResult(res))
+//     .catch(handleError(res));
+// };
 
 
 // Gets a single Poll from the DB
@@ -123,13 +124,21 @@ export function patch(req, res) {
     .catch(handleError(res));
 }
 
+export function myadminpolls(req, res) {
+  Poll.find({
+    groupeName: {
+      $in: req.query.mygrp
+    }
+  }, function(err, polls) {
+    if(err) {
+      console.log(err);
+      return handleError(res, err);
+    }
+    return res.status(200).json(polls);
+  });
+}
+
 export function mypolls(req, res) {
-  console.log(req.query);
-    /* var grp = [];
-    req.query.mygrp.forEach(function (v) {
-      grp.push(new ObjectId(v));
-    })
-    console.log(grp)*/
   Poll.find({
     isActif: true,
     groupeName: {
@@ -171,6 +180,7 @@ exports.vote = function(req, res) {
     console.log(poll.resultats);
     poll.save(function(err) {
       if(err) {
+        console.log(err);
         return handleError(res, err);
       }
       return res.status(200).json(poll);

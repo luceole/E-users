@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import {registerEvents} from './poll.events';
 
 var PollSchema = new mongoose.Schema({
+
   name: String,
   info: String,
   isActif: Boolean,
@@ -30,7 +31,7 @@ var PollSchema = new mongoose.Schema({
       }
     },
     reponses: []
-  }]
+  }],
     /*resultats: [{
     user: {
       name: String,
@@ -43,7 +44,10 @@ var PollSchema = new mongoose.Schema({
         // ,allDay: Boolean
       }]
 }]*/
-});
+},
+  {
+    usePushEach: true
+  });
 
 
 registerEvents(PollSchema);

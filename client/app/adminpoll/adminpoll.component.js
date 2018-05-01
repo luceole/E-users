@@ -3,8 +3,49 @@ const angular = require('angular');
 const uiRouter = require('angular-ui-router');
 import routes from './adminpoll.routes';
 
-export class modalAddAdminPoll {
+export class modalViewPoll {
+    /*@ngInject*/
+  constructor($scope, $uibModalInstance, $window, $timeout, $filter, Auth, User, Group, Poll, selectedPoll) {
+    'ngInject';
+    this.$uibModalInstance = $uibModalInstance;
+    this.repuser = [];
+    this.totx = [];
+    this.doTxt = function(r, i) {
+      if(r) this.totx[i] = this.totx[i] + 1;
+    };
+    this.subHeaders = function() {
+      var subs = [];
+      this.totx = [];
+      var self = this;
+      this.propositions.forEach(function(col) {
+        col.sttime.forEach(function(sub) {
+          subs.push(sub);
+          self.totx.push(0);
+        });
+      });
+      return subs;
+    };
+    this.user = Auth.getCurrentUser();
+    this.poll = new Poll(selectedPoll);
+    this.found = [];
+    this.propositions = this.poll.propositions;
+    this.subDate = this.subHeaders();
+    this.resultats = this.poll.resultats;
+    this.rep = function(r) {
+    //  console.log(r)
+      return r.reponses;
+    };
 
+    this.cancel = function() {
+    //this.resultats = this.poll.resultats;
+      this.$uibModalInstance.dismiss('cancel');
+    };
+  }
+}
+
+
+export class modalAddAdminPoll {
+    /*@ngInject*/
   constructor(Auth, User, Group, Poll, selectedPoll, $timeout, $uibModalInstance, moment) {
     'ngInject';
     this.Auth = Auth;
@@ -144,7 +185,7 @@ export class modalAddAdminPoll {
       })
         .then(function(r) {
         //  console.log('Add is OK ');
-          this.$uibModalInstance.close();
+          self.$uibModalInstance.close();
         })
         .catch(function(err) {
           err = err.data;
@@ -200,8 +241,27 @@ export class AdminpollComponent {
     this.message = 'Hello';
     this.Auth = Auth;
     this.Poll = Poll;
+    this.isAdmin = Auth.isAdminSync();
     this.$uibModal = $uibModal;
-    this.polls = Poll.query();
+    console.log(this.isAdmin);
+    if(this.isAdmin) {
+      this.polls = Poll.query();}
+    else {
+      var self = this;
+      this.Auth.getCurrentUser()
+    .then(function(data) {
+      console.log(data);
+      var userGroupes = data.adminOf;
+      var userGrp = [''];
+      userGroupes.forEach(function(p) {
+        userGrp.push(p.name);
+      });
+      self.Auth.myadminpolls(userGrp)
+    .then(function(dataRes) {
+      self.polls = dataRes;
+    });
+    });
+    }
   }
 
   cancel() {
@@ -222,6 +282,22 @@ export class AdminpollComponent {
       }
     });
   }
+
+  view(poll) {
+    var ModalInstance = this.$uibModal.open({
+      controller: modalViewPoll,
+      controllerAs: 'modalViewPollCtrl',
+      templateUrl: 'modalViewPoll.html',
+      size: 'lg',
+      resolve: {
+        selectedPoll() {
+          return poll;
+        }
+      }
+    });
+  }
+
+
   active(poll) {
     poll.isActif = !poll.isActif;
     this.Auth.updatePoll(poll._id, {
@@ -241,6 +317,8 @@ export class AdminpollComponent {
       });
     }
   }
+
+
 }
 
 export default angular.module('eUsersApp.adminpoll', [uiRouter])

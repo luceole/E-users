@@ -15,8 +15,16 @@ export function PollResource($resource) {
     },
     mypolls: {
       method: 'GET',
+      isArray: true,
       params: {
         controller: 'mypolls'
+      }
+    },
+    myadminpolls: {
+      method: 'GET',
+      isArray: true,
+      params: {
+        controller: 'myadminpolls'
       }
     },
     update: {

@@ -1,7 +1,5 @@
 'use strict';
-
 class _User {}
-
 export function AuthService($window, $location, $http, $cookies, $q, appConfig, Util, User, Group, Poll) {
   'ngInject';
 
@@ -233,7 +231,6 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
 
     votePoll(id, poll, callback) {
       var cb = callback || angular.noop;
-      console.log(poll);
       return Poll.vote({
         id
       }, poll,
@@ -245,10 +242,20 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
         }).$promise;
     },
 
-    mypoll(mygrp, callback) {
+    mypolls(mygrp, callback) {
       var cb = callback || angular.noop;
-      console.log(mygrp);
-      return Mypolls(mygrp,
+      return Poll.mypolls({mygrp},
+        function(data) {
+          return safeCb(callback)(null, data);
+        },
+        function(err) {
+          return safeCb(callback)(err);
+        }).$promise;
+    },
+
+    myadminpolls(mygrp, callback) {
+      var cb = callback || angular.noop;
+      return Poll.myadminpolls({mygrp},
         function(data) {
           return safeCb(callback)(null, data);
         },
@@ -279,7 +286,7 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
         sso,
         sig
       }, function(data) {
-        console.log(`data ${data}`);
+        //console.log(`data ${data}`);
         return safeCb(callback)(null, data);
       },
       function(err) {
@@ -324,8 +331,6 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
         pwdToken,
         newPassword
       }, function(data) {
-        console.log('data: ');
-        console.log(data);
         $cookies.put('token', data.token);
         currentUser = User.get();
         return safeCb(callback)(null);
@@ -412,6 +417,7 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
        * @return {Bool}
        */
     hasRoleSync(role) {
+    //  console.log(_.get(currentUser, 'role'));
       return hasRole(_.get(currentUser, 'role'), role);
     },
 
@@ -474,6 +480,5 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
         }).$promise;
     },
   };
-
   return Auth;
 }

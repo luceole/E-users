@@ -49,6 +49,11 @@ angular.module('E-userApp', [ngCookies, ngResource, ngSanitize, ngMaterial, mwlC
   calendarConfig.dateFormats.hour = 'HH:mm';
 }])
   .config(routeConfig)
+  .filter('ouinon', function() {
+    return function(input) {
+      return input ? 'Oui' : 'Non';
+    };
+  })
   .run(function($rootScope, $location, Auth) {
     'ngInject';
     // Redirect to login if route requires auth and you're not logged in

@@ -2,6 +2,92 @@
 const angular = require('angular');
 const uiRouter = require('angular-ui-router');
 import routes from './collaborate.routes';
+
+export class PollComponent {
+  /*@ngInject*/
+  constructor($uibModalInstance, $window, $timeout, Auth, User, Group, Poll, selectedPoll)
+ {
+    this.$uibModalInstance = $uibModalInstance;
+    this.Auth = Auth;
+    this.getCurrentUser = Auth.getCurrentUser;
+    this.user = Auth.getCurrentUserSync();
+    this.$window = $window;
+    this.repuser = [];
+    this.totx = [];
+    this.doTxt = function(r, i) {
+      if(r) {
+        this.totx[i] = this.totx[i] + 1;
+      }
+    };
+    this.subHeaders = function() {
+      var subs = [];
+      this.totx = [];
+      var self = this;
+      this.propositions.forEach(function(col) {
+        col.sttime.forEach(function(sub) {
+          //console.log(sub);
+          subs.push(sub);
+          self.repuser.push(false);
+          self.totx.push(0);
+        });
+      });
+      return subs;
+    };
+
+
+    this.poll = new Poll(selectedPoll);
+    //console.log(this.poll);
+    this.found = [];
+    this.propositions = this.poll.propositions;
+    this.subDate = this.subHeaders();
+    this.resultats = this.poll.resultats;
+    this.found = this.resultats.filter(o => o.user.email === this.user.email);
+    console.log(this.found);
+    if(this.found.length) {
+      console.log('trouvé');
+      // Remplacer directement
+      var i = this.resultats.indexOf(this.found[0]);
+    // console.log(this.resultats[i].reponses)
+      this.repuser = this.resultats[i].reponses;
+      this.resultats.splice(this.resultats.indexOf(this.found[0]), 1);
+    }
+  }
+
+  rep(r) {
+    //  console.log(r)
+    return r.reponses;
+  }
+  ok() {
+    var self = this;
+    var newRep = {
+      user: {
+        email: this.user.email
+      },
+      reponses: this.repuser
+    };
+
+    console.log(this.poll);
+    this.Auth.votePoll(this.poll._id, {
+      resultats: this.poll.resultats,
+      vote: newRep
+    })
+      .then(function(r) {
+        console.log('Maj is OK ');
+        self.$uibModalInstance.close();
+      })
+      .catch(function(err) {
+        err = err.data;
+        console.log(err);
+      //  $window.alert('Erreur en modification : ' + err);
+      });
+  }
+
+  cancel() {
+    this.resultats = this.poll.resultats;
+    this.$uibModalInstance.dismiss('cancel');
+  }
+}
+
 export class NoteComponent {
   /*@ngInject*/
   constructor(Group, Auth, $uibModalInstance, grp) {
@@ -63,6 +149,22 @@ export class CollaborateComponent {
     this.isLoggedIn = Auth.isLoggedInSync;
     this.isAdmin = Auth.isAdminSync;
     this.getCurrentUser = Auth.getCurrentUserSync;
+    this.user = Auth.getCurrentUserSync();
+    var self = this;
+    this.Auth.getCurrentUser()
+    .then(function(data) {
+      var userGroupes = data.memberOf;
+      var userGrp = [];
+      userGroupes.forEach(function(p) {
+        userGrp.push(p.name);
+      });
+      self.Auth.mypolls(userGrp)
+    .then(function(data) {
+      self.polls = data;
+    });
+    });
+
+
     this.isActif = Auth.isActif;
     this.$uibModal = $uibModal;
     this.Message = Message;
@@ -70,6 +172,7 @@ export class CollaborateComponent {
       type: 'success',
       msg: 'cliquez sur un évément pour vous inscrire ou dé-inscrire.'
     };
+    //this.polls = this.Auth.mypolls(['eole']);
     // this.OauthActif = true;
     // this.DeviseSite = appConfig.DeviseSite || 'Eco-système Libre';
     // this.TitreSite = appConfig.TitreSite || 'Libre Communauté';
@@ -161,6 +264,18 @@ export class CollaborateComponent {
     var Auth = this.Auth;
     var calendarConfig = this.calendarConfig;
     var self = this;
+
+    // this.Auth.getCurrentUser()
+    // .then(function(data) {
+    //   var userGroupes = data.memberOf;
+    //   console.log(data);
+    //   self.Auth.mypolls(userGroupes)
+    // .then(function(data) {
+    //   self.polls = data;
+    //   console.log(self.polls);
+    // });
+    // });
+
     if(raz) this.eventSources = [];
 
         //var workEvents = [];
@@ -275,6 +390,42 @@ export class CollaborateComponent {
       }
     });
   }
+
+  rep(poll) {
+    var resultats = poll.resultats;
+    var found = resultats.filter(o => o.user.email === this.user.email);
+    return found.length;
+  }
+
+  openPoll(poll) {
+    var modalInstance = this.$uibModal.open({
+      controller: PollComponent,
+      controllerAs: 'NP',
+      templateUrl: 'modalRepPoll.html',
+      size: 'lg',
+      resolve: {
+        selectedPoll() {
+          return poll;
+        }
+      }
+    });
+    modalInstance.result.then(res => {
+      var self = this;
+      this.Auth.getCurrentUser()
+      .then(function(data) {
+        var userGroupes = data.memberOf;
+        var userGrp = [];
+        userGroupes.forEach(function(p) {
+          userGrp.push(p.name);
+        });
+        self.Auth.mypolls(userGrp)
+      .then(function(data) {
+        self.polls = data;
+      });
+      });
+    }, () => {});
+  }
+
 
   openPad(grp) {
     var authorID = this.getCurrentUser().authorPadID;
