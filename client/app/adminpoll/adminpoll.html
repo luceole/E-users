@@ -84,8 +84,6 @@
       </uib-tab>
       <uib-tab heading="Propositions de dates" ng-click="modalAddAdminPollCtrl.initCalendar()"
       actived="modalAddAdminPollCtrl.active.tab1" disable="modalAddAdminPollCtrl.disable.tab1">
-
-
           <div style="center; display:inline-block; min-height:290px;">
       <div uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="modalAddAdminPollCtrl.dateOptions"
       ng-change="modalAddAdminPollCtrl.selectDate(dt)" modalAddAdminPollCtrl.dateOptions"></div>
@@ -107,7 +105,6 @@
       </uib-tab>
       <uib-tab heading="Propositions d'horaires" ng-click="modalAddAdminPollCtrl.initTime()"
       active="modalAddAdminPollCtrl.active.tab2" disable="modalAddAdminPollCtrl.disable.tab2">
-
 
         <div class="table-responsive">
           <table class="table table-bordered table-condensed table-body-center">
@@ -147,12 +144,13 @@
           <!-- <button class="btn btn-primary " ng-click="modalAddAdminPollCtrl.ok()">OK</button> -->
       </uib-tab>
       </div>
-
-  <div class="modal-footer ">
+  </uib-tabset>
+  <div class="modal-footer " ng-show="!modalAddAdminPollCtrl.disable.tab2">
     <button class="btn btn-primary " ng-click="modalAddAdminPollCtrl.ok() ">OK</button>
     <button class="btn btn-warning" ng-click="modalAddAdminPollCtrl.cancel() ">Annuler</button>
   </div>
 </script>
+
 <script type="text/ng-template" id="modalViewPoll.html">
   <div class="modal-header">
     <h3 class="modal-title">Réponses au sondage <button class="glyphicon glyphicon-remove pull-right" ng-click="modalViewPollCtrl.cancel()">

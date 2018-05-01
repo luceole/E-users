@@ -68,7 +68,7 @@
   </dir-pagination-controls>
   <br>
   <table class="table table-striped ">
-    <tr dir-paginate="poll in collaborateCtrl.polls |  itemsPerPage :'12' ">
+    <tr dir-paginate="poll in collaborateCtrl.polls |  filter:search:strict |itemsPerPage :'12' ">
       <td>
         <button class="btn btn-warning btn-xs"  ng_if="!collaborateCtrl.rep(poll)" type="button" ng-click="collaborateCtrl.openPoll(poll)" rel="tooltip" title="Répondre au sondage">
           <span class="glyphicon glyphicon-star"></span>Répondre

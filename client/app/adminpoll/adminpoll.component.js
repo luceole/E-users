@@ -322,7 +322,7 @@ export class AdminpollComponent {
     poll.isActif = !poll.isActif;
     this.Auth.updatePoll(poll._id, {
       isActif: poll.isActif
-    }).then(function(r) {
+    }).then(r => {
       console.log('Maj is OK ');
     })
       .catch(function(err) {
@@ -335,11 +335,10 @@ export class AdminpollComponent {
       this.Poll.remove({
         id: poll._id
       });
+      this.polls.splice(this.polls.indexOf(poll), 1);
     }
-    this.freshPolls();
+    //this.freshPolls();
   }
-
-
 }
 
 export default angular.module('eUsersApp.adminpoll', [uiRouter])
