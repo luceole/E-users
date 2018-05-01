@@ -75,8 +75,7 @@ export class modalAddAdminPoll {
     this.hstep = 1;
     this.mstep = 15;
 
-    if(!angular.isObject(selectedPoll)) { //CREATE
-    //  console.log('CREATE');
+    if(!angular.isObject(selectedPoll)) {     //CREATE
       this.newPoll = true;
       this.disable = {
         tab0: false,
@@ -85,11 +84,8 @@ export class modalAddAdminPoll {
       };
       this.propositions = [];
       this.grp = {};
-    } else // MODIFY
-
+    } else    // MODIFY
     {
-    //  console.log('MODIFY');
-    //  console.log(this.poll);
       this.newPoll = false;
       this.titre = 'Modification du sondage';
       this.disable = {
@@ -103,10 +99,8 @@ export class modalAddAdminPoll {
       self = this;
       var r = [];
       r = this.isadminOf.filter(function(item) {
-      //  console.log(self.poll.groupe + ' ' + item._id);
         return (self.poll.groupe == item._id);
       });
-    //  console.log(r);
       if(r.length) this.grp.selected = r[0];
     }
   } // End Constructor
@@ -184,7 +178,6 @@ export class modalAddAdminPoll {
         propositions: self.propositions
       })
         .then(function(r) {
-        //  console.log('Add is OK ');
           self.$uibModalInstance.close();
         })
         .catch(function(err) {
@@ -198,9 +191,7 @@ export class modalAddAdminPoll {
           //   self.errors[field] = error.message;
           //  });
         });
-      //}
     } else {
-    //  console.log(self.poll);
       this.Auth.updatePoll(self.poll._id, {
         name: self.poll.name,
         info: self.poll.info,
@@ -210,7 +201,6 @@ export class modalAddAdminPoll {
         propositions: self.propositions
       })
         .then(function(data) {
-      //    console.log('Maj is OK ');
           self.$uibModalInstance.close();
         })
         .catch(function(err) {
@@ -243,27 +233,54 @@ export class AdminpollComponent {
     this.Poll = Poll;
     this.isAdmin = Auth.isAdminSync();
     this.$uibModal = $uibModal;
-    console.log(this.isAdmin);
-    if(this.isAdmin) {
-      this.polls = Poll.query();}
-    else {
-      var self = this;
-      this.Auth.getCurrentUser()
-    .then(function(data) {
-      console.log(data);
-      var userGroupes = data.adminOf;
-      var userGrp = [''];
-      userGroupes.forEach(function(p) {
-        userGrp.push(p.name);
+    this.freshPolls = function() {
+      if(this.isAdmin) {
+        this.polls = Poll.query();}
+      else {
+        var self = this;
+        this.Auth.getCurrentUser()
+      .then(function(data) {
+      //  console.log(data);
+        var userGroupes = data.adminOf;
+        var userGrp = [''];
+        userGroupes.forEach(function(p) {
+          userGrp.push(p.name);
+        });
+        self.Auth.myadminpolls(userGrp)
+      .then(function(dataRes) {
+        self.polls = dataRes;
       });
-      self.Auth.myadminpolls(userGrp)
-    .then(function(dataRes) {
-      self.polls = dataRes;
-    });
-    });
-    }
+      });
+      }
+    };
   }
 
+
+  $onInit() {
+    this.freshPolls();
+  }
+
+  // refreshPolls() {
+  //   console.log(this.isAdmin);
+  //   if(this.isAdmin) {
+  //     this.polls = Poll.query();}
+  //   else {
+  //     var self = this;
+  //     this.Auth.getCurrentUser()
+  //   .then(function(data) {
+  //   //  console.log(data);
+  //     var userGroupes = data.adminOf;
+  //     var userGrp = [''];
+  //     userGroupes.forEach(function(p) {
+  //       userGrp.push(p.name);
+  //     });
+  //     self.Auth.myadminpolls(userGrp)
+  //   .then(function(dataRes) {
+  //     self.polls = dataRes;
+  //   });
+  //   });
+  //   }
+  // }
   cancel() {
     this.$uibModalInstance.dismiss('cancel');
   }
@@ -281,6 +298,9 @@ export class AdminpollComponent {
         }
       }
     });
+    ModalInstance.result.then(res => {
+      this.freshPolls();
+    }, () => {});
   }
 
   view(poll) {
@@ -316,6 +336,7 @@ export class AdminpollComponent {
         id: poll._id
       });
     }
+    this.freshPolls();
   }
 
 
