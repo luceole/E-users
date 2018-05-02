@@ -158,29 +158,33 @@
   </div>
 
   <div class="table-responsive">
-    <table class="table table-bordered table-condensed table-body-center">
+    <!-- <table class="table table-bordered table-condensed table-body-center"> -->
+        <table class="table table-striped table-bordered table-body-center">
       <thead>
         <tr>
-          <th>Utilsateurs</th>
-          <th colspan="{{p.sttime.length}} " ng-repeat="p in modalViewPollCtrl.propositions track by $index "> {{p.stdate}}</th>
+          <th class="bg-info vertical-align:middle;" rowspan="2">{{modalViewPollCtrl.poll.name}}<br>{{modalViewPollCtrl.poll.info}} </th>
+          <th colspan="{{p.sttime.length}} " class="bg-info" ng-repeat="p in modalViewPollCtrl.propositions track by $index "> {{p.stdate}}</th>
         </tr>
         <tr>
-          <th></th>
-          <th ng-repeat="x in modalViewPollCtrl.subDate track by $index ">{{x}}</th>
+
+          <th  class="bg-info"  ng-repeat="x in modalViewPollCtrl.subDate track by $index ">{{x}}</th>
+        </tr>
+        <tr>
+          <td class="bg-success ">Résultats</td>
+          <td class="bg-success " ng-repeat="tx in modalViewPollCtrl.totx track by $index ">{{tx}}
+          </td>
         </tr>
       </thead>
       <tbody>
-        <tr>
-        </tr>
-        <tr ng-repeat="r in modalViewPollCtrl.resultats track by $index  ">
+        <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html">
+        </dir-pagination-controls>
+
+          <tr dir-paginate="r in modalViewPollCtrl.resultats  |  itemsPerPage :'12' ">
+
           <td>{{r.user.email}}</td>
-          <td ng-repeat="w in modalViewPollCtrl.rep(r) track by $index" ng-init="modalViewPollCtrl.doTxt(w,$index)">{{w|ouinon}}</td>
+          <td ng-repeat="w in modalViewPollCtrl.rep(r) track by $index" >{{w|ouinon}}</td>
         </tr>
-        <tr>
-          <td>Total</td>
-          <td ng-repeat="tx in modalViewPollCtrl.totx track by $index ">{{tx}}
-          </td>
-        </tr>
+
         <!--<tr>
           <td>
                         <input placeholder="Email " ng-model="email"> </input>

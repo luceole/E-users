@@ -155,7 +155,7 @@ export function eventsofgroup(req, res) {
   console.log(groupe);
   var events = [];
   Group.findById(req.params.id).lean()
-  .populate('events.participants', 'uid')
+  .populate('events.participants', 'uid name surname email')
   .exec(function(err, groupe) {
     if(err) {
       return handleError(res, err);

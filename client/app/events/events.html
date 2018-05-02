@@ -136,7 +136,20 @@
           </uib-tab>
           <uib-tab heading="Participants">
             Listes des participants:
-            <div ng-repeat="user in modalEditEvCtrl.event.participants"> {{user.uid}}</div>
+            <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html">
+            </dir-pagination-controls>
+            <table class="table table-striped ">
+              <tr dir-paginate="user in modalEditEvCtrl.event.participants | orderBy:'groupeInfo' | filter:search:strict | itemsPerPage :'8' ">
+                <td>
+                  <strong>{{user.name}}</strong> {{user.surname}}
+                </td>
+
+                <td>
+                  {{user.email}}
+                </td>
+              </tr>
+            </table>
+            <!-- <div ng-repeat="user in modalEditEvCtrl.event.participants"> {{user.uid}}</div> -->
           </uib-tab>
         </uib-tabset>
       </form>

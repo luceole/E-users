@@ -31,6 +31,12 @@ export class modalViewPoll {
     this.propositions = this.poll.propositions;
     this.subDate = this.subHeaders();
     this.resultats = this.poll.resultats;
+    this.resultats.forEach( (resultat) => {
+
+      resultat.reponses.forEach( (r,index) => {
+     if(r) this.totx[index] = this.totx[index] + 1;
+   });
+    });
     this.rep = function(r) {
     //  console.log(r)
       return r.reponses;
