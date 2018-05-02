@@ -136,7 +136,7 @@
 
           <tr>
             <th class="bg-info vertical-align:middle;" rowspan="2">{{NP.poll.name}}<br>{{NP.poll.info}} </th>
-            <th colspan="{{p.sttime.length}} " class="bg-info" ng-repeat="p in modalViewPollCtrl.propositions track by $index "> {{p.stdate}}</th>
+            <th colspan="{{p.sttime.length}} " class="bg-info" ng-repeat="p in NP.propositions track by $index "> {{p.stdate}}</th>
           </tr>
           <tr>
 
