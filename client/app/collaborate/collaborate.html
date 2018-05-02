@@ -4,10 +4,10 @@
 
     <uib-tabset>
     <uib-tab heading="Services">
-
       <span ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0">Vous êtes inscrit dans : {{collaborateCtrl.getCurrentUser().memberOf.length}} groupe(s) </span>
-      <form>
-        <input ng-model="search.$" placeholder="Recherche globale">
+      <span ng-if="collaborateCtrl.getCurrentUser().memberOf.length == 0">Vous êtes inscrit dans aucun groupe - Modifiez vos paramètres </span>
+      <form >
+        <input ng-show="collaborateCtrl.getCurrentUser().memberOf.length > 0" ng-model="search.$" placeholder="Recherche globale">
       </form>
       <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"
       template-url="/assets/dirPagination.tpl.html"></dir-pagination-controls>
@@ -29,7 +29,8 @@
       </table>
 
      </uib-tab>
-    <uib-tab heading="Agenda">
+    <uib-tab ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0" heading="Agenda">
+        <span ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0">Vous êtes inscrit dans : {{collaborateCtrl.getCurrentUser().memberOf.length}} groupe(s) </span>
     <div class="alert alert-info">
     <div class="text-center">
         <h4> Agenda de vos groupes</h4>
@@ -60,15 +61,17 @@
     </div>
   </uib-tab>
 
-<uib-tab heading="Sondage">
-  <form>
-    <input ng-model="search.$" placeholder="Recherche globale">
+<uib-tab ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0" heading="Sondage">
+    <span ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0">Vous êtes inscrit dans : {{collaborateCtrl.getCurrentUser().memberOf.length}} groupe(s) </span>
+   <div  class="text text-warning" ng-if="collaborateCtrl.polls.length == 0"> Aucun Sondage </div>
+  <form >
+    <input   ng-show="collaborateCtrl.polls.length" ng-model="searchText" placeholder="Recherche globale">
   </form>
   <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html">
   </dir-pagination-controls>
   <br>
   <table class="table table-striped ">
-    <tr dir-paginate="poll in collaborateCtrl.polls |  filter:search:strict |itemsPerPage :'12' ">
+    <tr dir-paginate="poll in collaborateCtrl.polls |  filter:searchText:strict | itemsPerPage :'12' ">
       <td>
         <button class="btn btn-warning btn-xs"  ng_if="!collaborateCtrl.rep(poll)" type="button" ng-click="collaborateCtrl.openPoll(poll)" rel="tooltip" title="Répondre au sondage">
           <span class="glyphicon glyphicon-star"></span>Répondre
