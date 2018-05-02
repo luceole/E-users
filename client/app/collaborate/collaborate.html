@@ -125,45 +125,40 @@
     <h3 class="modal-title">Répondre au sondage <button class="glyphicon glyphicon-remove pull-right" ng-click="NP.cancel()">
         </button></h3>
   </div>
-  <!-- <table>
-    <tr ng-repeat="(k, v) in rep() track by $index ">
-      <td>{{k}} - {{v}}</td>
-    </tr>
-  </table>-->
+
 
   <div class="table-responsive">
     <table class="table table-bordered table-condensed table-body-center">
       <thead>
-        <tr>resultats
-          <th>Utilsateurs</th>
-          <th colspan="{{p.sttime.length}} " ng-repeat="p in NP.propositions track by $index "> {{p.stdate}}</th>
-        </tr>
-        <tr>
-          <th></th>
-          <th ng-repeat="x in NP.subDate track by $index ">{{x}}</th>
-        </tr>
+
+          <tr>
+            <th class="bg-info vertical-align:middle;" rowspan="2">{{NP.poll.name}}<br>{{NP.poll.info}} </th>
+            <th colspan="{{p.sttime.length}} " class="bg-info" ng-repeat="p in modalViewPollCtrl.propositions track by $index "> {{p.stdate}}</th>
+          </tr>
+          <tr>
+
+            <th  class="bg-info"  ng-repeat="x in NP.subDate track by $index ">{{x}}</th>
+          </tr>
+          <tr>
+            <td class="bg-success ">Résultats</td>
+            <td class="bg-success " ng-repeat="tx in NP.totx track by $index ">{{tx}}
+            </td>
+          </tr>
+
       </thead>
       <tbody>
         <tr>
         </tr>
         <tr ng-repeat="r in NP.resultats track by $index  ">
           <td>{{r.user.email}}</td>
-          <td ng-repeat="w in NP.rep(r) track by $index" ng-init="NP.doTxt(w,$index)">{{w|ouinon}}</td>
-        </tr>
-        <tr>
-          <td>Total</td>
-          <td ng-repeat="tx in NP.totx track by $index ">{{tx}}
-          </td>
+          <td ng-repeat="w in NP.rep(r) track by $index">{{w|ouinon}}</td>
         </tr>
         <tr>
           <td>
-            <!--            <input placeholder="Email " ng-model="email"> </input>-->
             {{NP.user.email}}
           </td>
           <td ng-repeat="t in NP.subDate track by $index ">
-            <label>
-
-              <input type="checkbox" ng-model="NP.repuser[$index]"> </label>
+            <label><input type="checkbox" ng-model="NP.repuser[$index]"> </label>
           </td>
         </tr>
       </tbody>

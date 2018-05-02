@@ -41,10 +41,14 @@ export class PollComponent {
     this.propositions = this.poll.propositions;
     this.subDate = this.subHeaders();
     this.resultats = this.poll.resultats;
+    this.resultats.forEach( (resultat) => {
+
+      resultat.reponses.forEach( (r,index) => {
+     if(r) this.totx[index] = this.totx[index] + 1;
+   });
+    });
     this.found = this.resultats.filter(o => o.user.email === this.user.email);
-    console.log(this.found);
     if(this.found.length) {
-      console.log('trouvé');
       // Remplacer directement
       var i = this.resultats.indexOf(this.found[0]);
     // console.log(this.resultats[i].reponses)
@@ -65,14 +69,12 @@ export class PollComponent {
       },
       reponses: this.repuser
     };
-
-    console.log(this.poll);
     this.Auth.votePoll(this.poll._id, {
       resultats: this.poll.resultats,
       vote: newRep
     })
       .then(function(r) {
-        console.log('Maj is OK ');
+        //console.log('Maj is OK ');
         self.$uibModalInstance.close();
       })
       .catch(function(err) {
@@ -83,7 +85,7 @@ export class PollComponent {
   }
 
   cancel() {
-    this.resultats = this.poll.resultats;
+    //this.resultats = this.poll.resultats;
     this.$uibModalInstance.dismiss('cancel');
   }
 }
@@ -423,7 +425,23 @@ export class CollaborateComponent {
         self.polls = data;
       });
       });
-    }, () => {});
+    }, () => {
+      var self = this;
+      this.Auth.getCurrentUser()
+      .then(function(data) {
+        var userGroupes = data.memberOf;
+        var userGrp = [];
+        userGroupes.forEach(function(p) {
+          userGrp.push(p.name);
+        });
+        self.Auth.mypolls(userGrp)
+      .then(function(data) {
+        self.polls = data;
+      });
+      });
+
+
+    });
   }
 
 
