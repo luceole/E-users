@@ -24,6 +24,9 @@ import {
   GroupResource
 } from './group.service';
 import {
+  PollResource
+} from './poll.service';
+import {
   MessageResource
 } from './message.service';
 
@@ -41,6 +44,7 @@ export default angular.module('E-userApp.auth', [constants, util, ngCookies, uiR
   .factory('User', UserResource)
   .factory('Group', GroupResource)
   .factory('Demande', DemandeResource)
+  .factory('Poll', PollResource)
   .factory('Message', MessageResource)
   .config(['$httpProvider', addInterceptor])
   .name;

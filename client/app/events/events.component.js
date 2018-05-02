@@ -178,7 +178,6 @@ export class EventsComponent {
   }
 
   refreshEvents(raz) {
-    console.log('refreshEvents');
     var eventsGroupe = {};
     var Auth = this.Auth;
     var calendarConfig = this.calendarConfig;
@@ -261,8 +260,7 @@ export class EventsComponent {
     });
   }
   timespanClicked(calendarDate, calendarCell) {
-    console.log(calendarDate);
-    console.log(calendarCell);
+
   }
   eventTimesChanged(event) {
     self = this;

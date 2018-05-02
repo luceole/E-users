@@ -1,8 +1,6 @@
 'use strict';
-
 class _User {}
-
-export function AuthService($window, $location, $http, $cookies, $q, appConfig, Util, User, Group) {
+export function AuthService($window, $location, $http, $cookies, $q, appConfig, Util, User, Group, Poll) {
   'ngInject';
 
   var safeCb = Util.safeCb;
@@ -206,6 +204,65 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
           return safeCb(callback)(err);
         }).$promise;
     },
+    // Create Poll
+    createPoll(poll, callback) {
+      var cb = callback || angular.noop;
+      return Poll.save(poll,
+        function(data) {
+          return safeCb(callback)(null, data);
+        },
+        function(err) {
+          return safeCb(callback)(err);
+        }).$promise;
+    },
+
+    updatePoll(id, poll, callback) {
+      var cb = callback || angular.noop;
+      return Poll.update({
+        id
+      }, poll,
+        function(data) {
+          return safeCb(callback)(null, data);
+        },
+        function(err) {
+          return safeCb(callback)(err);
+        }).$promise;
+    },
+
+    votePoll(id, poll, callback) {
+      var cb = callback || angular.noop;
+      return Poll.vote({
+        id
+      }, poll,
+        function(data) {
+          return safeCb(callback)(null, data);
+        },
+        function(err) {
+          return safeCb(callback)(err);
+        }).$promise;
+    },
+
+    mypolls(mygrp, callback) {
+      var cb = callback || angular.noop;
+      return Poll.mypolls({mygrp},
+        function(data) {
+          return safeCb(callback)(null, data);
+        },
+        function(err) {
+          return safeCb(callback)(err);
+        }).$promise;
+    },
+
+    myadminpolls(mygrp, callback) {
+      var cb = callback || angular.noop;
+      return Poll.myadminpolls({mygrp},
+        function(data) {
+          return safeCb(callback)(null, data);
+        },
+        function(err) {
+          return safeCb(callback)(err);
+        }).$promise;
+    },
 
     userAdmingroup(idgrp, listusers, callback) {
       var cb = callback || angular.noop;
@@ -229,7 +286,7 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
         sso,
         sig
       }, function(data) {
-        console.log(`data ${data}`);
+        //console.log(`data ${data}`);
         return safeCb(callback)(null, data);
       },
       function(err) {
@@ -266,8 +323,7 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
         return safeCb(callback)(null);
       }, function(err) {
         return safeCb(callback)(err);
-      })
-        .$promise;
+      }).$promise;
     },
 
     ResetPassword(pwdToken, newPassword, callback) {
@@ -275,8 +331,6 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
         pwdToken,
         newPassword
       }, function(data) {
-        console.log('data: ');
-        console.log(data);
         $cookies.put('token', data.token);
         currentUser = User.get();
         return safeCb(callback)(null);
@@ -363,6 +417,7 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
        * @return {Bool}
        */
     hasRoleSync(role) {
+    //  console.log(_.get(currentUser, 'role'));
       return hasRole(_.get(currentUser, 'role'), role);
     },
 
@@ -425,6 +480,5 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
         }).$promise;
     },
   };
-
   return Auth;
 }

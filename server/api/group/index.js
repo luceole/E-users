@@ -17,7 +17,7 @@ router.put('/:id/eventupdate', auth.hasRole('admin_grp'), controller.eventupdate
 router.put('/:id/eventdelete', auth.hasRole('admin_grp'), controller.eventdelete);
 
 router.post('/', auth.hasRole('admin'), controller.create);
-router.put('/:id', auth.hasRole('admin'), controller.upsert);
+router.put('/:id', auth.hasRole('admin_grp'), controller.upsert);
 router.patch('/:id', auth.hasRole('admin_grp'), controller.patch);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 

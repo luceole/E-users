@@ -286,7 +286,7 @@ export function me(req, res, next) {
     _id: userId
   }, '-salt -password')
     .populate('memberOf', 'name info note digest groupPadID')
-    .populate('adminOf', 'info name')
+    .populate('adminOf', 'name info  groupPadID ')
     .exec()
     .then(user => { // don't ever give out the password or salt
       if(!user) {
