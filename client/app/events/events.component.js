@@ -112,7 +112,7 @@ export class ModalEditEvComponent {
           info: self.event.info,
           lieu: self.event.lieu,
           groupe: self.event.group.info,
-          //eventPadID: String,
+          eventPadID: String,
           participants: self.event.participants
         })
         .then(() => {
@@ -138,10 +138,13 @@ export class ModalEditEvComponent {
 
 export class EventsComponent {
   /*@ngInject*/
-  constructor($timeout, $uibModal, Auth, Group, User, calendarConfig, calendarEventTitle, Message, moment) {
+  constructor($timeout, $http, $uibModal, $cookies, $window, Auth, Group, User, calendarConfig, calendarEventTitle, Message, moment) {
   //  'ngInject';
     this.$timeout = $timeout;
     this.$uibModal = $uibModal;
+    this.$cookies = $cookies;
+    this.$window = $window;
+    this.$http = $http;
     this.Auth = Auth;
     this.Group = Group;
     this.Message = Message;
@@ -165,6 +168,45 @@ export class EventsComponent {
       month: 'MMMM YYYY',
       year: 'YYYY'
     };
+    this.openPad = (args) => {
+      var padID = args.calendarEvent.eventPadID;
+      var grpID = padID.split('\$')[0];
+      console.log('grpID:' + grpID);
+      var authorID = this.getCurrentUser().authorPadID;
+      this.$http.post('/api/pads', {
+        authorID,
+        groupID: grpID
+      }).success(data => {
+        if(data) {
+          this.$cookies.put('sessionID', data.sessionID);
+          var mydomain = this.extractRootDomain(this.urlPad);
+          this.$cookies.put('sessionID', data.sessionID, {domain: mydomain});
+          var url = `${this.urlPad}/p/${padID}?userName=${this.getCurrentUser().name}`;
+          //this.$window.open('//localhost:9001/p/' + grp.groupPadID + "$" + grp.name + "?userName=" + this.getCurrentUser().name);
+          this.$window.open(url);
+        } else alert(' Pad  non trouvé ou vous n\'êtes pas autorisé');
+      })
+        .error(function(err) {
+          console.log(`err :${err}`);
+          alert('Serveur Pad  non actif');
+        });
+    };
+
+    var args;
+    var self = this;
+    this.actions = [{
+      label: '<i class=\'glyphicon glyphicon-pencil\'></i>',
+      onClick(args)
+      {
+        self.openPad(args);
+      }
+    }
+     , {
+       label: '<i class=\'glyphicon glyphicon-remove\'></i>',
+       onClick(args) {
+         alert('Deleted', args);
+       }
+     }];
     this.eventSources = [];
     this.alert = {
       type: '',
@@ -175,6 +217,41 @@ export class EventsComponent {
       var msg = 'Participants : ' + event.participants.length;
       return event.info + '<br>Lieu :' + event.lieu + '<br> ' + msg;
     };
+  }
+  extractHostname(url) {
+    var hostname;
+      //find & remove protocol (http, ftp, etc.) and get hostname
+
+    if(url.indexOf('://') > -1) {
+      hostname = url.split('/')[2];
+    }
+    else {
+      hostname = url.split('/')[0];
+    }
+
+      //find & remove port number
+    hostname = hostname.split(':')[0];
+      //find & remove "?"
+    hostname = hostname.split('?')[0];
+
+    return hostname;
+  }
+  extractRootDomain(url) {
+    var domain = this.extractHostname(url),
+      splitArr = domain.split('.'),
+      arrLen = splitArr.length;
+
+     //extracting the root domain here
+     //if there is a subdomain
+    if(arrLen > 2) {
+      domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
+         //check to see if it's using a Country Code Top Level Domain (ccTLD) (i.e. ".me.uk")
+      if(splitArr[arrLen - 2].length == 2 && splitArr[arrLen - 1].length == 2) {
+             //this is using a ccTLD
+        domain = splitArr[arrLen - 3] + '.' + domain;
+      }
+    }
+    return domain;
   }
 
   refreshEvents(raz) {
@@ -198,6 +275,7 @@ export class EventsComponent {
               if(data.length > 0) {
                 //eventsGroupe.events = data;
                 angular.forEach(data, function(ev, ind) {
+                  //console.log(ev.eventPadID);
                   ev.startsAt = new Date(ev.startsAt);
                   //if(self.moment(ev.endsAt).isbefore(self.moment(ev.startsAt))) ev.endsAt = ev.startsAt;
                   if(!ev.endsAt) ev.endsAt = ev.startsAt;
@@ -205,6 +283,7 @@ export class EventsComponent {
                   ev.endsAt = new Date(ev.endsAt);
                   ev.draggable = true;
                   ev.resizable = true;
+                  ev.actions = self.actions;
                   ev.group = {
                     _id: grp._id,
                     info: grp.info
@@ -233,6 +312,16 @@ export class EventsComponent {
     this.Message.get()
       .$promise
       .then(result => {
+        this.myconfig = result;
+        if(this.myconfig.etherpadUrl) {
+          this.urlPad = this.myconfig.etherpadUrl;
+        }
+        if(this.myconfig.etherpadHost) {
+          this.hostPad = this.myconfig.etherpadHost;
+        }
+        if(this.myconfig.ethercalcUrl) {
+          this.urlCal = this.myconfig.ethercalcUrl;
+        }
         this.refreshEvents(true);
       });
   }

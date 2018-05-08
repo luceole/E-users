@@ -1,13 +1,5 @@
 <script id="customMonthCell.html" type="text/ng-template">
-  <div class="cal-month-day {{day.cssClass}}">
-
-    <span class="pull-right" data-cal-date ng-click="vm.calendarCtrl.dateClicked(day.date)" ng-bind="day.label">
-    </span>
-
-    <small style="position: absolute; bottom: 10px; left: 5px">
-      There are {{ day.events.length }} events on this day
-    </small>
-  </div>
+coucou
 </script>
 
 <div class="container">
@@ -48,7 +40,10 @@
           </label>
       </div>
       <mwl-calendar events="eventsCtrl.eventSources" view="eventsCtrl.calendarView" view-title="eventsCtrl.calendarTitle" view-date="eventsCtrl.viewDate" on-event-click="eventsCtrl.eventClicked(calendarEvent)" on-event-times-changed="calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd; eventsCtrl.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
-        cell-is-open="eventsCtrl.cellIsOpen" day-view-start="08:00" day-view-end="19:59" day-view-split="30" cell-modifier="eventsCtrl.modifyCell(calendarCell)" cell-auto-open-disabled="false" on-timespan-click="eventsCtrl.timespanClicked(calendarDate, calendarCell)">
+        cell-is-open="eventsCtrl.cellIsOpen" day-view-start="08:00" day-view-end="19:59" day-view-split="30"
+        cell-modifier="eventsCtrl.modifyCell(calendarCell)"
+        cell-auto-open-disabled="false" on-timespan-click="eventsCtrl.timespanClicked(calendarDate, calendarCell)"
+          custom-template-urls="{calendarViewCell: 'customMonthCell.html'}">
       </mwl-calendar>
     </div>
   </div>
