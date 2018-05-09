@@ -19,7 +19,7 @@ This project was generated with the [Angular Full-Stack Generator](https://githu
 ## Getting Started
 
 Docker :
-https://hub.docker.com/r/luceole/e-userprod/
+https://hub.docker.com/r/luceole/e-user-prod/
 
 ### Prerequisites
 
