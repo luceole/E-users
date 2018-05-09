@@ -8,12 +8,11 @@
     </div>
   </header>
 <div class="container">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="col-sm-2"></div>
-      <div class="col-sm-10">
-       <div class="container-fluid">
-        <div class="col-md-6">
+
+
+      <div class="row">
+        <div class="col-md-2 col-lg-2 col-sm-2 "></div>
+       <div class="col-sm-6 col-md-4 col-lg-4" >
         <h3> Création de votre compte</h3>
         <form class="form" name="registerForm" ng-submit="vm.register(registerForm)" novalidate>
           <div class="form-group" ng-class="{ 'has-success': registerForm.name.$valid && vm.submitted,
@@ -27,27 +26,29 @@
           <div class="form-group" ng-class="{ 'has-success': registerForm.surname.$valid && vm.submitted,
                                     'has-error': registerForm.surname.$invalid && vm.submitted }">
 
-            <input type="text" name="surname" class="form-control" ng-model="vm.user.surname" placeholder="Votre prénom" required style="width:250px" />
+            <input type="text" name="surname" class="form-control" ng-model="vm.user.surname" placeholder="Votre prénom"
+            required style="width:250px" />
             <p class="help-block" ng-show="registerForm.surname.$error.required && vm.submitted">
               Prénom Obligatoire
             </p>
           </div>
           <div class="form-group" ng-class="{ 'has-success': registerForm.email.$valid && vm.submitted,
                                     'has-error': registerForm.email.$invalid && vm.submitted }">
-            <input type="email" name="email" class="form-control" ng-model="vm.user.email" placeholder="Votre courriel professionel" required ng-focus="vm.myReset(registerForm,'email')" ; mongoose-error style="width:250px" />
+            <input type="email" name="email" class="form-control" ng-model="vm.user.email" placeholder="Votre courriel professionel"
+            required ng-focus="vm.myReset(registerForm,'email')" mongoose-error style="width:250px" />
+
             <p class="help-block" ng-show="registerForm.email.$error.email && vm.submitted">
               Adresse electronique invalide.
             </p>
             <p class="help-block" ng-show="registerForm.email.$error.required && vm.submitted">
               Quel est votre adresse electronique?
-            </p>
-            <p class="help-block" ng- <option ng-repeat="option in vm.Options" value="{{option.id}}">{{option.name}}</option>show="registerForm.email.$error.mongoose">
+           </p>
+            <p class="help-block" ng-show="registerForm.email.$error.mongoose">
               {{ vm.errors.email }}
             </p>
           </div>
           <div class="form-group" ng-class="{ 'has-success': registerForm.uid.$valid && vm.submitted,
                                     'has-error': registerForm.uid.$invalid && vm.submitted }">
-
             <input type="uid" name="uid" class="form-control"
              ng-model="vm.user.uid" ng-focus="vm.myInit(registerForm,'uid')"
               placeholder="Votre identifiant: courriel ou autre)" required mongoose-error style="width:250px" />
@@ -56,7 +57,7 @@
             </p>
             <p class="help-block" ng-show="registerForm.email.$error.required && vm.submitted">
               Choisissez votre login (courriel ou autre).
-            </p>
+            </p>  <div class="col-sm-2"></div>
             <p class="help-block" ng-show="registerForm.uid.$error.mongoose">
               {{ vm.errors.uid }}
             </p>
@@ -70,7 +71,6 @@
             <p class="help-block" ng-show="registerForm.Password.$error.mongoose">
               {{ vm.errors.password }}
             </p>
-
           </div>
           <div class="form-group" ng-class="{ 'has-success': registerForm.confirmPassword.$valid && vm.submitted,
                                             'has-error': registerForm.confirmPassword.$invalid && vm.submitted }">
@@ -98,21 +98,19 @@
                   </button>
                 </span>
         </form>
-
-
       <br>
-      <div>
+    </div>
+
+     <div class="col-sm-4 col-md-4 col-lg-4" >
+      <br>
       <p class="alert alert-info">
-      Les informations recueillies
-      sur ce formulaire sont enregistrées
-      dans un fichier informatisé
-      par le Pôle Logiciels Libres.
-      Conformément à la loi «
-       informatique et libertés »,
-      vous pouvez exercer votre droit d'accès
-      aux données vous concernant
-      et les faire rectifier en contactant
-      l'administrateur du site.
-    </p>
+      Les informations recueillies sur ce formulaire sont enregistrées dans un fichier informatisé.
+      Conformément à la loi «informatique et libertés », vous pouvez exercer votre droit d'accès
+      aux données vous concernant et les faire rectifier en contactant
+       <a href="https://pcll.ac-dijon.fr/pcll/contact/" target="_blank">l'administrateur du site.</a> 
+     </p>
   </div>
-  </div>
+
+
+</div>
+</div>
