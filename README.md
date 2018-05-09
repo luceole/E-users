@@ -1,6 +1,6 @@
 # E-USERS
 
-Groups work application
+Groups work application (Alpha Realease)
 
 - Manage Users and Groups
 
@@ -18,7 +18,8 @@ This project was generated with the [Angular Full-Stack Generator](https://githu
 
 ## Getting Started
 
-
+Docker :
+https://hub.docker.com/r/luceole/e-userprod/
 
 ### Prerequisites
 
@@ -38,7 +39,3 @@ This project was generated with the [Angular Full-Stack Generator](https://githu
 ## Build & development
 
 Run `gulp build` for building and `gulp serve` for preview.
-
-## Testing
-
-Running `npm test` will run the unit tests with karma.

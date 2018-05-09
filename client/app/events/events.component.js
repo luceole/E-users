@@ -13,12 +13,11 @@ export class ModalEditEvComponent {
     this.moment = moment;
     this.getCurrentUser = Auth.getCurrentUserSync;
     this.updateEvent = updateEvent;
-    if(updateEvent.group) {
+    if (updateEvent.group) {
       this.titre = 'Modification: ';
       this.libDate = moment(updateEvent.startsAt).format('LLLL');
       this.newEv = false;
-    }
-    else {
+    } else {
       this.titre = 'Création: ';
       this.libDate = '';
       this.newEv = true;
@@ -71,23 +70,23 @@ export class ModalEditEvComponent {
 
   delete() {
     var self = this;
-    if(this.event.participants.length > 0) {
-      if(!confirm('Attention des participants sont inscrits \nConfirmez vous la suppression?')) {
+    if (this.event.participants.length > 0) {
+      if (!confirm('Attention des participants sont inscrits \nConfirmez vous la suppression?')) {
         return;
       }
     }
     this.Auth.eventdelete(this.event.group._id, {
-      id: this.event._id
-    })
-        .then(function() {
-          self.$uibModalInstance.close();
-        })
-        .catch(function(err) {
-          err = err.data;
-          //$window.alert("Maj Erreur " + err);
-          console.log(err);
-          self.$uibModalInstance.close();
-        });
+        id: this.event._id
+      })
+      .then(function() {
+        self.$uibModalInstance.close();
+      })
+      .catch(function(err) {
+        err = err.data;
+        //$window.alert("Maj Erreur " + err);
+        console.log(err);
+        self.$uibModalInstance.close();
+      });
   }
 
   ok(form) {
@@ -95,15 +94,15 @@ export class ModalEditEvComponent {
     var self = this;
     self.submitted = true;
     self.editMessage = '';
-    if(form.$valid) {
-      if(self.newEv) {
+    if (form.$valid) {
+      if (self.newEv) {
         self.event.group = self.grp;
         self.event.title = self.grp.info;
       }
-      if(this.moment(self.event.endsAt).isBefore(self.event.startsAt)) {
-        self.event.endsAt = self.event.startsAt;}
-      return self.Auth.eventupdate(self.event.group._id,
-        {
+      if (this.moment(self.event.endsAt).isBefore(self.event.startsAt)) {
+        self.event.endsAt = self.event.startsAt;
+      }
+      return self.Auth.eventupdate(self.event.group._id, {
           _id: self.event._id,
           title: self.event.title,
           startsAt: new Date(self.event.startsAt),
@@ -139,7 +138,7 @@ export class ModalEditEvComponent {
 export class EventsComponent {
   /*@ngInject*/
   constructor($timeout, $http, $uibModal, $cookies, $window, Auth, Group, User, calendarConfig, calendarEventTitle, Message, moment) {
-  //  'ngInject';
+    //  'ngInject';
     this.$timeout = $timeout;
     this.$uibModal = $uibModal;
     this.$cookies = $cookies;
@@ -174,18 +173,20 @@ export class EventsComponent {
       console.log('grpID:' + grpID);
       var authorID = this.getCurrentUser().authorPadID;
       this.$http.post('/api/pads', {
-        authorID,
-        groupID: grpID
-      }).success(data => {
-        if(data) {
-          this.$cookies.put('sessionID', data.sessionID);
-          var mydomain = this.extractRootDomain(this.urlPad);
-          this.$cookies.put('sessionID', data.sessionID, {domain: mydomain});
-          var url = `${this.urlPad}/p/${padID}?userName=${this.getCurrentUser().name}`;
-          //this.$window.open('//localhost:9001/p/' + grp.groupPadID + "$" + grp.name + "?userName=" + this.getCurrentUser().name);
-          this.$window.open(url);
-        } else alert(' Pad  non trouvé ou vous n\'êtes pas autorisé');
-      })
+          authorID,
+          groupID: grpID
+        }).success(data => {
+          if (data) {
+            this.$cookies.put('sessionID', data.sessionID);
+            var mydomain = this.extractRootDomain(this.urlPad);
+            this.$cookies.put('sessionID', data.sessionID, {
+              domain: mydomain
+            });
+            var url = `${this.urlPad}/p/${padID}?userName=${this.getCurrentUser().name}`;
+            //this.$window.open('//localhost:9001/p/' + grp.groupPadID + "$" + grp.name + "?userName=" + this.getCurrentUser().name);
+            this.$window.open(url);
+          } else alert(' Pad  non trouvé ou vous n\'êtes pas autorisé');
+        })
         .error(function(err) {
           console.log(`err :${err}`);
           alert('Serveur Pad  non actif');
@@ -196,17 +197,10 @@ export class EventsComponent {
     var self = this;
     this.actions = [{
       label: '<i class=\'glyphicon glyphicon-pencil\'></i>',
-      onClick(args)
-      {
+      onClick(args) {
         self.openPad(args);
       }
-    }
-     , {
-       label: '<i class=\'glyphicon glyphicon-remove\'></i>',
-       onClick(args) {
-         alert('Deleted', args);
-       }
-     }];
+    }];
     this.eventSources = [];
     this.alert = {
       type: '',
@@ -220,18 +214,17 @@ export class EventsComponent {
   }
   extractHostname(url) {
     var hostname;
-      //find & remove protocol (http, ftp, etc.) and get hostname
+    //find & remove protocol (http, ftp, etc.) and get hostname
 
-    if(url.indexOf('://') > -1) {
+    if (url.indexOf('://') > -1) {
       hostname = url.split('/')[2];
-    }
-    else {
+    } else {
       hostname = url.split('/')[0];
     }
 
-      //find & remove port number
+    //find & remove port number
     hostname = hostname.split(':')[0];
-      //find & remove "?"
+    //find & remove "?"
     hostname = hostname.split('?')[0];
 
     return hostname;
@@ -241,13 +234,13 @@ export class EventsComponent {
       splitArr = domain.split('.'),
       arrLen = splitArr.length;
 
-     //extracting the root domain here
-     //if there is a subdomain
-    if(arrLen > 2) {
+    //extracting the root domain here
+    //if there is a subdomain
+    if (arrLen > 2) {
       domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
-         //check to see if it's using a Country Code Top Level Domain (ccTLD) (i.e. ".me.uk")
-      if(splitArr[arrLen - 2].length == 2 && splitArr[arrLen - 1].length == 2) {
-             //this is using a ccTLD
+      //check to see if it's using a Country Code Top Level Domain (ccTLD) (i.e. ".me.uk")
+      if (splitArr[arrLen - 2].length == 2 && splitArr[arrLen - 1].length == 2) {
+        //this is using a ccTLD
         domain = splitArr[arrLen - 3] + '.' + domain;
       }
     }
@@ -260,9 +253,9 @@ export class EventsComponent {
     var calendarConfig = this.calendarConfig;
     //console.log(calendarConfig);
     self = this;
-    if(raz) this.eventSources = [];
-        //var workEvents = [];
-        //var couleur = ['DotgerBlue', 'chocolate', 'ForestGreen', 'DarkRed', 'FireBrick', 'Tan', 'Peru', 'oliveDrab', 'Lavender', 'GoldenRod', 'CornFlowerBlue', 'LightSkyBlue', 'grey'];
+    if (raz) this.eventSources = [];
+    //var workEvents = [];
+    //var couleur = ['DotgerBlue', 'chocolate', 'ForestGreen', 'DarkRed', 'FireBrick', 'Tan', 'Peru', 'oliveDrab', 'Lavender', 'GoldenRod', 'CornFlowerBlue', 'LightSkyBlue', 'grey'];
     // var myUid = self.getCurrentUser()._id;
     // var userGroupes = self.getCurrentUser().adminOf;
     var myUid = this.getCurrentUser()._id;
@@ -271,40 +264,40 @@ export class EventsComponent {
     angular.forEach(userGroupes, function(grp, index) {
       //console.log(grp._id);
       Auth.eventsofgroup(grp._id)
-            .then(function(data) {
-              if(data.length > 0) {
-                //eventsGroupe.events = data;
-                angular.forEach(data, function(ev, ind) {
-                  //console.log(ev.eventPadID);
-                  ev.startsAt = new Date(ev.startsAt);
-                  //if(self.moment(ev.endsAt).isbefore(self.moment(ev.startsAt))) ev.endsAt = ev.startsAt;
-                  if(!ev.endsAt) ev.endsAt = ev.startsAt;
-                  //if(ev.allDay) ev.endsAt = ev.startsAt;
-                  ev.endsAt = new Date(ev.endsAt);
-                  ev.draggable = true;
-                  ev.resizable = true;
-                  ev.actions = self.actions;
-                  ev.group = {
-                    _id: grp._id,
-                    info: grp.info
-                  };
-                });
-
-           // eventsGroupe.events = angular.copy(data);
-                // eventsGroupe.index = index;
-              //   eventsGroupe.events.group_id = grp._id;
-              //   // eventsGroupe.startsAt = new Date(eventsGroupe.startsAt);
-              // eventsGroupe.eventgroup = {
-              //     _id: grp._id,
-              //     info: grp.info
-              //   };
-                Array.prototype.push.apply(self.eventSources, data);
-                return self.eventSources;
-              //  console.log(grp._id);
-            //    console.log(eventSources[index]);
-                // eventsGroupe = {};
-              }
+        .then(function(data) {
+          if (data.length > 0) {
+            //eventsGroupe.events = data;
+            angular.forEach(data, function(ev, ind) {
+              //console.log(ev.eventPadID);
+              ev.startsAt = new Date(ev.startsAt);
+              //if(self.moment(ev.endsAt).isbefore(self.moment(ev.startsAt))) ev.endsAt = ev.startsAt;
+              if (!ev.endsAt) ev.endsAt = ev.startsAt;
+              //if(ev.allDay) ev.endsAt = ev.startsAt;
+              ev.endsAt = new Date(ev.endsAt);
+              ev.draggable = true;
+              ev.resizable = true;
+              ev.actions = self.actions;
+              ev.group = {
+                _id: grp._id,
+                info: grp.info
+              };
             });
+
+            // eventsGroupe.events = angular.copy(data);
+            // eventsGroupe.index = index;
+            //   eventsGroupe.events.group_id = grp._id;
+            //   // eventsGroupe.startsAt = new Date(eventsGroupe.startsAt);
+            // eventsGroupe.eventgroup = {
+            //     _id: grp._id,
+            //     info: grp.info
+            //   };
+            Array.prototype.push.apply(self.eventSources, data);
+            return self.eventSources;
+            //  console.log(grp._id);
+            //    console.log(eventSources[index]);
+            // eventsGroupe = {};
+          }
+        });
     });
   }
 
@@ -313,13 +306,13 @@ export class EventsComponent {
       .$promise
       .then(result => {
         this.myconfig = result;
-        if(this.myconfig.etherpadUrl) {
+        if (this.myconfig.etherpadUrl) {
           this.urlPad = this.myconfig.etherpadUrl;
         }
-        if(this.myconfig.etherpadHost) {
+        if (this.myconfig.etherpadHost) {
           this.hostPad = this.myconfig.etherpadHost;
         }
-        if(this.myconfig.ethercalcUrl) {
+        if (this.myconfig.ethercalcUrl) {
           this.urlCal = this.myconfig.ethercalcUrl;
         }
         this.refreshEvents(true);
@@ -343,8 +336,7 @@ export class EventsComponent {
         }
       }
     });
-    uibModalInstance.closed.then(function()
-    {
+    uibModalInstance.closed.then(function() {
       self.refreshEvents(true);
     });
   }
@@ -354,33 +346,33 @@ export class EventsComponent {
   eventTimesChanged(event) {
     self = this;
     this.viewDate = event.startsAt;
-  //  console.log(event);
-    if(event.participants.length > 0) {
-      if(!confirm('Des participants sont déja inscrits: Etes vous sur ?')) {
+    //  console.log(event);
+    if (event.participants.length > 0) {
+      if (!confirm('Des participants sont déja inscrits: Etes vous sur ?')) {
         self.refreshEvents(true);
         return;
       }
     }
     this.Auth.eventupdate(event.group._id, {
-      _id: event._id,
-      allDay: event.allDay,
-      startsAt: new Date(event.startsAt),
-      endsAt: new Date(event.endsAt)
-    }).then(function(data) {
-      self.alert = {
-        type: 'error',
-        msg: 'Modification Effectuée'
-      };
-      self.refreshEvents(true);
-    })
-    .catch(function(err) {
-      self.refreshEvents(true);
-      self.alert = {
-        type: 'error',
-        msg: 'Erreur : Modification Imposible'
-      };
-      //console.log(err);
-    });
+        _id: event._id,
+        allDay: event.allDay,
+        startsAt: new Date(event.startsAt),
+        endsAt: new Date(event.endsAt)
+      }).then(function(data) {
+        self.alert = {
+          type: 'error',
+          msg: 'Modification Effectuée'
+        };
+        self.refreshEvents(true);
+      })
+      .catch(function(err) {
+        self.refreshEvents(true);
+        self.alert = {
+          type: 'error',
+          msg: 'Erreur : Modification Imposible'
+        };
+        //console.log(err);
+      });
     this.$timeout(function() {
       self.alert = {
         type: 'info',
