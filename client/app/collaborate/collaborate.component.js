@@ -41,11 +41,10 @@ export class PollComponent {
     this.propositions = this.poll.propositions;
     this.subDate = this.subHeaders();
     this.resultats = this.poll.resultats;
-    this.resultats.forEach( (resultat) => {
-
-      resultat.reponses.forEach( (r,index) => {
-     if(r) this.totx[index] = this.totx[index] + 1;
-   });
+    this.resultats.forEach((resultat) => {
+      resultat.reponses.forEach((r, index) => {
+        if(r) this.totx[index] = this.totx[index] + 1;
+      });
     });
     this.found = this.resultats.filter(o => o.user.email === this.user.email);
     if(this.found.length) {
@@ -192,6 +191,13 @@ export class CollaborateComponent {
       month: 'MMMM YYYY',
       year: 'YYYY'
     };
+    this.actions = [{
+      label: '<i class=\'glyphicon glyphicon-pencil\'></i>',
+      onClick(args)
+      {
+        self.openPadEv(args);
+      }
+    }];
     this.calendarEventTitle.monthViewTooltip = this.calendarEventTitle.weekViewTooltip = this.calendarEventTitle.dayViewTooltip = function(event) {
       var msg = '<br>Participation: Oui';
       if(event.color == calendarConfig.colorTypes.important)
@@ -299,6 +305,7 @@ export class CollaborateComponent {
                   } else {
                     ev.color = calendarConfig.colorTypes.important;
                   }
+                  ev.actions = self.actions;
                   ev.startsAt = new Date(ev.startsAt);
                   ev.endsAt = new Date(ev.endsAt);
                   ev.group = {
@@ -439,11 +446,32 @@ export class CollaborateComponent {
         self.polls = data;
       });
       });
-
-
     });
   }
 
+  openPadEv(args) {
+    var padID = args.calendarEvent.eventPadID;
+    var grpID = padID.split('\$')[0];
+    console.log('grpID:' + grpID);
+    var authorID = this.getCurrentUser().authorPadID;
+    this.$http.post('/api/pads', {
+      authorID,
+      groupID: grpID
+    }).success(data => {
+      if(data) {
+        this.$cookies.put('sessionID', data.sessionID);
+        var mydomain = this.extractRootDomain(this.urlPad);
+        this.$cookies.put('sessionID', data.sessionID, {domain: mydomain});
+        var url = `${this.urlPad}/p/${padID}?userName=${this.getCurrentUser().name}`;
+        //this.$window.open('//localhost:9001/p/' + grp.groupPadID + "$" + grp.name + "?userName=" + this.getCurrentUser().name);
+        this.$window.open(url);
+      } else alert(' Pad  non trouvé ou vous n\'êtes pas autorisé');
+    })
+      .error(function(err) {
+        console.log(`err :${err}`);
+        alert('Serveur Pad  non actif');
+      });
+  }
 
   openPad(grp) {
     var authorID = this.getCurrentUser().authorPadID;
@@ -456,14 +484,14 @@ export class CollaborateComponent {
         var mydomain = this.extractRootDomain(this.urlPad);
         this.$cookies.put('sessionID', data.sessionID, {domain: mydomain});
         var url = `${this.urlPad}/p/${grp.groupPadID}$${grp.name}?userName=${this.getCurrentUser().name}`;
-        //this.$window.open('//localhost:9001/p/' + grp.groupPadID + "$" + grp.name + "?userName=" + this.getCurrentUser().name);
+         //this.$window.open('//localhost:9001/p/' + grp.groupPadID + "$" + grp.name + "?userName=" + this.getCurrentUser().name);
         this.$window.open(url);
       } else alert(`${url}\n Pad  non trouvé ou vous n'êtes pas autorisé`);
     })
-      .error(function(err) {
-        console.log(`err :${err}`);
-        alert('Serveur Pad  non actif');
-      });
+       .error(function(err) {
+         console.log(`err :${err}`);
+         alert('Serveur Pad  non actif');
+       });
   }
 
   openCalc(grp) {

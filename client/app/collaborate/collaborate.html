@@ -16,8 +16,8 @@
         <tr dir-paginate="group in collaborateCtrl.getCurrentUser().memberOf | orderBy: 'name'| filter:search:strict | itemsPerPage : '12' ">
           <td>
             <button class="btn  btn-default btn-sm btn-primary" ng-click="collaborateCtrl.openNote(group)"><span class="glyphicon .glyphicon-info-sign"></span>Informations </button>
-            <button ng-if="collaborateCtrl.urlPad" class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openPad(group)">EtherPAD</button>
-            <button ng-if="collaborateCtrl.urlCal" class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openCalc(group)">EtherCALC</button>
+            <button ng-if="collaborateCtrl.urlPad" class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openPad(group)" >Groupe PAD </button>
+            <button ng-if="collaborateCtrl.urlCal" class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openCalc(group)">Groupe CALC</button>
           </td>
           <td>
             <strong>{{group.name}}</strong>
