@@ -31,8 +31,8 @@ module.exports = {
     url: 'http://localhost:3000/api/users/validate/'
   },
   onlineServices: [
-    {glyphicon: 'glyphicon-bullhorn', url: 'https://forum.domain.fr', title: ' Forum Libre Communauté'},
-    {glyphicon: 'glyphicon-certificate', url: 'https://chat.domain.fr', title: 'Chat Libre Communauté'}
+    {glyphicon: 'glyphicon-bullhorn', url: 'https://forum.domain.fr', title: ' Forum Libre Communauté', target: '_self'},
+    {glyphicon: 'glyphicon-certificate', url: 'https://chat.domain.fr', title: 'Chat Libre Communauté'  target: '_blank'}
   ],
   Structures: [
       {id: 'Education', value: 'Education'},
