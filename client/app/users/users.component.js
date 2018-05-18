@@ -36,7 +36,9 @@ export class UsersModalComponent {
       this.Save_user.email = this.user.email;
       this.Save_user.structure = this.user.structure;
       this.Save_user.role = this.user.role;
+      //this.Save.user.authorPadID = this.user.authorPadID;
       this.Save_user.isactif = this.user.isactif;
+
       this.$uibModalInstance.close('ok');
     },
     err => {
@@ -44,6 +46,11 @@ export class UsersModalComponent {
       console.log(err.data);
     }
     );
+  }
+  initPadId(){
+    console.log(this.user.authorPadID)
+    this.user.authorPadID=""
+    this.ok();
   }
 
   cancel() {
