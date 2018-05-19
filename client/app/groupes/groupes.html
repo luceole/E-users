@@ -116,10 +116,59 @@
               </tr>
             </table>
           </uib-tab>
+
           <uib-tab heading="Participants">
-            <div ng-repeat="user in ModalEditAdminGroupCtrl.groupe.participants"> {{user.uid}}
-            </div>
-            </uid-tab>
+            <table class="table table-striped ">
+              <div>
+                <!-- <ui-select name="admingrp" required ng-model="ModalEditAdminGroupCtrl.admin.selected" ng-disable="disabled" style="width: 300px;" title="Administrateur">
+                  <ui-select-match placeholder="Selection dans la liste...">{{$select.selected.uid}}</ui-select-match>
+                  <ui-select-choices repeat="admin in ModalEditAdminGroupCtrl.listadmgrp| filter: $select.search|orderBy:'uid'">
+                    <div ng-bind-html="admin.uid  | highlight: $select.search"></div>
+                    <span ng-bind-html="admin.structure | highlight: $select.search"></span>
+                  </ui-select-choices>
+                </ui-select>
+                <button class="btn btn-primary" ng-click="ModalEditAdminGroupCtrl.addAdm(ModalEditAdminGroupCtrl.admin.selected,ModalEditAdminGroupCtrl.groupe.adminby)">Ajouter</button>
+              </div> -->
+
+              <tr dir-paginate="user in ModalEditAdminGroupCtrl.groupe.participants| orderBy:'uid' | filter:search:strict | itemsPerPage :'12' ">
+                <td>
+                  - {{user.uid}}
+                </td>
+                <td>
+                  <a href ng-click="ModalEditAdminGroupCtrl.delAdm(user,ModalEditAdminGroupCtrl.groupe.adminby)" rel="tooltip" title="Effacer" class="trash">
+                    <div class="glyphicon glyphicon-trash pull-right"></div>
+                  </a>
+
+                </td>
+              </tr>
+            </table>
+          </uib-tab>
+          <uib-tab heading="Demandes">
+            <table class="table table-striped ">
+              <div>
+                <!-- <ui-select name="admingrp" required ng-model="ModalEditAdminGroupCtrl.admin.selected" ng-disable="disabled" style="width: 300px;" title="Administrateur">
+                  <ui-select-match placeholder="Selection dans la liste...">{{$select.selected.uid}}</ui-select-match>
+                  <ui-select-choices repeat="admin in ModalEditAdminGroupCtrl.listadmgrp| filter: $select.search|orderBy:'uid'">
+                    <div ng-bind-html="admin.uid  | highlight: $select.search"></div>
+                    <span ng-bind-html="admin.structure | highlight: $select.search"></span>
+                  </ui-select-choices>
+                </ui-select>
+                <button class="btn btn-primary" ng-click="ModalEditAdminGroupCtrl.addAdm(ModalEditAdminGroupCtrl.admin.selected,ModalEditAdminGroupCtrl.groupe.adminby)">Ajouter</button>
+              </div> -->
+
+              <tr dir-paginate="user in ModalEditAdminGroupCtrl.groupe.demandes| orderBy:'uid' | filter:search:strict | itemsPerPage :'12' ">
+                <td>
+                  - {{user.uid}}
+                </td>
+                <td>
+                  <a href ng-click="ModalEditAdminGroupCtrl.delAdm(user,ModalEditAdminGroupCtrl.groupe.adminby)" rel="tooltip" title="Effacer" class="trash">
+                    <div class="glyphicon glyphicon-trash pull-right"></div>
+                  </a>
+
+                </td>
+              </tr>
+            </table>
+          </uib-tab>
         </uib-tabset>
       </form>
     </div>

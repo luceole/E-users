@@ -22,6 +22,8 @@ router.get('/listadmin', auth.hasRole('admin'), controller.listadmin);
 router.get('/me', auth.isAuthenticated(), controller.me);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 router.put('/:id/addusergroup', auth.isAuthenticated(), controller.addusergroup);
+router.put('/:id/candidatusergroup', auth.isAuthenticated(), controller.candidatusergroup);
+router.put('/:id/nocandidatusergroup', auth.isAuthenticated(), controller.nocandidatusergroup);
 router.put('/:id/delusergroup', auth.isAuthenticated(), controller.delusergroup);
 router.put('/useradmingroup', auth.isAuthenticated(), controller.useradmingroup);
 router.put('/:id/discoursesso', auth.isAuthenticated(), controller.discourseSso);

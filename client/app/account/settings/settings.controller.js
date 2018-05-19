@@ -72,34 +72,76 @@ export default class SettingsController {
     return r.length;
   }
 
+  isCandidatOf(groupe) {
+    var grpId = groupe._id;
+    //this.user = this.Auth.getCurrentUserSync();
+    // console.log(this.user.candidatOf);
+    // console.log(grpId);
+    var r = this.user.candidatOf.filter(o => o == grpId);
+    return r.length;
+  }
+
   addusergroup(groupe) {
     var grpId = groupe._id;
-
-    this.Auth.addUserGroup(grpId, (err, u) => {
-      if(err) {
-        alert(`Erreur MAJ ${err.data}`);
-        console.log(err);
-      }
+    if(groupe.type == 0)   //Ouvert
+    {
+      this.Auth.addUserGroup(grpId, (err, u) => {
+        if(err) {
+          alert(`Erreur MAJ ${err.data}`);
+          console.log(err);
+        }
       //console.log(u);
       // Force =>  Read User
-      this.user = this.Auth.getCurrentUserSync();
-      this.groups = this.Group.listopengroups();
+        this.user = this.Auth.getCurrentUserSync();
+        this.groups = this.Group.listopengroups();
       //console.log(  this.groups)
-    });
+      });
+    } else // Reservé
+  {
+      console.log('reservé');
+      this.Auth.candidatUserGroup(grpId, (err, u) => {
+        if(err) {
+          alert(`Erreur MAJ ${err.data}`);
+          console.log(err);
+        }
+      //console.log(u);
+      // Force =>  Read User
+        this.user = this.Auth.getCurrentUserSync();
+        console.log(this.user);
+        this.groups = this.Group.listopengroups();
+      //console.log(  this.groups)
+      });
+    }
   }
 
   delusergroup(groupe) {
     var grpId = groupe._id;
-
-    this.Auth.delUserGroup(grpId, (err, u) => {
-      if(err) {
-        alert(`Erreur MAJ ${err.data}`);
-        console.log(err);
-      }
+    if(groupe.type == 0)   //Ouvert
+    {
+      this.Auth.delUserGroup(grpId, (err, u) => {
+        if(err) {
+          alert(`Erreur MAJ ${err.data}`);
+          console.log(err);
+        }
       //  console.log(u)
       // Force =>  Read User
-      this.user = this.Auth.getCurrentUserSync();
-      this.groups = this.Group.listopengroups();
-    });
+        this.user = this.Auth.getCurrentUserSync();
+        this.groups = this.Group.listopengroups();
+      });
+    } else // Reservé
+  {
+      console.log('reservé');
+      this.Auth.nocandidatUserGroup(grpId, (err, u) => {
+        if(err) {
+          alert(`Erreur MAJ ${err.data}`);
+          console.log(err);
+        }
+    //console.log(u);
+    // Force =>  Read User
+        this.user = this.Auth.getCurrentUserSync();
+        this.groups = this.Group.listopengroups();
+    //console.log(  this.groups)
+      });
+    }
   }
 }

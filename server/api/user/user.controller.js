@@ -384,7 +384,33 @@ export function addusergroup(req, res) {
     });
 }
 
-
+export function candidatusergroup(req, res) {
+  var userId = req.params.id;
+  var groupId = String(req.body.idGroup);
+  return User.findById(userId, '-salt -hashedPassword')
+  //  .populate('memberOf', 'info')
+    .exec()
+    .then(user => {
+      user.candidatOf.push(groupId);
+      return user.save()
+        .then(user => {
+          Group.findById(groupId, function(err, group) {
+            if(err) {
+              console.log(err);
+              return err;
+            }
+            group.demandes.push(userId);
+            group.save(function(err) {
+              if(err) {
+                console.log(err);
+              }
+            });
+          });
+          return res.status(200).json(user);
+        });
+      //return res.status(200).json(user)
+    });
+}
 export function delusergroup(req, res) {
   var userId = req.params.id;
   var groupId = String(req.body.idGroup);
@@ -402,6 +428,36 @@ export function delusergroup(req, res) {
               return err;
             }
             group.participants.pull(userId);
+            group.save(function(err) {
+              if(err) {
+                console.log(err);
+              }
+            });
+          });
+          return res.status(200).json(user);
+        });
+      //  return res.status(200).json(user)
+    });
+}
+
+
+export function nocandidatusergroup(req, res) {
+  var userId = req.params.id;
+  var groupId = String(req.body.idGroup);
+  return User.findById(userId, '-salt -hashedPassword')
+    .populate('memberOf', 'info')
+    .exec()
+    .then(user => {
+      user.candidatOf.pull(groupId);
+      return user.save()
+        .then(user => {
+          console.log('1');
+          Group.findById(groupId, function(err, group) {
+            if(err) {
+              console.log(err);
+              return err;
+            }
+            group.demandes.pull(userId);
             group.save(function(err) {
               if(err) {
                 console.log(err);

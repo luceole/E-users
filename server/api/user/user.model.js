@@ -48,6 +48,10 @@ var UserSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Group'
   }],
+  candidatOf: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Group'
+  }],
   adminOf: [{
     type: Schema.Types.ObjectId,
     ref: 'Group'

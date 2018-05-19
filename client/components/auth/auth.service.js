@@ -139,6 +139,35 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
         return safeCb(callback)(err);
       }).$promise;
     },
+    candidatUserGroup(idGroup, callback) {
+      return User.candidatusergroup({
+        id: currentUser._id
+      }, {
+        idGroup
+      },
+      function(user) {
+        currentUser = User.get();
+        return safeCb(callback)(null, user);
+      },
+      function(err) {
+        return safeCb(callback)(err);
+      }).$promise;
+    },
+    nocandidatUserGroup(idGroup, callback) {
+      return User.nocandidatusergroup({
+        id: currentUser._id
+      }, {
+        idGroup
+      },
+      function(user) {
+        currentUser = User.get();
+        return safeCb(callback)(null, user);
+      },
+      function(err) {
+        return safeCb(callback)(err);
+      }).$promise;
+    },
+
 
     delUserGroup(idGroup, callback) {
       var cb = callback || angular.noop;

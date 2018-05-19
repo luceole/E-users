@@ -32,6 +32,19 @@ export function UserResource($resource) {
         controller: 'listadmin'
       }
     },
+    candidatusergroup: {
+      method: 'PUT',
+      params: {
+        controller: 'candidatusergroup'
+      }
+    },
+
+    nocandidatusergroup: {
+      method: 'PUT',
+      params: {
+        controller: 'nocandidatusergroup'
+      }
+    },
     addusergroup: {
       method: 'PUT',
       params: {
