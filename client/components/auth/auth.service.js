@@ -139,6 +139,35 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
         return safeCb(callback)(err);
       }).$promise;
     },
+    candidatUserGroup(idGroup, callback) {
+      return User.candidatusergroup({
+        id: currentUser._id
+      }, {
+        idGroup
+      },
+      function(user) {
+        currentUser = User.get();
+        return safeCb(callback)(null, user);
+      },
+      function(err) {
+        return safeCb(callback)(err);
+      }).$promise;
+    },
+    nocandidatUserGroup(idGroup, callback) {
+      return User.nocandidatusergroup({
+        id: currentUser._id
+      }, {
+        idGroup
+      },
+      function(user) {
+        currentUser = User.get();
+        return safeCb(callback)(null, user);
+      },
+      function(err) {
+        return safeCb(callback)(err);
+      }).$promise;
+    },
+
 
     delUserGroup(idGroup, callback) {
       var cb = callback || angular.noop;
@@ -275,7 +304,27 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
       })
         .$promise;
     },
-
+    userSupCandidat(idgrp, listusers, callback) {
+      var cb = callback || angular.noop;
+      return User.userSupCandidat({
+        idgrp, listusers
+      }, function() {
+        return safeCb(callback)(null);
+      }, function(err) {
+        return safeCb(callback)(err);
+      })
+        .$promise;
+    }, userAddCandidat(idgrp, listusers, callback) {
+      var cb = callback || angular.noop;
+      return User.userAddCandidat({
+        idgrp, listusers
+      }, function() {
+        return safeCb(callback)(null);
+      }, function(err) {
+        return safeCb(callback)(err);
+      })
+          .$promise;
+    },
 
     discourseSso(id, params, callback) {
       var sso = params.sso;

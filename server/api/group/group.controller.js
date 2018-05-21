@@ -66,6 +66,7 @@ export function index(req, res) {
   return Group.find()
     .populate('owner', 'uid')
     .populate('participants', 'uid info note')
+    .populate('demandes', 'uid name surname email')
     .populate('adminby', 'uid')
     .exec()
     .then(respondWithResult(res))
