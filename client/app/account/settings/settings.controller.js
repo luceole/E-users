@@ -113,9 +113,9 @@ export default class SettingsController {
     }
   }
 
-  delusergroup(groupe) {
+  delusergroup(groupe, moderate) {
     var grpId = groupe._id;
-    if(groupe.type == 0)   //Ouvert
+    if(!moderate)   //Ouvert
     {
       this.Auth.delUserGroup(grpId, (err, u) => {
         if(err) {

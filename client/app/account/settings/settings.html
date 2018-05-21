@@ -106,14 +106,14 @@
           <table class="table table-striped ">
             <tr dir-paginate="group in vm.groups | orderBy:'name' | filter:search:strict | itemsPerPage :'12' ">
               <td>
-                <button class="btn btn-success btn-xs" type="button" ng-if="vm.isMemberOf(group)" ng-click="vm.delusergroup(group)">
+                <button class="btn btn-success btn-xs" type="button" ng-if="vm.isMemberOf(group)" ng-click="vm.delusergroup(group,0)">
                   <span class="glyphicon glyphicon-star"></span>Désinscrire
                 </button>
 
                 <button class="btn btn-warning btn-xs" type="button" ng-if="!vm.isMemberOf(group) && !vm.isCandidatOf(group)" ng-click="vm.addusergroup(group)">
                   <span class="glyphicon glyphicon-star"></span>Inscrire
                 </button>
-                <button class="btn btn-info btn-xs" type="button" ng-if="vm.isCandidatOf(group)" ng-click="vm.delusergroup(group)">
+                <button class="btn btn-info btn-xs" type="button" ng-if="vm.isCandidatOf(group)" ng-click="vm.delusergroup(group,1)">
                   <span class="glyphicon glyphicon-star"></span>Modération
                 </button>
               </td>
