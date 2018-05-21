@@ -331,7 +331,31 @@ export function update(req, res) {
         .catch(validationError(res));
     });
 }
-
+export function usersupcandidat(req, res) {
+  var listusers = req.body.listusers;
+  var idgrp = req.body.idgrp;
+  console.log('del candid');
+  listusers.forEach(function(userId) {
+    User.findById(userId).exec()
+        .then(user => {
+          user.candidatOf.pull(idgrp);
+          user.save();
+        });
+  });
+}
+export function useraddcandidat(req, res) {
+  var listusers = req.body.listusers;
+  var idgrp = req.body.idgrp;
+  console.log('add candidat to grou');
+  listusers.forEach(function(userId) {
+    User.findById(userId).exec()
+        .then(user => {
+          user.candidatOf.pull(idgrp);
+          user.memberOf.push(idgrp);
+          user.save();
+        });
+  });
+}
 export function useradmingroup(req, res) {
   var listusers = req.body.listusers;
   var idgrp = req.body.idgrp;

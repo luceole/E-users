@@ -63,6 +63,18 @@ export function UserResource($resource) {
         controller: 'useradmingroup'
       }
     },
+    userSupCandidat: {
+      method: 'PUT',
+      params: {
+        controller: 'usersupcandidat'
+      }
+    },
+    userAddCandidat: {
+      method: 'PUT',
+      params: {
+        controller: 'useraddcandidat'
+      }
+    },
     discourseSso: {
       method: 'PUT',
       params: {

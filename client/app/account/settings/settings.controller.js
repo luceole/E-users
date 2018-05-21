@@ -107,7 +107,6 @@ export default class SettingsController {
       //console.log(u);
       // Force =>  Read User
         this.user = this.Auth.getCurrentUserSync();
-        console.log(this.user);
         this.groups = this.Group.listopengroups();
       //console.log(  this.groups)
       });

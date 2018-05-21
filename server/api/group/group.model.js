@@ -69,7 +69,7 @@ var GroupSchema = new Schema({
 GroupSchema.pre('save', function(next) {
   var grpId = this._id;
   if(this.isModified('adminby')) {
-    //console.log('GROUP Pre-Save: ' + this._id + ' adminby: ' + this.adminby);
+    console.log('GROUP Pre-Save: ' + this._id + ' adminby: ' + this.adminby);
     this.adminby.forEach(function(id) {
       var query = {
         _id: id
@@ -87,9 +87,15 @@ GroupSchema.pre('save', function(next) {
       });
     });
   }
+
   return next(); // Always go on !
 });
 
+// GroupSchema.pre('findOneAndUpdate', function(next) {
+//   console.log('pre');
+//   console.log(this._update.demandes);
+//     return next();
+// });
 
 GroupSchema.pre('findOneAndUpdate', function(next) {
   if(!this._update.adminby) return next();
@@ -106,6 +112,7 @@ GroupSchema.pre('findOneAndUpdate', function(next) {
         adminOf: grpId
       }
     };
+
   //  console.log(update);
     User.findOneAndUpdate(query, update, function(err, user) {
       if(err) {
@@ -166,14 +173,33 @@ GroupSchema.pre('save', function(next) {
 GroupSchema.pre('remove', function(next) {
 //  console.log('pre remove ' + this.adminby);
   var grpId = this._id;
+  // this.participants.forEach(function(id) {   // Pas utile => On n'autorise pas la suppression s'il y a des inscrits
+  //   var query = {
+  //     _id: id
+  //   };
+  //   var update = {
+  //     $pull: {
+  //       memberOf: grpId
+  //     },
+  //   };
+  //   User.findOneAndUpdate(query, update, function(err, user) {
+  //     if(err) {
+  //       console.log(`erreur Adminby : ${err}`);
+  //     //  return next();
+  //     }
+  //   //  next(); // Always go on !
+  //   });
+  // });
+
+
   this.adminby.forEach(function(id) {
     var query = {
       _id: id
     };
     var update = {
-      $addToSet: {
+      $pull: {
         adminOf: grpId
-      }
+      },
     };
     User.findOneAndUpdate(query, update, function(err, user) {
       if(err) {
