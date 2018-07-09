@@ -7,58 +7,61 @@
       <img src="assets/images/LogoPLLPt.png " alt="Pôle Logiciels Libres">
     </div>
   </header>
-<div class="container">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="col-sm-2"></div>
-      <div class="col-sm-10">
-        <div class="container-fluid">
-          <div class="col-md-6">
-            <h3>Connexion</h3>
-            <form class="form" name="form" ng-submit="vm.login(form)" novalidate>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
+          <div class="container-fluid">
+            <div class="col-md-6">
+               <h3>Identification:</h3>
+              <form class="form" name="form" ng-submit="vm.login(form)"  novalidate>
 
-              <div class="form-group">
-                <label>Identifiant</label>
+                <div class="form-group">
 
-                <input name="uid" class="form-control" ng-model="vm.user.uid" required style="width:250px">
-              </div>
 
-              <div class="form-group">
-                <label>Mot de Passe</label>
+                  <input name="uid" class="form-control" ng-model="vm.user.uid"  placeholder="Identifiant" required style="width:250px">
+                </div>
 
-                <input type="password" name="password" class="form-control" ng-model="vm.user.password" required style="width:250px">
-              </div>
+                <div class="form-group">
 
-              <div class="form-group has-error">
-                <p class="help-block" ng-show="(form.uid.$error.required || form.password.$error.required) && vm.submitted">
-                  Entrez votre identifiant et votre mot de passe..
-                </p>
-                <p class="help-block">{{ vm.msg }}</p>
-              </div>
-              <span>
+
+                  <input type="password" name="password" class="form-control" ng-model="vm.user.password"  placeholder="Mot de passe" required style="width:250px">
+                </div>
+
+                <div class="form-group has-error">
+                  <p class="help-block" ng-show="(form.uid.$error.required || form.password.$error.required) && vm.submitted">
+                    Entrez votre identifiant et votre mot de passe..
+                  </p>
+                  <p class="help-block">{{ vm.msg }}</p>
+                </div>
+                <span>
                 <button class="btn  btn-default btn-lg btn-login" type="submit">
                 Connexion
               </button>
             </span>
-            </form>
-          </div>
-          <h3>Informations:</h3> Pour profiter des services en ligne vous devez avoir un compte.
-          <br>
-          <p>
-            Pour éviter le spam les demandes d'inscription sont soumises à modération.
-            <br> {{vm.MSG}}
-            <br>
-            <br>
-            <span class="alert alert-info"><a href="/signup"> Inscrivez vous.</a></span>
-          </p>
-        </div>
-              <div class="col-md-6" ng-if="vm.OauthActif" >
-            <h3>Se connecter avec</h3>
-            <a href="/auth/openid" target="_self" class="btn btn-default"><img src="assets/images/openid-wordmark.svg" style="max-width:150px"/></a>
+              </form>
+              <div  ng-if="vm.OauthActif">
+                <h3>Se connecter avec</h3>
+                <a href="/auth/openid" target="_self" class="btn btn-default"><img src="assets/images/openid-wordmark.svg" style="max-width:150px"/></a>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h3>Informations:</h3> Pour profiter des services en ligne vous devez avoir un compte.
+              <br> Pour éviter le spam les demandes d'inscription sont soumises à modération.
+              <br> <br>
+              <span class="alert alert-info"><a href="/signup"> Inscrivez vous.</a></span>
+              <br>
+              <div ng-if="vm.Infos">
+                <br><br>
+                <div class="alert alert-warning" ng-bind-html="vm.Infos"> </div>
+              </div>
+
+            </div>
+
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-</div>
+  </div>

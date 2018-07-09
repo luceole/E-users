@@ -16,7 +16,9 @@ export default class LoginController {
         this.TitreSite = this.myconfig.TitreSite;
         this.DeviseSite = this.myconfig.DeviseSite;
         this.OauthActif = this.myconfig.OauthActif;
-      //  console.log(this.myconfig)
+        this.Infos = this.myconfig.Infos;
+
+       console.log(this.myconfig)
       });
   }
   login(form) {
