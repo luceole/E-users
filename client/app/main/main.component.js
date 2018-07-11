@@ -3,107 +3,38 @@ import uiRouter from 'angular-ui-router';
 import routing from './main.routes';
 export class MainController {
   /*@ngInject*/
-  constructor($http, $timeout, $state, $stateParams, $window, socket, appConfig, Auth, calendarConfig, moment, Message) {
+  constructor($http, $timeout, $state, $stateParams, $window, $scope, socket, appConfig, Auth, calendarConfig, moment, Message) {
     this.w = $window;
     this.$http = $http;
+    this.$scope = $scope;
+    this.Auth = Auth;
     //this.$timeout = $timeout;
     this.socket = socket;
     this.Message = Message;
     this.isLoggedIn = Auth.isLoggedInSync;
-    this.Auth = Auth;
-    this.isAdmin = Auth.isAdminSync;
     this.getCurrentUser = Auth.getCurrentUserSync;
+    this.isAdmin = Auth.isAdminSync;
     this.$state = $state;
     this.$stateParams = $stateParams;
     this.MSG = '';
-
     this.DeviseSite = appConfig.DeviseSite || 'Eco-système ';
     this.TitreSite = appConfig.TitreSite || 'Libre Communaute';
-
     this.onlineServices = [];
     this.OauthActif = appConfig.OauthActif || false;
     this.sso = this.$state.current.name == 'discoursesso';
   }
-  // eventClicked(event) {
-  //   var message = '';
-  //   var self = this;
-  //   var myUid = this.getCurrentUser()._id;
-  //   if(event.participants.filter(function(item) {
-  //     return ((item) && item._id == myUid);
-  //   }).length) {
-  //     message = 'Dé-inscription de ' + event.title + ' effectuée';
-  //   } else {
-  //     message = 'Inscription à ' + event.title + ' effectuée';
-  //   }
-  //   this.alert.msg = message;
-  //   this.alert.type = 'warning';
-  //   this.$timeout(function() {
-  //     self.alert = {
-  //       type: 'info',
-  //       msg: 'cliquez sur un évément pour vous inscrire ou dé-inscrire.'
-  //     };
-  //   }, 2000);
-  // }
-  //
-  // refreshEvents() {
-  //   var eventsGroupe = {};
-  //   var Auth = this.Auth;
-  //   var calendarConfig = this.calendarConfig;
-  //   var eventSources = this.eventSources;
-  //       //var workEvents = [];
-  //       //var couleur = ['DotgerBlue', 'chocolate', 'ForestGreen', 'DarkRed', 'FireBrick', 'Tan', 'Peru', 'oliveDrab', 'Lavender', 'GoldenRod', 'CornFlowerBlue', 'LightSkyBlue', 'grey'];
-  //   var myUid = this.getCurrentUser()._id;
-  //   var userGroupes = this.getCurrentUser().memberOf;
-  //   //console.log(userGroupes);
-  //   angular.forEach(userGroupes, function(grp, index) {
-  //     //console.log(grp._id);
-  //     Auth.eventsofgroup(grp._id)
-  //           .then(function(data) {
-  //             if(data.length > 0) {
-  //               //eventsGroupe.events = data;
-  //               angular.forEach(data, function(ev, ind) {
-  //                 if(ev.participants.filter(function(item) {
-  //                   return ((item) && item._id == myUid);
-  //                 }).length) {
-  //                   ev.color = calendarConfig.colorTypes.info;
-  //                   // { // can also be calendarConfig.colorTypes.warning for shortcuts to the deprecated event types
-  //                   //   primary: '#e3bc08', // the primary event color (should be darker than secondary)
-  //                   //   secondary: '#fdf1ba' // the secondary event color (should be lighter than primary)
-  //                   // };
-  //                 } else {
-  //                   ev.color = calendarConfig.colorTypes.important;
-  //                 }
-  //                 ev.startsAt = new Date(ev.startsAt);
-  //                 ev.endsAt = new Date(ev.endsAt);
-  //               });
-  //
-  //               eventsGroupe.events = angular.copy(data);
-  //               eventsGroupe.index = index;
-  //               eventsGroupe.group_id = grp._id;
-  //               // eventsGroupe.startsAt = new Date(eventsGroupe.startsAt);
-  //               // eventsGroupe.endsAt = new Date(eventsGroupe.endsAt);
-  //               eventsGroupe.group = {
-  //                 _id: grp._id,
-  //                 info: grp.info
-  //               };
-  //
-  //               Array.prototype.push.apply(eventSources, eventsGroupe.events);
-  //
-  //             //  console.log(grp._id);
-  //           //    console.log(eventSources[index]);
-  //               eventsGroupe = {};
-  //             }
-  //           });
-  //   });
-  // }
 
+
+  $onDestroy() {
+    socket.unsyncUpdates('thing');
+  };
 
   $onInit() {
-    // this.$http.get('/api/things')
-    //   .then(response => {
-    //     this.awesomeThings = response.data;
-    //     this.socket.syncUpdates('thing', this.awesomeThings);
-    //   });
+    this.$http.get('/api/things')
+      .then(response => {
+        this.awesomeThings = response.data;
+        this.socket.syncUpdates('thing', this.awesomeThings);
+      });
     this.Message.get()
       .$promise
       .then(result => {
@@ -115,17 +46,17 @@ export class MainController {
         //console.log(this.myconfig);
       });
 
-    if(this.$state.current.name == 'discoursesso') {
+    if (this.$state.current.name == 'disc  this.Auth = Auth;oursesso') {
       this.MSG = ' ***  REDIRECTION Forum Discourse en cours ..';
       this.Auth.getCurrentUser()
         .then(u => {
-          if(u._id) {
+          if (u._id) {
             var sso = this.$stateParams.sso;
             var sig = this.$stateParams.sig;
             this.Auth.discourseSso(u._id, {
-              sso,
-              sig
-            })
+                sso,
+                sig
+              })
               .then(rep => {
                 this.w.location.href = rep.url;
               });
@@ -134,27 +65,41 @@ export class MainController {
     }
     this.MSG = '';
   }
+  addThing() {
+    if (this.newThing) {
+      this.$http.post('/api/things', {
+        info: this.newThing.info,
+        name: this.newThing.name
+      });
 
+      this.newThing.info = '';
+      this.newThing.name = '';
+    }
+  }
+
+  deleteThing(thing) {
+    this.$http.delete('/api/things/' + thing._id);
+  }
 
   Formlogin(form) {
     this.submitted = true;
     this.msg = '';
 
 
-    if(form.$valid) {
+    if (form.$valid) {
       this.Auth.login({
-        uid: this.user.uid,
-        password: this.user.password
-      })
+          uid: this.user.uid,
+          password: this.user.password
+        })
         .then(u => {
-          if(this.$state.current.name == 'discoursesso') {
+          if (this.$state.current.name == 'discoursesso') {
             this.MSG = ' ***  REDIRECTION en cours ..';
             var sso = this.$stateParams.sso;
             var sig = this.$stateParams.sig;
             this.Auth.discourseSso(u._id, {
-              sso,
-              sig
-            })
+                sso,
+                sig
+              })
               .then(rep => {
                 this.w.location.href = rep.url;
               });

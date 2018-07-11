@@ -9,7 +9,7 @@
 <div class="container" ng-if="$ctrl.isLoggedIn()&& !$ctrl.sso " ng-init="CalInit()">
   <div class="row">
     <div class="col-lg-12">
-      <p>Bonjour {{ $ctrl.getCurrentUser().surname }} {{ $ctrl.getCurrentUser().name }}</p>
+      <!-- <p>Bonjour {{ $ctrl.getCurrentUser().surname }} {{ $ctrl.getCurrentUser().name }}</p> -->
       <div class="alert alert-warning" ng-if="!$ctrl.getCurrentUser().mailValid">
         Votre adresse electronique <b> {{$ctrl.getCurrentUser().email}} </b> n'a pas encore été confirmée.
         <br>Un message de confirmation vous a été envoyé.
@@ -18,77 +18,50 @@
       </div>
       <div class="alert alert-warning" ng-if="!$ctrl.getCurrentUser().isactif"> Votre compte est en attende de validation par le modérateur. </div>
     </div>
-    <div class="alert alert-info" ng-if="$ctrl.getCurrentUser().isactif">
+    <div  ng-if="$ctrl.getCurrentUser().isactif">
       <h3 ng-if="$ctrl.MSG">Informations:</h3> {{$ctrl.MSG }}
-
+<!--
       <h3>Vos services en lignes</h3>
-
-      <!-- <p><span class="glyphicon glyphicon-bullhorn"></span><a href="https://forum.libre-communaute.fr"> Forum Libre Communauté</a>
-        <p><span class="glyphicon glyphicon-certificate"></span><a href="https://chat.libre-communaute.fr"> Chat Libre Communauté</a> -->
-
       <div ng-repeat="service in $ctrl.onlineServices">
         <span class="glyphicon {{service.glyphicon}}"></span><a href="{{service.url}}" target="{{service.target}}"> {{service.title}}</a>
       </div>
-    </div>
+      -->
+      <div class="row ">
+        <div class="col-lg-12 alert-info">
+          <br>
+            <uib-accordion>
+              <div uib-accordion-group class="panel-default"  is-open=true heading="Services en lignes ">
+            <!-- <h3 class="page-header">Services en lignes:</h3> -->
+
+      <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6  " ng-repeat="service in $ctrl.onlineServices">
+        <li "> <span class="glyphicon {{service.glyphicon}}"><a href="{{service.url}}" target="{{service.target}}"> {{service.title}}</a></span></li>
+      </ul>
+
+  </div>
+
+<div uib-accordion-group class="panel-default" ng-if="$ctrl.awesomeThings.length" heading="Brèves d'actualités">
 
 
-
-<!-- <div class="alert alert-info">
-        <div class="text-center">
-            <h4> Agenda de vos groupes</h4>
-              <div  class="alert {{$ctrl.alert.type}}" align="center" ng-if="$ctrl.alert.msg"> {{$ctrl.alert.msg}}</div>
-            <h2 class="text-center">{{ $ctrl.calendarTitle }}</h2>
-            <div class="text-center">
-                 <div class="btn-group">
-                   <label class="btn btn-primary" ng-model="$ctrl.calendarView" uib-btn-radio="'month'" ng-click="$ctrl.cellIsOpen = false">Mois</label>
-                   <label class="btn btn-primary" ng-model="$ctrl.calendarView" uib-btn-radio="'week'" ng-click="$ctrl.cellIsOpen = false">Semaine</label>
-                 </div>
-               </div>
-           <div class="btn-group">
-
-             <button
-               class="btn btn-primary"
-               mwl-date-modifier
-               date="$ctrl.viewDate"
-               decrement="$ctrl.calendarView"
-               ng-click="$ctrl.cellIsOpen = false">
-               Précédent
-             </button>
-             <button
-               class="btn btn-default"
-               mwl-date-modifier
-               date="$ctrl.viewDate"
-               set-to-today
-               ng-click="$ctrl.cellIsOpen = false">
-               Aujourdhui
-             </button>
-             <button
-               class="btn btn-primary"
-               mwl-date-modifier
-               date="$ctrl.viewDate"
-               increment="$ctrl.calendarView"
-               ng-click="$ctrl.cellIsOpen = false">
-               Suivant
-             </button>
-
+          <!-- <h3 class="page-header">Brèves d'actualités: </h3> -->
+          <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in $ctrl.awesomeThings">
+            <li><a uib-tooltip="{{thing.info}}">{{thing.name}}<button type="button" ng-if="$ctrl.isAdmin()" class="close" ng-click="$ctrl.deleteThing(thing)">&times;</button></a></li>
+          </ul>
 </div>
 
-<br><br>
-    <mwl-calendar
-    events="$ctrl.eventSources"
-    view="$ctrl.calendarView"
-    view-title="$ctrl.calendarTitle"
-    view-date="$ctrl.viewDate"
-    on-event-click="$ctrl.eventClicked(calendarEvent)"
-    on-event-times-changed="$ctrl.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
-    cell-is-open="$ctrl.cellIsOpen"
-    day-view-start="08:00"
-    day-view-end="19:59"
-    day-view-split="30"
-    cell-modifier="$ctrl.modifyCell(calendarCell)"
-    cell-auto-open-disabled="false"
-    on-timespan-click="$ctrl.timespanClicked(calendarDate, calendarCell)">
-    </mwl-calendar>
-    </div> -->
+
+<div uib-accordion-group class="panel-default" ng-if="$ctrl.isAdmin()"  heading="Ajouter une brève ">
+  <form class="thing-form">
+    <label> Ajouter une brève </label>
+    <p class="input-group">
+      <input type="text" class="form-control" placeholder="Titre" ng-model="$ctrl.newThing.name" style="width:280px">
+      <input type="text" class="form-control" placeholder="Saisisez votre brève." ng-model="$ctrl.newThing.info" style="width:450px>
+      <span class="input-group-btn"></p>
+        <button type="submit" class="btn btn-primary" ng-click="$ctrl.addThing()">Ajoutez</button>
+      </span>
+  </form>
+   </div>
+
+  </uib-accordion>
+  <br>
     </div>
   </div>

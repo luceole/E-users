@@ -43,7 +43,7 @@
                   <li role="menuitem "><a href="/demandes ">Gestion des Demandes </a></li>
                   <li role="menuitem "><a href="/users ">Gestion des Utilisateurs </a></li>
                   <li role="menuitem "><a href="/groupes ">Gestion des Groupes </a></li>
-                   <li role="menuitem" "><a href="/adminpoll "> Gestion des Sondages </a></li> 
+                   <li role="menuitem" "><a href="/adminpoll "> Gestion des Sondages </a></li>
                   <li role="menuitem " "><a href="/events "> Gestion des Réunions </a></li>
                 </ul>
               </div>
@@ -54,8 +54,8 @@
           <li ng-hide="$ctrl.isLoggedIn() ">
             <a ui-sref-active="active " ui-sref="login " rel="tooltip " title="Se Connecter "> <span class="glyphicon glyphicon-log-in "></span>  &nbsp;</a>
           </li>
-          <li ng-show="$ctrl.isLoggedIn() ">
-            <p class="navbar-text ">Hello {{ $ctrl.getCurrentUser().name}}</p>
+          <li ng-show="$ctrl.isLoggedIn()  ">
+            <p class="navbar-text "><span  class="glyphicon glyphicon-user">{{ $ctrl.getCurrentUser().surname}}</span></p>
           </li>
           <li ng-show="$ctrl.isActif() " ui-sref-active="active "><a ui-sref="settings "><span class="glyphicon glyphicon-cog " rel="tooltip " title="Parametres " alt="Parametres "></span></a></li>
           <li ng-show="$ctrl.isLoggedIn() "><a ui-sref="logout " rel="tooltip " title="Quitter " alt="Quitter "><span class="glyphicon glyphicon-log-out "></span> &nbsp;</a></li>
