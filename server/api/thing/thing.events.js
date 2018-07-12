@@ -5,7 +5,6 @@
 'use strict';
 
 import {EventEmitter} from 'events';
-import Thing from './thing.model';
 var ThingEvents = new EventEmitter();
 
 // Set max event listeners (0 == unlimited)
@@ -18,10 +17,17 @@ var events = {
 };
 
 // Register the event emitter to the model events
-for(var e in events) {
-  let event = events[e];
-  Thing.schema.post(e, emitEvent(event));
+function registerEvents(Thing) {
+  for(var e in events) {
+    let event = events[e];
+    Thing.post(e, emitEvent(event));
+  }
 }
+// // Register the event emitter to the model events
+// for(var e in events) {
+//   let event = events[e];
+//   Thing.schema.post(e, emitEvent(event));
+// }
 
 function emitEvent(event) {
   return function(doc) {
@@ -29,5 +35,5 @@ function emitEvent(event) {
     ThingEvents.emit(event, doc);
   };
 }
-
+export {registerEvents};
 export default ThingEvents;

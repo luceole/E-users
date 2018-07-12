@@ -20,7 +20,7 @@ function onConnect(socket) {
   // require('../api/pad/pad.socket').register(socket);
   // require('../api/group/group.socket').register(socket);
   // require('../api/message/message.socket').register(socket);
-  // require('../api/thing/thing.socket').register(socket);
+  require('../api/thing/thing.socket').register(socket);
 }
 
 export default function(socketio) {
