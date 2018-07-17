@@ -1,0 +1,37 @@
+<div class="container">
+  <span ng-if="directoryCtrl.user.memberOf.length > 0">Liste des participants du groupe: {{directoryCtrl.groupe.name}} (({{directoryCtrl.myfilterlist.length}} sur {{directoryCtrl.groupe.participants.length}} inscrits)</span>
+  <form><input ng-model="directoryCtrl.search.$" placeholder="Recherche globale">
+  <input ng-model="directoryCtrl.search.email" placeholder="Recherche sur le Mel">
+</form>
+<button class="btn btn-warning btn-xs" type="button"  ng-click="directoryCtrl.copyAdr()" rel="tooltip" title="Copier les emails">
+  <span class="glyphicon glyphicon-star"></span>Copier les adresses
+</button>
+<button class="btn btn-warning btn-xs" type="button"  ng-click="directoryCtrl.mailtoAdr()" rel="tooltip" title="Ecrire">
+  <span class="glyphicon glyphicon-star"></span>Envoyez un mail
+</button>
+  <table class="table table-striped ">
+    <div>
+      <!-- <ui-select name="admingrp" required ng-model="ModalEditAdminGroupCtrl.admin.selected" ng-disable="disabled" style="width: 300px;" title="Administrateur">
+        <ui-select-match placeholder="Selection dans la liste...">{{$select.selected.uid}}</ui-select-match>
+        <ui-select-choices repeat="admin in ModalEditAdminGroupCtrl.listadmgrp| filter: $select.search|orderBy:'uid'">
+          <div ng-bind-html="admin.uid  | highlight: $select.search"></div>
+          <span ng-bind-html="admin.structure | highlight: $select.search"></span>
+        </ui-select-choices>
+      </ui-select>
+      <button class="btn btn-primary" ng-click="ModalEditAdminGroupCtrl.addAdm(ModalEditAdminGroupCtrl.admin.selected,ModalEditAdminGroupCtrl.groupe.adminby)">Ajouter</button>
+    </div> -->
+	  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"></dir-pagination-controls>
+    <tr dir-paginate="user in directoryCtrl.myfilterlist= (directoryCtrl.groupe.participants | filter:directoryCtrl.search:strict )| orderBy:'name' | itemsPerPage :'12' ">
+      <td>
+        {{user.name}} {{user.surname}}
+      </td>
+      <td>
+     <a href=mailto:{{user.email}} rel="tooltip" title="Envoyer un courriel"> {{user.email}}  </a>
+      </td>
+      <td>
+     {{user.structure}}
+      </td>
+    </tr>
+  </table>
+
+</div>

@@ -143,6 +143,7 @@ export class CollaborateComponent {
     this.$cookies = $cookies;
     this.$window = $window;
     this.$timeout = $timeout;
+    this.$state = $state;
     this.socket = socket;
     this.Auth = Auth;
     this.Group = Group;
@@ -449,6 +450,10 @@ export class CollaborateComponent {
     });
   }
 
+  goDirectory(gp) {
+    console.log(gp._id);
+    this.$state.go('directory', {'grpID': gp._id });
+  }
   openPadEv(args) {
     var padID = args.calendarEvent.eventPadID;
     var grpID = padID.split('\$')[0];

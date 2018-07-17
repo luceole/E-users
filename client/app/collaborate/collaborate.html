@@ -18,6 +18,7 @@
             <button class="btn  btn-default btn-sm btn-primary" ng-click="collaborateCtrl.openNote(group)"><span class="glyphicon .glyphicon-info-sign"></span>Informations </button>
             <button ng-if="collaborateCtrl.urlPad" class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openPad(group)" >Groupe PAD </button>
             <button ng-if="collaborateCtrl.urlCal" class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openCalc(group)">Groupe CALC</button>
+            <button class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.goDirectory(group)">Annuaire</button>
           </td>
           <td>
             <strong>{{group.name}}</strong>

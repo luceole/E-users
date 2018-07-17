@@ -24,6 +24,7 @@ import {
 import _Auth from '../components/auth/auth.module';
 import account from './account';
 //import admin from './admin';
+import directory from './directory/directory.component';
 import adminpoll from './adminpoll/adminpoll.component';
 import poll from './poll/poll.component';
 import groupes from './groupes/groupes.component';
@@ -42,7 +43,7 @@ import './app.scss';
 import '../assets/dirPagination';
 angular.module('E-userApp', [ngCookies, ngResource, ngSanitize, ngMaterial, mwlCalendar, 'btford.socket-io', ngValidationMatch, uiRouter,
   uiBootstrap, uiSelect, 'ckeditor',
-  _Auth, account, groupes, collaborate, navbar, footer, main, constants, socket, util, demandes, users, events, poll, adminpoll
+  _Auth, account, groupes, collaborate, navbar, footer, main, constants, socket, util, demandes, users, events, poll, adminpoll, directory
 ])
 .config(['calendarConfig', function(calendarConfig) {
   calendarConfig.dateFormatter = 'moment'; // use moment to format dates

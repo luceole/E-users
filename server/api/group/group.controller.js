@@ -101,7 +101,9 @@ export function isopen(req, res) {
 
 // Gets a single Group from the DB
 export function show(req, res) {
-  return Group.findById(req.params.id).exec()
+  return Group.findById(req.params.id)
+  .populate('participants', 'surname name email structure')
+  .exec()
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
