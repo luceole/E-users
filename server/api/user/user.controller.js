@@ -331,10 +331,22 @@ export function update(req, res) {
         .catch(validationError(res));
     });
 }
+export function usersupgroup(req, res) {
+  var listusers = req.body.listusers;
+  var idgrp = req.body.idgrp;
+  //console.log('del memberOf');
+  listusers.forEach(function(userId) {
+    User.findById(userId).exec()
+        .then(user => {
+          user.memberOf.pull(idgrp);
+          user.save();
+        });
+  });
+}
 export function usersupcandidat(req, res) {
   var listusers = req.body.listusers;
   var idgrp = req.body.idgrp;
-  console.log('del candid');
+  //console.log('del candidat');
   listusers.forEach(function(userId) {
     User.findById(userId).exec()
         .then(user => {
@@ -343,31 +355,31 @@ export function usersupcandidat(req, res) {
         });
   });
 }
-export function useraddcandidat(req, res) {
-  var listusers = req.body.listusers;
-  var idgrp = req.body.idgrp;
-  console.log('add candidat to grou');
-  listusers.forEach(function(userId) {
-    User.findById(userId).exec()
-        .then(user => {
-          user.candidatOf.pull(idgrp);
-          user.memberOf.push(idgrp);
-          user.save();
-        });
-  });
-}
+//export function useraddcandidat(req, res) {
+  // var listusers = req.body.listusers;
+  // var idgrp = req.body.idgrp;
+  // console.log('add candidat to groupe');
+  // listusers.forEach(function(userId) {
+  //   User.findById(userId).exec()
+  //       .then(user => {
+  //         user.candidatOf.pull(idgrp);
+  //         user.memberOf.push(idgrp);
+  //         user.save();
+  //       });
+  // });
+//}
 export function useradmingroup(req, res) {
   var listusers = req.body.listusers;
   var idgrp = req.body.idgrp;
 
   listusers.forEach(function(userId) {
-    console.log(`grp=${idgrp}`);
-    Group.findById(idgrp, function(err, group) {
+    //console.log(`grp=${idgrp}`);
+    User.findById(userId, function(err, user) {
       if(err) {
         return err;
       }
-      group.adminby.pull(userId);
-      group.save(function(err) {
+      user.adminOf.pull(idgrp);
+      user.save(function(err) {
         if(err) {
           return err;
         }
@@ -445,7 +457,6 @@ export function delusergroup(req, res) {
       user.memberOf.pull(groupId);
       return user.save()
         .then(user => {
-          console.log('1');
           Group.findById(groupId, function(err, group) {
             if(err) {
               console.log(err);
@@ -475,7 +486,6 @@ export function nocandidatusergroup(req, res) {
       user.candidatOf.pull(groupId);
       return user.save()
         .then(user => {
-          console.log('1');
           Group.findById(groupId, function(err, group) {
             if(err) {
               console.log(err);

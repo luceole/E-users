@@ -304,7 +304,18 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
       })
         .$promise;
     },
-    userSupCandidat(idgrp, listusers, callback) {
+    userSupGroup(idgrp, listusers, callback) {
+      var cb = callback || angular.noop;
+      return User.userSupGroup({
+        idgrp, listusers
+      }, function() {
+        return safeCb(callback)(null);
+      }, function(err) {
+        return safeCb(callback)(err);
+      })
+        .$promise;
+    },
+    userSuppCandidat(idgrp, listusers, callback) {
       var cb = callback || angular.noop;
       return User.userSupCandidat({
         idgrp, listusers
@@ -314,17 +325,18 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
         return safeCb(callback)(err);
       })
         .$promise;
-    }, userAddCandidat(idgrp, listusers, callback) {
-      var cb = callback || angular.noop;
-      return User.userAddCandidat({
-        idgrp, listusers
-      }, function() {
-        return safeCb(callback)(null);
-      }, function(err) {
-        return safeCb(callback)(err);
-      })
-          .$promise;
     },
+    // userAddCandidat(idgrp, listusers, callback) {
+    //   var cb = callback || angular.noop;
+    //   return User.userAddCandidat({
+    //     idgrp, listusers
+    //   }, function() {
+    //     return safeCb(callback)(null);
+    //   }, function(err) {
+    //     return safeCb(callback)(err);
+    //   })
+    //       .$promise;
+    // },
 
     discourseSso(id, params, callback) {
       var sso = params.sso;

@@ -63,6 +63,12 @@ export function UserResource($resource) {
         controller: 'useradmingroup'
       }
     },
+    userSupGroup: {
+      method: 'PUT',
+      params: {
+        controller: 'usersupgroup'
+      }
+    },
     userSupCandidat: {
       method: 'PUT',
       params: {

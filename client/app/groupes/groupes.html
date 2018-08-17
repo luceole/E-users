@@ -105,8 +105,8 @@
                 </ui-select>
                 <button class="btn btn-primary" ng-click="ModalEditAdminGroupCtrl.addAdm(ModalEditAdminGroupCtrl.admin.selected,ModalEditAdminGroupCtrl.groupe.adminby)">Ajouter</button>
               </div>
-
-              <tr dir-paginate="user in ModalEditAdminGroupCtrl.groupe.adminby | orderBy:'uid' | filter:search:strict | itemsPerPage :'12' ">
+  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"  pagination-id="adm" template-url="/assets/dirPagination.tpl.html"></dir-pagination-controls>
+              <tr dir-paginate="user in ModalEditAdminGroupCtrl.groupe.adminby | orderBy:'uid' | filter:search:strict | itemsPerPage :'10' "  pagination-id="adm" >
                 <td>
                   - {{user.uid}}
                 </td>
@@ -119,26 +119,27 @@
               </tr>
             </table>
           </uib-tab>
-
           <uib-tab heading="Participants">
+
             <table class="table table-striped ">
               <div>
-                <!-- <ui-select name="admingrp" required ng-model="ModalEditAdminGroupCtrl.admin.selected" ng-disable="disabled" style="width: 300px;" title="Administrateur">
+               <ui-select name="usergrp" required ng-model="ModalEditAdminGroupCtrl.user.selected" ng-disable="disabled" style="width: 300px;" title="User">
                   <ui-select-match placeholder="Selection dans la liste...">{{$select.selected.uid}}</ui-select-match>
-                  <ui-select-choices repeat="admin in ModalEditAdminGroupCtrl.listadmgrp| filter: $select.search|orderBy:'uid'">
-                    <div ng-bind-html="admin.uid  | highlight: $select.search"></div>
-                    <span ng-bind-html="admin.structure | highlight: $select.search"></span>
+                  <ui-select-choices repeat="user in ModalEditAdminGroupCtrl.users| filter: $select.search|orderBy:'uid'">
+                    <div ng-bind-html="user.uid  | highlight: $select.search"></div>
+                    <span ng-bind-html="user.structure | highlight: $select.search"></span>
                   </ui-select-choices>
                 </ui-select>
-                <button class="btn btn-primary" ng-click="ModalEditAdminGroupCtrl.addAdm(ModalEditAdminGroupCtrl.admin.selected,ModalEditAdminGroupCtrl.groupe.adminby)">Ajouter</button>
-              </div> -->
-
-              <tr dir-paginate="user in ModalEditAdminGroupCtrl.groupe.participants| orderBy:'uid' | filter:search:strict | itemsPerPage :'12' ">
+                <button class="btn btn-primary" ng-click="ModalEditAdminGroupCtrl.addUser(ModalEditAdminGroupCtrl.user.selected,ModalEditAdminGroupCtrl.groupe.participants)">Ajouter</button>
+              </div>
+              <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"  pagination-id="participants" template-url="/assets/dirPagination.tpl.html"></dir-pagination-controls>
+              <tr dir-paginate="user in ModalEditAdminGroupCtrl.groupe.participants| orderBy:'uid' | filter:search:strict | itemsPerPage :'10' "  pagination-id="participants" >
                 <td>
                   - {{user.uid}}
                 </td>
                 <td>
-                  <a href ng-click="ModalEditAdminGroupCtrl.delAdm(user,ModalEditAdminGroupCtrl.groupe.adminby)" rel="tooltip" title="Effacer" class="trash">
+                  <a href ng-click="ModalEditAdminGroupCtrl.delUser(user,ModalEditAdminGroupCtrl.groupe.participants
+                  )" rel="tooltip" title="Effacer" class="trash">
                     <div class="glyphicon glyphicon-trash pull-right"></div>
                   </a>
 
@@ -149,15 +150,7 @@
           <uib-tab heading="Demandes">
             <table class="table table-striped ">
               <div>
-                <!-- <ui-select name="admingrp" required ng-model="ModalEditAdminGroupCtrl.admin.selected" ng-disable="disabled" style="width: 300px;" title="Administrateur">
-                  <ui-select-match placeholder="Selection dans la liste...">{{$select.selected.uid}}</ui-select-match>
-                  <ui-select-choices repeat="admin in ModalEditAdminGroupCtrl.listadmgrp| filter: $select.search|orderBy:'uid'">
-                    <div ng-bind-html="admin.uid  | highlight: $select.search"></div>
-                    <span ng-bind-html="admin.structure | highlight: $select.search"></span>
-                  </ui-select-choices>
-                </ui-select>
-                <button class="btn btn-primary" ng-click="ModalEditAdminGroupCtrl.addAdm(ModalEditAdminGroupCtrl.admin.selected,ModalEditAdminGroupCtrl.groupe.adminby)">Ajouter</button>
-              </div> -->
+
 
               <tr dir-paginate="user in ModalEditAdminGroupCtrl.groupe.demandes| orderBy:'uid' | filter:search:strict | itemsPerPage :'12' ">
 <td>  <button class="btn btn-success btn-xs"  ng-click="ModalEditAdminGroupCtrl.addDemande(user,ModalEditAdminGroupCtrl.groupe.demandes)"    type="button">Inscrire

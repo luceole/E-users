@@ -25,9 +25,9 @@ router.put('/:id/addusergroup', auth.isAuthenticated(), controller.addusergroup)
 router.put('/:id/candidatusergroup', auth.isAuthenticated(), controller.candidatusergroup);
 router.put('/:id/nocandidatusergroup', auth.isAuthenticated(), controller.nocandidatusergroup);
 router.put('/:id/delusergroup', auth.isAuthenticated(), controller.delusergroup);
-router.put('/useradmingroup', auth.hasRole('admin'), controller.useradmingroup);  // better auth.hasRole('admin')
+router.put('/useradmingroup', auth.hasRole('admin'), controller.useradmingroup);
 router.put('/usersupcandidat', auth.hasRole('admin'), controller.usersupcandidat);
-router.put('/useraddcandidat', auth.hasRole('admin'), controller.useraddcandidat);
+router.put('/usersupgroup', auth.hasRole('admin'), controller.usersupgroup);
 router.put('/:id/discoursesso', auth.isAuthenticated(), controller.discourseSso);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.put('/:id/updateme', auth.isAuthenticated(), controller.updateMe);

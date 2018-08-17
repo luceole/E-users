@@ -68,6 +68,9 @@ var GroupSchema = new Schema({
 // Modify User adminOf
 GroupSchema.pre('save', function(next) {
   var grpId = this._id;
+  if(this.isModified('participants')) {
+    console.log('GROUP Pre-Save: Participants');
+  }
   if(this.isModified('adminby')) {
     console.log('GROUP Pre-Save: ' + this._id + ' adminby: ' + this.adminby);
     this.adminby.forEach(function(id) {
@@ -96,17 +99,44 @@ GroupSchema.pre('save', function(next) {
 //   console.log(this._update.demandes);
 //     return next();
 // });
-
+GroupSchema.post('findOneAndUpdate', function(r) {
+  console.log('post update Group ' + r._id);
+});
 GroupSchema.pre('findOneAndUpdate', function(next) {
+  if(this._update.participants) {
+    //console.log('GROUP Pre-findOneAndUpdate: Participants');
+    //console.log(this._update.participants);
+    var grpId = this._conditions._id;
+    this._update.participants.forEach(function(id) {
+      var query = {
+        _id: id
+      };
+    //  console.log('++++>' + id);
+      var update = {
+        $addToSet: {
+          memberOf: grpId
+        },
+        $pull: {candidatOf: grpId}
+      };
+
+    //  console.log(update);
+      User.findOneAndUpdate(query, update, function(err, user) {
+        if(err) {
+          console.log(`erreur Adminby  : ${err}`);
+        }
+        return next(); // Always go on !
+      });
+    });
+  }
   if(!this._update.adminby) return next();
-//  console.log('GROUP Pre-findOneAndUpdate: ' + this._conditions._id + ' adminby: ' + this._update.adminby);
+  //console.log('GROUP Pre-findOneAndUpdate: ' + this._conditions._id + ' adminby: ' + this._update.adminby);
   //console.log(this._update);
   var grpId = this._conditions._id;
   this._update.adminby.forEach(function(id) {
     var query = {
       _id: id
     };
-    //console.log(id):
+    //console.log(id);
     var update = {
       $addToSet: {
         adminOf: grpId
@@ -190,8 +220,6 @@ GroupSchema.pre('remove', function(next) {
   //   //  next(); // Always go on !
   //   });
   // });
-
-
   this.adminby.forEach(function(id) {
     var query = {
       _id: id
