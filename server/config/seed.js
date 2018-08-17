@@ -91,7 +91,7 @@ if(config.env !== 'production') {
           name: `EOLE${i}`,
           uid: `eole${i}`,
           surname: 'Luc',
-          email: `luc@tmail.com${i}`,
+          email: `luc@mail.com${i}`,
           urlToken: `token${i}`,
           mailValid: false,
           structure: 'Education',
@@ -196,6 +196,8 @@ if(config.env !== 'production') {
       User.create({
         provider: 'local',
         role: 'admin',
+        uid: 'admin',
+        email: 'the.admin@mail.lan',
         name: 'Administrator',
         surname: 'The',
         urlToken: '',
