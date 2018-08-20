@@ -15,6 +15,7 @@ export class UsersModalComponent {
     this.Save_user = usr;
     this.Structures = [];
     this.$uibModalInstance = $uibModalInstance;
+    this.myfilterlist = [];
   }
   $onInit() {
     this.Message.get()
@@ -47,9 +48,9 @@ export class UsersModalComponent {
     }
     );
   }
-  initPadId(){
-    console.log(this.user.authorPadID)
-    this.user.authorPadID=""
+  initPadId() {
+    console.log(this.user.authorPadID);
+    this.user.authorPadID = '';
     this.ok();
   }
 
@@ -57,6 +58,39 @@ export class UsersModalComponent {
     this.$uibModalInstance.dismiss('cancel');
   }
 } // UserModal
+
+
+export class AddGroupComponent {
+    /*@ngInject*/
+  constructor(User, Group, Auth, $uibModalInstance, selectedUsers) {
+    this.Auth = Auth;
+    this.$uibModalInstance = $uibModalInstance;
+    this.selectedUsers = selectedUsers;
+    this.groups = Group.query();
+  }
+
+  ok(grp) {
+    console.log(grp.participants.length);
+    angular.forEach(this.selectedUsers, (u) => {
+      if(grp.participants.findIndex(x => x._id === u._id) == -1) grp.participants.push(u);
+    });
+    console.log(grp.participants.length);
+    this.Auth.updateGroup(grp._id, {
+      // info: this.groupe.info,
+      // type: this.groupe.type,
+      // owner: this.person.selected._id,
+      // demandes: this.groupe.demandes,
+      participants: grp.participants
+    })
+      .then(r => {
+        this.$uibModalInstance.close();
+      });
+  }
+
+  cancel() {
+    this.$uibModalInstance.dismiss('cancel');
+  }
+}
 
 //    PAGE Principale
 
@@ -68,6 +102,7 @@ export class UsersComponent {
     this.User = User;
     this.socket = socket;
     this.users = User.query();
+    this.myfilterlist = [];
     // this.socket.syncUpdates('user', this.users);
     // this.$onDestroy = function() {
     //   console.log("destroy");
@@ -82,7 +117,39 @@ export class UsersComponent {
     this.User.update(user._id, user, () => {});
   }
 
+  activeselected() {
+    this.myfilterlist.forEach((user, index) => {
+      user.isactif = true;
+      user.isdemande = false;
+      this.User.update(user._id, user, () => {});
+    });
+  }
 
+  addgroupselected()
+  {
+    var filterlist = this.myfilterlist;
+    var ModalInstance = this.$uibModal.open({
+      templateUrl: 'modalAddGroup.html',
+      controller: AddGroupComponent,
+      controllerAs: 'modalAddGrouptCtrl',
+      backdrop: 'static',
+      resolve: {
+        selectedUsers() {
+          return filterlist;
+        }
+      }
+    });
+
+    ModalInstance.result.then(function() {}, function() {
+      console.log(`Modal dismissed at: ${new Date()}`);
+    });
+  }
+  validmailselected() {
+    this.myfilterlist.forEach((user, index) => {
+      user.mailValid = true;
+      this.User.update(user._id, user, () => {});
+    });
+  }
   deactive(user) {
     if(user.role === 'admin') {
       if(!confirm('Déactivation d\'un utilisateur avec role  ADMIN: Etes vous sur ?')) {

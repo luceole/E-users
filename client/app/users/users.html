@@ -1,14 +1,28 @@
 <div class="container">
-	<p>Gestion des utilisateurs ({{usersCtrl.users.length}} inscrits)</p>
+
+Gestion des utilisateurs: {{usersCtrl.users.length}} inscrits</span>
+<p class="text-warning" ng-if="usersCtrl.users.length==0"> Chargement ...</p>
 	<form>
 		<input ng-model="usersCtrl.search.$" placeholder="Recherche globale">
-		<input ng-model="usersCtrl.search.email" placeholder="Recherche sur le Mel"> Utilisateurs Non Actif
+		<input ng-model="usersCtrl.search.email" placeholder="Recherche sur le Mel">
+		<input ng-model="usersCtrl.search.structure" placeholder="Recherche sur la Structure">
+		 Utilisateurs Non Actif
 		<input type="checkbox" ng-model="usersCtrl.search.isactif" ng-true-value=false ng-false-value="">
 	</form>
+	 <span ng-if="usersCtrl.users.length > 0">  selectionnés: {{usersCtrl.myfilterlist.length}}/{{usersCtrl.users.length}}</span>
 	<p class="text-warning" ng-if="usersCtrl.users.length==0"> Chargement ...</p>
 	<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"></dir-pagination-controls>
+	<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.activeselected()" rel="tooltip" title="Activer les {{usersCtrl.myfilterlist.length}} utilisateurs ">
+	  <span class="glyphicon glyphicon-star"></span>Activer les utilsateurs
+	</button>
+	<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.validmailselected()" rel="tooltip" title="Valider les mails des {{usersCtrl.myfilterlist.length}} utilisateurs ">
+	  <span class="glyphicon glyphicon-star"></span>Valider les emails
+	</button>
+	<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.addgroupselected()" rel="tooltip" title="Inscrire les {{usersCtrl.myfilterlist.length}} utilisateurs ">
+	  <span class="glyphicon glyphicon-star"></span>Inscrire dans un groupe
+	</button>
 	<table class="table table-striped ">
-		<tr dir-paginate="user in usersCtrl.users | orderBy:'name' | filter:usersCtrl.search:strict | itemsPerPage :'12' ">
+		<tr dir-paginate="user in usersCtrl.myfilterlist=( usersCtrl.users | orderBy:'name' | filter:usersCtrl.search:strict )| itemsPerPage :'12' ">
 			<td>
 				<button class="btn btn-warning btn-xs" type="button" ng-if="!user.isactif" ng-click="usersCtrl.active(user)" rel="tooltip" title="Autoriser cet utilisateur">
           <span class="glyphicon glyphicon-star"></span>Activer
@@ -49,6 +63,39 @@
 		</tr>
 	</table>
 
+<script type="text/ng-template" id="modalAddGroup.html">
+	<div class="modal-header">
+		<h3 class="modal-title" ng-show="modalAddGrouptCtrl.group.selected!=undefined">Inscrire les {{modalAddGrouptCtrl.selectedUsers.length}} utilisateurs dans le groupe {{modalAddGrouptCtrl.group.selected.name}}</h3>
+		<h3 class="modal-title" ng-show="modalAddGrouptCtrl.group.selected==undefined">Inscrire les {{modalAddGrouptCtrl.selectedUsers.length}} utilisateurs dans un groupe</h3>
+	</div>
+	<div class="modal-body">
+
+		<ui-select name="grp" required ng-model="modalAddGrouptCtrl.group.selected" ng-disable="disabled" style="width: 300px;" title="Choisir un groupe">
+			<ui-select-match placeholder="Selection dans la liste...">{{$select.selected.info}}</ui-select-match>
+			<ui-select-choices repeat="grp in modalAddGrouptCtrl.groups| filter: $select.search|orderBy:'uid'">
+				<div ng-bind-html="grp.info  | highlight: $select.search"></div>
+				<!-- <span ng-bind-html="grp.name | highlight: $select.search"></span> -->
+			</ui-select-choices>
+		</ui-select>
+	 <table class="table table-striped ">
+		<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"  pagination-id="adm" template-url="/assets/dirPagination.tpl.html"></dir-pagination-controls>
+	              <tr dir-paginate="user in modalAddGrouptCtrl.selectedUsers | orderBy:'uid' | itemsPerPage :'10' "  pagination-id="adm" >
+	                <td>
+	                  - {{user.uid}}
+	                </td>
+	                <td>
+	                  <a href ng-click="modalAddGrouptCtrl.selectedUsers.splice(modalAddGrouptCtrl.selectedUsers.indexOf(user), 1);" rel="tooltip" title="Déselectionner" class="trash">
+	                    <div class="glyphicon glyphicon-remove pull-right"></div>
+	                  </a>
+	                </td>
+	              </tr>
+	            </table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="modalAddGrouptCtrl.ok(modalAddGrouptCtrl.group.selected)" ng-show="modalAddGrouptCtrl.group.selected!=undefined">OK</button>
+		<button class="btn btn-warning" ng-click="modalAddGrouptCtrl.cancel()" >Annuler</button>
+	</div>
+</script>
 
 	<script type="text/ng-template" id="modalEdit.html">
 		<div class="modal-header">
