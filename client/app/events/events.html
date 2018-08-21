@@ -130,7 +130,13 @@ coucou
             <!-- End form-group -->
           </uib-tab>
           <uib-tab heading="Participants">
-            Listes des participants:
+            <span ng-show="modalEditEvCtrl.event.participants.length> 0"> {{modalEditEvCtrl.event.participants.length}} participants </span>
+            <button class="btn btn-warning btn-xs" type="button"  ng-click="modalEditEvCtrl.copyAdr()" rel="tooltip" title="Copier les emails">
+              <span class="glyphicon glyphicon-star"></span>Copier les participants
+            </button>
+            <button class="btn btn-warning btn-xs" type="button"  ng-click="modalEditEvCtrl.mailtoAdr()" rel="tooltip" title="Ecrire">
+              <span class="glyphicon glyphicon-star"></span>Envoyez un mail
+            </button>
             <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html">
             </dir-pagination-controls>
             <table class="table table-striped ">
