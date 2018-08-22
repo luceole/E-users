@@ -47,7 +47,7 @@
     "mongoose": "^4.13.9",
     "mongoose-paginate": "^5.0.3",
     "morgan": "~1.7.0",
-    "openid-client": "^1.8.1",
+    "openid-client": "^2.3.0",
     "passport": "~0.3.0",
     "passport-google-oauth20": "^1.0.0",
     "passport-local": "^1.0.0",
