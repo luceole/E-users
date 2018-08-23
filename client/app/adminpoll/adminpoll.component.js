@@ -4,14 +4,14 @@ const uiRouter = require('angular-ui-router');
 import routes from './adminpoll.routes';
 
 export class modalViewPoll {
-    /*@ngInject*/
+  /*@ngInject*/
   constructor($scope, $uibModalInstance, $window, $timeout, $filter, Auth, User, Group, Poll, selectedPoll) {
     'ngInject';
     this.$uibModalInstance = $uibModalInstance;
     this.repuser = [];
     this.totx = [];
     this.doTxt = function(r, i) {
-      if(r) this.totx[i] = this.totx[i] + 1;
+      if (r) this.totx[i] = this.totx[i] + 1;
     };
     this.subHeaders = function() {
       var subs = [];
@@ -31,19 +31,19 @@ export class modalViewPoll {
     this.propositions = this.poll.propositions;
     this.subDate = this.subHeaders();
     this.resultats = this.poll.resultats;
-    this.resultats.forEach( (resultat) => {
+    this.resultats.forEach((resultat) => {
 
-      resultat.reponses.forEach( (r,index) => {
-     if(r) this.totx[index] = this.totx[index] + 1;
-   });
+      resultat.reponses.forEach((r, index) => {
+        if (r) this.totx[index] = this.totx[index] + 1;
+      });
     });
     this.rep = function(r) {
-    //  console.log(r)
+      //  console.log(r)
       return r.reponses;
     };
 
     this.cancel = function() {
-    //this.resultats = this.poll.resultats;
+      //this.resultats = this.poll.resultats;
       this.$uibModalInstance.dismiss('cancel');
     };
   }
@@ -51,7 +51,7 @@ export class modalViewPoll {
 
 
 export class modalAddAdminPoll {
-    /*@ngInject*/
+  /*@ngInject*/
   constructor(Auth, User, Group, Poll, selectedPoll, $timeout, $uibModalInstance, moment) {
     'ngInject';
     this.Auth = Auth;
@@ -81,7 +81,7 @@ export class modalAddAdminPoll {
     this.hstep = 1;
     this.mstep = 15;
 
-    if(!angular.isObject(selectedPoll)) {     //CREATE
+    if (!angular.isObject(selectedPoll)) { //CREATE
       this.newPoll = true;
       this.disable = {
         tab0: false,
@@ -90,7 +90,7 @@ export class modalAddAdminPoll {
       };
       this.propositions = [];
       this.grp = {};
-    } else    // MODIFY
+    } else // MODIFY
     {
       this.newPoll = false;
       this.titre = 'Modification du sondage';
@@ -100,14 +100,14 @@ export class modalAddAdminPoll {
         tab2: false
       };
       this.grp = {};
-    //  this.propositions = angular.copy(this.poll.propositions);
+      //  this.propositions = angular.copy(this.poll.propositions);
       this.propositions = this.poll.propositions;
       self = this;
       var r = [];
       r = this.isadminOf.filter(function(item) {
         return (self.poll.groupe == item._id);
       });
-      if(r.length) this.grp.selected = r[0];
+      if (r.length) this.grp.selected = r[0];
     }
   } // End Constructor
 
@@ -118,10 +118,9 @@ export class modalAddAdminPoll {
       sttime: []
     };
     //this.propositions.push(prop);
-    if(!this.propositions.filter(function(item) {
-      return (item.stdate == prop.stdate);
-    }).length)
-    {
+    if (!this.propositions.filter(function(item) {
+        return (item.stdate == prop.stdate);
+      }).length) {
       this.propositions.push(prop);
     }
   }
@@ -142,10 +141,10 @@ export class modalAddAdminPoll {
   }
 
   initCalendar() {
-    if(this.disable.tab1 != true) {
+    if (this.disable.tab1 != true) {
       // Calendar in Tabset need this !
       this.$timeout(function() {
-    //    $('#calendar').fullCalendar('render');
+        //    $('#calendar').fullCalendar('render');
       }, 0);
     } else {
       /*  this.active = {};
@@ -156,7 +155,7 @@ export class modalAddAdminPoll {
 
   ok1(form) {
     this.submitted = true;
-    if(form.$valid) {
+    if (form.$valid) {
       this.disable.tab1 = false;
       this.active = 1;
       // this.$timeout(function() {
@@ -171,18 +170,24 @@ export class modalAddAdminPoll {
   }
   ok() {
     var self = this;
-      /* self.submitted = true
-       if (form.$valid) {*/
-    if(self.newPoll) {
-      this.Auth.createPoll({
-        name: self.poll.name,
-        info: self.poll.info,
-        groupe: self.grp.selected._id,
-        groupeInfo: self.grp.selected.info,
-        groupeName: self.grp.selected.name,
-        isActif: false,
-        propositions: self.propositions
+    /* self.submitted = true
+     if (form.$valid) {*/
+    angular.forEach(self.propositions, function(p) {
+      console.log(p)
+      p.sttime = p.sttime.filter(function(e) {
+        return e
       })
+    });
+    if (self.newPoll) {
+      this.Auth.createPoll({
+          name: self.poll.name,
+          info: self.poll.info,
+          groupe: self.grp.selected._id,
+          groupeInfo: self.grp.selected.info,
+          groupeName: self.grp.selected.name,
+          isActif: false,
+          propositions: self.propositions
+        })
         .then(function(r) {
           self.$uibModalInstance.close();
         })
@@ -199,13 +204,13 @@ export class modalAddAdminPoll {
         });
     } else {
       this.Auth.updatePoll(self.poll._id, {
-        name: self.poll.name,
-        info: self.poll.info,
-        groupe: self.grp.selected._id,
-        groupeInfo: self.grp.selected.info,
-        groupeName: self.grp.selected.name,
-        propositions: self.propositions
-      })
+          name: self.poll.name,
+          info: self.poll.info,
+          groupe: self.grp.selected._id,
+          groupeInfo: self.grp.selected.info,
+          groupeName: self.grp.selected.name,
+          propositions: self.propositions
+        })
         .then(function(data) {
           self.$uibModalInstance.close();
         })
@@ -240,23 +245,23 @@ export class AdminpollComponent {
     this.isAdmin = Auth.isAdminSync();
     this.$uibModal = $uibModal;
     this.freshPolls = function() {
-      if(this.isAdmin) {
-        this.polls = Poll.query();}
-      else {
+      if (this.isAdmin) {
+        this.polls = Poll.query();
+      } else {
         var self = this;
         this.Auth.getCurrentUser()
-      .then(function(data) {
-      //  console.log(data);
-        var userGroupes = data.adminOf;
-        var userGrp = [''];
-        userGroupes.forEach(function(p) {
-          userGrp.push(p.name);
-        });
-        self.Auth.myadminpolls(userGrp)
-      .then(function(dataRes) {
-        self.polls = dataRes;
-      });
-      });
+          .then(function(data) {
+            //  console.log(data);
+            var userGroupes = data.adminOf;
+            var userGrp = [''];
+            userGroupes.forEach(function(p) {
+              userGrp.push(p.name);
+            });
+            self.Auth.myadminpolls(userGrp)
+              .then(function(dataRes) {
+                self.polls = dataRes;
+              });
+          });
       }
     };
   }
@@ -327,17 +332,17 @@ export class AdminpollComponent {
   active(poll) {
     poll.isActif = !poll.isActif;
     this.Auth.updatePoll(poll._id, {
-      isActif: poll.isActif
-    }).then(r => {
-      console.log('Maj is OK ');
-    })
+        isActif: poll.isActif
+      }).then(r => {
+        console.log('Maj is OK ');
+      })
       .catch(function(err) {
         err = err.data;
         console.log(err);
       });
   }
   delete(poll) {
-    if(confirm('Suppression de ' + poll.name)) {
+    if (confirm('Suppression de ' + poll.name)) {
       this.Poll.remove({
         id: poll._id
       });

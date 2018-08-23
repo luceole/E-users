@@ -25,31 +25,31 @@ Gestion des utilisateurs: {{usersCtrl.users.length}} inscrits</span>
 		<tr dir-paginate="user in usersCtrl.myfilterlist=( usersCtrl.users | orderBy:'name' | filter:usersCtrl.search:strict )| itemsPerPage :'12' ">
 			<td>
 				<button class="btn btn-warning btn-xs" type="button" ng-if="!user.isactif" ng-click="usersCtrl.active(user)" rel="tooltip" title="Autoriser cet utilisateur">
-          <span class="glyphicon glyphicon-star"></span>Activer
+          <span class="glyphicon glyphicon-ok"></span>
         </button>
 				<button type="button" class="btn btn-success btn-xs" ng-if="user.isactif" ng-click="usersCtrl.deactive(user)" rel="tooltip" title="Suspendre cet utilisateur">
-          Déactiver
+  <span class="glyphicon glyphicon-remove"></span>
         </button>
-
-				<button class="btn btn-warning btn-xs" type="button" ng-if="!user.mailValid" ng-click="usersCtrl.validmail(user)" rel="tooltip" title="Courriel Non Confirmé">
+				<button class="btn btn-warning btn-xs" type="button" ng-if="!user.mailValid" ng-click="usersCtrl.validmail(user)" rel="tooltip" title="Valider le Courriel">
             <span class="glyphicon glyphicon-envelope"></span>
           </button>
-				<button class="btn btn-success btn-xs" type="button" ng-if="user.mailValid" ng-click="usersCtrl.invalidmail(user)" rel="tooltip" title="Courriel Confirmé">
+				<button class="btn btn-success btn-xs" type="button" ng-if="user.mailValid" ng-click="usersCtrl.invalidmail(user)" rel="tooltip" title="Invalider le Courriel">
               <span class="glyphicon glyphicon-envelope"></span>
           </button>
-				<span>
-          <a href ng-click="usersCtrl.edit(user)" rel="tooltip" title="Modifier" class="trash">
-            <div class="glyphicon glyphicon-pencil pull-right"></div>
-          </a>
-        </span>
+
+          <button class="btn  btn-xs" type="button"  ng-click="usersCtrl.edit(user)" rel="tooltip" title="Modifier" class="trash">
+            <span class="glyphicon glyphicon-pencil"></span>
+          </button>
+
 			</td>
 			<td>
 				<strong>{{user.name}}</strong>
 				<strong>{{user.surname}}</strong>
 			</td>
-			<td> {{user.uid}} </td>
-			<td> {{user.creationDate | date: "dd/MM/yyyy"}} </td>
-			<td>
+			<td> <div class=" hidden-xs">{{user.uid}}  </div></td>
+			<td> <div class=" hidden-xs">{{user.role}}  </div></td>
+			<td> <div class="hidden-sm hidden-xs">{{user.creationDate | date: "dd/MM/yyyy"}} </div></td>
+			<td >
 				<strong> {{user.structure}} </strong>
 			</td>
 			<td>
