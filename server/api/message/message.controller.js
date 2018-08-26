@@ -71,12 +71,13 @@ export function index(req, res) {
   var ethercalcUrl = config.ethercalc ? config.ethercalc.url : '';
   var etherpadUrl = config.etherpad ? config.etherpad.url : '';
   var etherHost = config.etherpad ? config.etherpad.host : '';
+  var boardUrl = config.board ? config.board.url : '';
   var Infos = config.Infos ? config.Infos : '';
   var DeviseSite = config.DeviseSite ? config.DeviseSite : 'DeviseSite';
   var TitreSite = config.TitreSite ? config.TitreSite : 'TitreSite';
   var onlineServices = config.onlineServices ? config.onlineServices : [];
-  var Structures = config.Structures ? config. Structures: [];
-  return res.status(200).json({OauthActif: config.OauthActif, ethercalcUrl, etherpadUrl, etherHost, DeviseSite, TitreSite, onlineServices, Structures, Infos});
+  var Structures = config.Structures ? config.Structures : [];
+  return res.status(200).json({OauthActif: config.OauthActif, boardUrl, ethercalcUrl, etherpadUrl, etherHost, DeviseSite, TitreSite, onlineServices, Structures, Infos});
     // return Message.find().exec(),
     //   .then(respondWithResult(res))
     //   .catch(handleError(res));

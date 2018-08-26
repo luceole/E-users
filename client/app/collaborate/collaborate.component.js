@@ -220,6 +220,7 @@ export class CollaborateComponent {
     this.urlPad = '';
     this.hostPad = '';
     this.urlCal = '';
+    this.urlBoard = '';
     $scope.$on('$destroy', function() {
       socket.unsyncUpdates('thing');
     });
@@ -383,6 +384,9 @@ export class CollaborateComponent {
         if(this.myconfig.ethercalcUrl) {
           this.urlCal = this.myconfig.ethercalcUrl;
         }
+        if(this.myconfig.boardUrl) {
+          this.urlBoard = this.myconfig.boardUrl;
+        }
         //console.log(this.myconfig);
         this.refreshEvents(false);
       });
@@ -504,6 +508,12 @@ export class CollaborateComponent {
     //console.log(url);
     this.$window.open(url);
   }
+  openBoard(grp) {
+    var url = `${this.urlBoard}/${grp.name}`;
+    //console.log(url);
+    this.$window.open(url);
+  }
+
 }
 export default angular.module('eUsersApp.collaborate', [uiRouter])
   .config(routes)
