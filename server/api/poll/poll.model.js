@@ -1,13 +1,16 @@
 'use strict';
 
 import mongoose from 'mongoose';
-import {registerEvents} from './poll.events';
+import {
+  registerEvents
+} from './poll.events';
 
 var PollSchema = new mongoose.Schema({
 
   name: String,
   info: String,
   isActif: Boolean,
+  type: Number, // 0 Public, 5  Tous, 10 Modéré groupe
   groupe: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Groupe'
@@ -18,8 +21,8 @@ var PollSchema = new mongoose.Schema({
   propositions: [{
     date: Date,
     stdate: String,
-    sttime: []
-      // ,allDay: Boolean
+    sttime: [],
+    allDay: Boolean
   }],
 
   resultats: [{
@@ -32,7 +35,7 @@ var PollSchema = new mongoose.Schema({
     },
     reponses: []
   }],
-    /*resultats: [{
+  /*resultats: [{
     user: {
       name: String,
       email: String
@@ -44,10 +47,9 @@ var PollSchema = new mongoose.Schema({
         // ,allDay: Boolean
       }]
 }]*/
-},
-  {
-    usePushEach: true
-  });
+}, {
+  usePushEach: true
+});
 
 
 registerEvents(PollSchema);

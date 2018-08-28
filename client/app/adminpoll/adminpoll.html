@@ -26,7 +26,7 @@
           <span class="glyphicon glyphicon-pencil pull-right"></span>
           <a href ng-click="adminpollCtrl.view(poll)" ng-if="poll.resultats.length>0" rel="tooltip" title="Résultat" class="trash">
             <div class="glyphicon glyphicon-eye-open pull-right"></div>
-          </a>
+          </a>{{groupe.type}}
           </span>
       </td>
       <td>
@@ -35,6 +35,13 @@
       <td>
         {{poll.info}}
       </td>
+      <td ng-switch="poll.type">
+        <strong ng-switch-when="0">Public</strong>
+        <strong ng-switch-when="5">Tous</strong>
+        <strong ng-switch-when="10">Groupe</strong>
+        <strong ng-switch-default>{{groupe.type}}</strong>
+      </td>
+      <td>
       <td>
         {{poll.groupeInfo}}
       </td>
@@ -68,8 +75,16 @@
             </p>
             Description
             <input type="text" name="desc" class="form-control" ng-model="modalAddAdminPollCtrl.poll.info" style="width:350px" />
-            Groupe
-            <ui-select ng-model="modalAddAdminPollCtrl.grp.selected" name="groupe" ng-disable="disabled" required style="width: 300px;" title="Groupe">
+
+            Type :
+            <select name="type" required ng-model="modalAddAdminPollCtrl.poll.type" ng-options="o.id as o.name for o in modalAddAdminPollCtrl.typeoptions">
+            </select>
+            <p class="help-block" ng-show="addForm.groupe.$error.required && modalAddAdminPollCtrl.submitted">
+             Type Obligatoire
+           </p>
+           <div ng-if="modalAddAdminPollCtrl.poll.type==10">
+             Groupe
+            <ui-select ng-model="modalAddAdminPollCtrl.grp.selected" name="groupe" ng-disable="disabled" placeholder="Selection dans la liste..."  required style="width: 300px;" title="Groupe">
               <ui-select-match placeholder="Selection dans la liste...">{{$select.selected.info}}</ui-select-match>
               <ui-select-choices repeat="grp in modalAddAdminPollCtrl.isadminOf  | filter: $select.search|orderBy:'info'">
                 <div ng-bind-html="grp.info  | highlight: $select.search"></div>
@@ -79,6 +94,7 @@
               Groupe Obligatoire
             </p>
           </div>
+        </div>
         </form>
         <button class="btn btn-primary " ng-click="modalAddAdminPollCtrl.ok1(addForm) ">Etape suivante</button>
       </uib-tab>
@@ -107,19 +123,24 @@
       active="modalAddAdminPollCtrl.active.tab2" disable="modalAddAdminPollCtrl.disable.tab2">
 
         <div class="table-responsive">
+
           <table class="table table-bordered table-condensed table-body-center">
             <tr>
-              <th> Date</th>
-              <th> Horaire 1
+              <th> Date
+              <!-- <button class="btn btn-warning btn-xs" type="button" ng-if="!modalAddAdminPollCtrl.propositions.allDay"  ng-click="modalAddAdminPollCtrl.allDay()">Journée entière</button>
+              <button class="btn btn-success btn-xs" type="button" ng-if="modalAddAdminPollCtrl.propositions.allDay" ng-click="modalAddAdminPollCtrl.allDay()">Journée entière</button> -->
+              </th>
+
+              <th > Horaire 1
                 <button ng-click="modalAddAdminPollCtrl.dup(0)">Dupliquer</button>
               </th>
-              <th> Horaire 2
+              <th ng-show="!modalAddAdminPollCtrl.propositions.allDay"> Horaire 2
                 <button ng-click="modalAddAdminPollCtrl.dup(1)">Dupliquer</button>
               </th>
-              <th> Horaire 3
+              <th ng-show="!modalAddAdminPollCtrl.propositions.allDay"> Horaire 3
                 <button ng-click="modalAddAdminPollCtrl.dup(2)">Dupliquer</button>
               </th>
-              <th> Horaire 4
+              <th ng-show="!modalAddAdminPollCtrl.propositions.allDay"> Horaire 4
                 <button ng-click="modalAddAdminPollCtrl.dup(3)">Dupliquer</button>
               </th>
             </tr>
@@ -130,16 +151,17 @@
               <td>
                 <input ng-model="p.sttime[0]" placeholder="ex 10h00-12h00" maxlength="11" size="14">
               </td>
-              <td>
+              <td ng-show="!modalAddAdminPollCtrl.propositions.allDay">
                 <input ng-model="p.sttime[1]" placeholder="11h30-12h45" maxlength="11" size="14">
               </td>
-              <td>
+              <td ng-show="!modalAddAdminPollCtrl.propositions.allDay">
                 <input ng-model="p.sttime[2]" placeholder=" 14h00-1600h " maxlength="11" size="14">
               </td>
-              <td>
+              <td ng-show="!modalAddAdminPollCtrl.propositions.allDay">
                 <input ng-model="p.sttime[3]" placeholder="16h00-18h00 " maxlength="11 " size="14">
               </td>
             </tr>
+
           </table>
           <!-- <button class="btn btn-primary " ng-click="modalAddAdminPollCtrl.ok()">OK</button> -->
       </uib-tab>

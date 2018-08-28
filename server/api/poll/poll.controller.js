@@ -17,7 +17,7 @@ var _ = require('lodash');
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
-    if(entity) {
+    if (entity) {
       return res.status(statusCode).json(entity);
     }
     return null;
@@ -29,7 +29,7 @@ function patchUpdates(patches) {
     try {
       // eslint-disable-next-line prefer-reflect
       jsonpatch.apply(entity, patches, /*validate*/ true);
-    } catch(err) {
+    } catch (err) {
       return Promise.reject(err);
     }
 
@@ -39,7 +39,7 @@ function patchUpdates(patches) {
 
 function removeEntity(res) {
   return function(entity) {
-    if(entity) {
+    if (entity) {
       return entity.remove()
         .then(() => {
           res.status(204).end();
@@ -50,7 +50,7 @@ function removeEntity(res) {
 
 function handleEntityNotFound(res) {
   return function(entity) {
-    if(!entity) {
+    if (!entity) {
       res.status(404).end();
       return null;
     }
@@ -72,17 +72,7 @@ export function index(req, res) {
     .catch(handleError(res));
 }
 
-// exports.mypolls = function(req, res) {
-//   console.log(req.query);
-//   return Poll.find({
-//     isActif: true,
-//     groupeName: {
-//       $in: req.query.mygrp
-//     }
-//   }).exec()
-//     .then(respondWithResult(res))
-//     .catch(handleError(res));
-// };
+
 
 
 // Gets a single Poll from the DB
@@ -98,23 +88,30 @@ export function create(req, res) {
   console.log('create');
   console.log(req.body);
   return Poll.create(req.body).then(respondWithResult(res, 201))
-      .catch(handleError(res));
+    .catch(handleError(res));
 }
 
 // Upserts the given Poll in the DB at the specified ID
 export function upsert(req, res) {
   console.log('upsert');
-  if(req.body._id) {
+  if (req.body._id) {
     Reflect.deleteProperty(req.body, '_id');
   }
-  return Poll.findOneAndUpdate({_id: req.params.id}, req.body, {new: true, upsert: true, setDefaultsOnInsert: true, runValidators: true}).exec()
+  return Poll.findOneAndUpdate({
+      _id: req.params.id
+    }, req.body, {
+      new: true,
+      upsert: true,
+      setDefaultsOnInsert: true,
+      runValidators: true
+    }).exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
 
 // Updates an existing Poll in the DB
 export function patch(req, res) {
-  if(req.body._id) {
+  if (req.body._id) {
     Reflect.deleteProperty(req.body, '_id');
   }
   return Poll.findById(req.params.id).exec()
@@ -126,43 +123,80 @@ export function patch(req, res) {
 
 export function myadminpolls(req, res) {
   Poll.find({
-    groupeName: {
-      $in: req.query.mygrp
-    }
+    $or: [{
+        type: {
+          $lt: 10
+        }
+      },
+      {
+        groupeName: {
+          $in: req.query.mygrp
+        }
+      }
+    ]
   }, function(err, polls) {
-    if(err) {
+    if (err) {
       console.log(err);
       return handleError(res, err);
     }
     return res.status(200).json(polls);
   });
 }
+exports.mypolls = function(req, res) {
+  console.log(req.query);
+  return Poll.find({
+      isActif: true,
+      $or: [{
+          type: {
+            $lt: 10
+          }
+        },
+        {
+          groupeName: {
+            $in: req.query.mygrp
+          }
+        }
+      ]
+    }).exec()
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+};
 
-export function mypolls(req, res) {
-  Poll.find({
-    isActif: true,
-    groupeName: {
-      $in: req.query.mygrp
-    }
-  }, function(err, polls) {
-    if(err) {
-      console.log(err);
-      return handleError(res, err);
-    }
-    return res.status(200).json(polls);
-  });
-}
+//  $or: [ { quantity: { $lt: 20 } }, { price: 10 } ]
+// export function mypolls(req, res) {
+//   Poll.find({
+//       isActif: true,
+//       $or: [{
+//           type: {
+//             $lt: 10
+//           }
+//         },
+//         {
+//           groupeName: {
+//             $in: req.query.mygrp
+//           }
+//         }
+//       ]
+//     },
+//     function(err, polls) {
+//       if (err) {
+//         console.log(err);
+//         return handleError(res, err);
+//       }
+//       return res.status(200).json(polls);
+//     });
+// }
 
 // vote an existing poll in the DB.
 exports.vote = function(req, res) {
-  if(req.body._id) {
+  if (req.body._id) {
     delete req.body._id;
   }
   Poll.findById(req.params.id, function(err, poll) {
-    if(err) {
+    if (err) {
       return handleError(res, err);
     }
-    if(!poll) {
+    if (!poll) {
       return res.status(404).send('Not Found');
     }
     console.log('VOTE');
@@ -170,7 +204,7 @@ exports.vote = function(req, res) {
       return v.user.email == req.body.vote.user.email;
     });
     console.log(updated);
-    if(updated == -1) {
+    if (updated == -1) {
       console.log('Nouveau');
       poll.resultats.push(req.body.vote);
     } else {
@@ -179,7 +213,7 @@ exports.vote = function(req, res) {
     }
     console.log(poll.resultats);
     poll.save(function(err) {
-      if(err) {
+      if (err) {
         console.log(err);
         return handleError(res, err);
       }

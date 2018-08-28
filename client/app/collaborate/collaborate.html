@@ -81,7 +81,13 @@
         <button class="btn btn-success btn-xs" ng_if="collaborateCtrl.rep(poll)" type="button" ng-click="collaborateCtrl.openPoll(poll)" rel="tooltip" title="Répondre au sondage">
           <span class="glyphicon glyphicon-star"></span>Modifier&nbsp&nbsp
         </button>
-        {{poll.groupeInfo}}
+        <td ng-switch="poll.type">
+          <strong ng-switch-when="0">Public</strong>
+          <strong ng-switch-when="5">Tous</strong>
+          <strong ng-switch-when="10">Groupe : </strong>   {{poll.groupeInfo}}
+          <strong ng-switch-default>{{groupe.type}}</strong>
+        </td>
+
       </td>
       <td>
         <strong>{{poll.name}}</strong>

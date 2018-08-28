@@ -58,6 +58,19 @@ export class modalAddAdminPoll {
     this.$timeout = $timeout;
     this.getCurrentUser = Auth.getCurrentUserSync;
     //this.polls = Poll.query();
+    this.typeoptions = [{
+        id: 0,
+        name: 'Public'
+      },
+      {
+        id: 5,
+        name: 'Tous'
+      },
+      {
+        id: 10,
+        name: 'Groupe'
+      }
+    ];
     this.poll = new Poll(selectedPoll);
     this.newPoll = true;
     this.titre = 'Création d\'un sondage';
@@ -134,6 +147,11 @@ export class modalAddAdminPoll {
       p.sttime[x] = self.propositions[0].sttime[x];
     });
   }
+  // allDay() {
+  //   var self = this;
+  //   self.propositions.allDay = !self.propositions.allDay;
+  // }
+
   openDD($event) {
     $event.preventDefault();
     $event.stopPropagation();
@@ -172,22 +190,35 @@ export class modalAddAdminPoll {
     var self = this;
     /* self.submitted = true
      if (form.$valid) {*/
+
     angular.forEach(self.propositions, function(p) {
-      console.log(p)
+      if (!p.sttime[0]) p.sttime[0] = " ";
       p.sttime = p.sttime.filter(function(e) {
         return e
       })
     });
+
     if (self.newPoll) {
-      this.Auth.createPoll({
-          name: self.poll.name,
-          info: self.poll.info,
-          groupe: self.grp.selected._id,
-          groupeInfo: self.grp.selected.info,
-          groupeName: self.grp.selected.name,
-          isActif: false,
-          propositions: self.propositions
-        })
+      var npoll = {};
+      if (self.poll.type == 10) npoll = {
+        name: self.poll.name,
+        info: self.poll.info,
+        type: self.poll.type,
+        groupe: self.grp.selected._id,
+        groupeInfo: self.grp.selected.info,
+        groupeName: self.grp.selected.name,
+        isActif: false,
+        propositions: self.propositions
+
+      }
+      else npoll = {
+        name: self.poll.name,
+        info: self.poll.info,
+        type: self.poll.type,
+        isActif: false,
+        propositions: self.propositions
+      }
+      this.Auth.createPoll(npoll)
         .then(function(r) {
           self.$uibModalInstance.close();
         })
@@ -203,14 +234,26 @@ export class modalAddAdminPoll {
           //  });
         });
     } else {
-      this.Auth.updatePoll(self.poll._id, {
-          name: self.poll.name,
-          info: self.poll.info,
-          groupe: self.grp.selected._id,
-          groupeInfo: self.grp.selected.info,
-          groupeName: self.grp.selected.name,
-          propositions: self.propositions
-        })
+      if (self.poll.type == 10) npoll = {
+        name: self.poll.name,
+        info: self.poll.info,
+        type: self.poll.type,
+        groupe: self.grp.selected._id,
+        groupeInfo: self.grp.selected.info,
+        groupeName: self.grp.selected.name,
+        propositions: self.propositions
+
+      }
+      else npoll = {
+        name: self.poll.name,
+        info: self.poll.info,
+        type: self.poll.type,
+        groupe: undefined,
+        groupeInfo: "",
+        groupeName: "",
+        propositions: self.propositions
+      }
+      this.Auth.updatePoll(self.poll._id, npoll)
         .then(function(data) {
           self.$uibModalInstance.close();
         })
@@ -244,6 +287,20 @@ export class AdminpollComponent {
     this.Poll = Poll;
     this.isAdmin = Auth.isAdminSync();
     this.$uibModal = $uibModal;
+    this.typeoptions = [{
+        id: 0,
+        name: 'Public'
+      },
+      {
+        id: 5,
+        name: 'Tous'
+      },
+      {
+        id: 10,
+        name: 'Groupe'
+      }
+    ];
+
     this.freshPolls = function() {
       if (this.isAdmin) {
         this.polls = Poll.query();
