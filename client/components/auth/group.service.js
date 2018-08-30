@@ -6,7 +6,6 @@ export function GroupResource($resource) {
   return $resource('/api/groups/:id/:controller', {
     id: '@_id'
   }, {
-
     listopengroups: {
       method: 'GET',
       isArray: true,
@@ -14,8 +13,16 @@ export function GroupResource($resource) {
         controller: 'isopen'
       }
     },
+
+    commun: {
+      method: 'GET',
+      isArray: true,
+      params: {
+        controller: 'commun'
+      }
+    },
     eventsofgroup: {
-      method: 'get',
+      method: 'GET',
       isArray: true,
       params: {
         controller: 'eventsofgroup'
@@ -45,6 +52,5 @@ export function GroupResource($resource) {
     update: {
       method: 'PUT',
     }
-  }
-  );
+  });
 }

@@ -10,7 +10,7 @@ import Param from '../api/param/param.model';
 import Thing from '../api/thing/thing.model';
 
 
-if(config.env !== 'production') {
+if (config.env !== 'production') {
   Thing.find({}).remove()
     .then(() => {
       let thing = Thing.create({
@@ -43,15 +43,15 @@ if(config.env !== 'production') {
         // List of user roles
         userRoles: ['guest', 'user', 'admin_grp', 'admin'],
         onlineServices: [{
-          glyphicon: 'glyphicon-bullhorn',
-          url: 'https://forum.libre-communaute.fr',
-          title: ' Forum Libre Communauté'
-        },
-        {
-          glyphicon: 'glyphicon-certificate',
-          url: 'https://chat.libre-communaute.fr',
-          title: 'Chat Libre Communauté'
-        }
+            glyphicon: 'glyphicon-bullhorn',
+            url: 'https://forum.libre-communaute.fr',
+            title: ' Forum Libre Communauté'
+          },
+          {
+            glyphicon: 'glyphicon-certificate',
+            url: 'https://chat.libre-communaute.fr',
+            title: 'Chat Libre Communauté'
+          }
         ]
       });
     });
@@ -59,33 +59,33 @@ if(config.env !== 'production') {
   User.find({}).remove()
     .then(() => {
       User.create({
-        provider: 'local',
-        role: 'admin_grp',
-        name: 'Test',
-        uid: 'test',
-        surname: 'User',
-        email: 'luc.bourdot@ac-dijon.fr',
-        mailValid: true,
-        structure: 'Education',
-        isactif: true,
-        password: 'test'
-      }, {
-        provider: 'local',
-        role: 'admin',
-        name: 'Admin',
-        surname: 'Alfred',
-        uid: 'admin',
-        email: 'admin@admin.com',
-        mailValid: true,
-        structure: 'MEN',
-        isactif: true,
-        password: 'admin'
-      })
+          provider: 'local',
+          role: 'admin_grp',
+          name: 'Test',
+          uid: 'test',
+          surname: 'User',
+          email: 'luc.bourdot@ac-dijon.fr',
+          mailValid: true,
+          structure: 'Education',
+          isactif: true,
+          password: 'test'
+        }, {
+          provider: 'local',
+          role: 'admin',
+          name: 'Admin',
+          surname: 'Alfred',
+          uid: 'admin',
+          email: 'admin@admin.com',
+          mailValid: true,
+          structure: 'MEN',
+          isactif: true,
+          password: 'admin'
+        })
         .then(() => {
           console.log('finished populating users');
         });
       var uT = [];
-      for(var i = 0; i < 10; i++) {
+      for (var i = 0; i < 10; i++) {
         uT.push({
           provider: 'local',
           name: `EOLE${i}`,
@@ -109,6 +109,16 @@ if(config.env !== 'production') {
             uid: 'admin'
           }, function(err, UserAdmin) {
             Group.create({
+              name: 'Tous',
+              info: 'Groupe Commun',
+              note: 'Bonjour le groupe',
+              type: 0,
+              active: true,
+              owner: UserAdmin._id,
+              adminby: [UserAdmin._id],
+              participants: [],
+              events: []
+            }, {
               name: 'dream',
               info: 'The Dream Team',
               note: 'Bonjour le groupe Dream Team',
@@ -171,42 +181,59 @@ if(config.env !== 'production') {
     });
 } else { // Mode Production Create Params and first Admin if empty User
   Param.count({}, function(err, count) {
-    if(count == 0) {
+    if (count == 0) {
       Param.create({
         DeviseSite: 'Eco-système Logiciels Libres ',
         TitreSite: 'Libre Communauté',
         // List of user roles
         userRoles: ['guest', 'user', 'admin_grp', 'admin'],
         onlineServices: [{
-          glyphicon: 'glyphicon-bullhorn',
-          url: 'https://forum.libre-communaute.fr',
-          title: ' Forum Libre Communauté'
-        },
-        {
-          glyphicon: 'glyphicon-certificate',
-          url: 'https://chat.libre-communaute.fr',
-          title: 'Chat Libre Communauté'
-        }
+            glyphicon: 'glyphicon-bullhorn',
+            url: 'https://forum.libre-communaute.fr',
+            title: ' Forum Libre Communauté'
+          },
+          {
+            glyphicon: 'glyphicon-certificate',
+            url: 'https://chat.libre-communaute.fr',
+            title: 'Chat Libre Communauté'
+          }
         ]
       });
     }
   });
   User.count({}, function(err, count) {
-    if(count == 0) {
+    if (count == 0) {
       User.create({
-        provider: 'local',
-        role: 'admin',
-        uid: 'admin',
-        email: 'the.admin@mail.lan',
-        name: 'Administrator',
-        surname: 'The',
-        urlToken: '',
-        mailValid: true,
-        structure: 'Autre',
-        isactif: true,
-        password: 'admin'
-      })
+          provider: 'local',
+          role: 'admin',
+          uid: 'admin',
+          email: 'the.admin@mail.lan',
+          name: 'Administrator',
+          surname: 'The',
+          urlToken: '',
+          mailValid: true,
+          structure: 'Autre',
+          isactif: true,
+          password: 'admin'
+        })
         .then(() => {
+          Group.find({}).remove(function() {
+            User.findOne({
+              uid: 'admin'
+            }, function(err, UserAdmin) {
+              Group.create({
+                name: 'Tous',
+                info: 'Groupe Commun',
+                note: 'Bonjour le groupe',
+                type: 0,
+                active: true,
+                owner: UserAdmin._id,
+                adminby: [UserAdmin._id],
+                participants: [],
+                events: []
+              })
+            })
+          });
           console.log('finished populating Administrator => Connect and change password');
         });
     }

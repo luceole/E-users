@@ -3,10 +3,10 @@
   <form><input ng-model="directoryCtrl.search.$" placeholder="Recherche globale">
   <input ng-model="directoryCtrl.search.email" placeholder="Recherche sur le Mel">
 </form>
-<button class="btn btn-warning btn-xs" type="button"  ng-click="directoryCtrl.copyAdr()" rel="tooltip" title="Copier les emails">
+<button class="btn btn-warning btn-xs" ng-if="(directoryCtrl.groupe.name != 'Tous') || directoryCtrl.isAdminOf" type="button"  ng-click="directoryCtrl.copyAdr()" rel="tooltip" title="Copier les emails">
   <span class="glyphicon glyphicon-star"></span>Copier les adresses
 </button>
-<button class="btn btn-warning btn-xs" type="button"  ng-click="directoryCtrl.mailtoAdr()" rel="tooltip" title="Ecrire">
+<button class="btn btn-warning btn-xs" ng-if="(directoryCtrl.groupe.name != 'Tous') || directoryCtrl.isAdminOf" type="button"  ng-click="directoryCtrl.mailtoAdr()" rel="tooltip" title="Ecrire">
   <span class="glyphicon glyphicon-star"></span>Envoyez un mail
 </button>
   <table class="table table-striped ">
@@ -25,11 +25,13 @@
       <td>
         {{user.name}} {{user.surname}}
       </td>
-      <td>
-     <a href=mailto:{{user.email}} rel="tooltip" title="Envoyer un courriel"> {{user.email}}  </a>
-      </td>
+
       <td>
      {{user.structure}}
+      </td>
+      <td ng-if="(directoryCtrl.groupe.name != 'Tous') || directoryCtrl.isAdminOf">
+
+     <a href=mailto:{{user.email}} rel="tooltip" title="Envoyer un courriel"> {{user.email}}  </a>
       </td>
     </tr>
   </table>

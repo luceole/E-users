@@ -7,15 +7,31 @@ export class DirectoryComponent {
   /*@ngInject*/
   constructor(Auth, Group, User, $stateParams) {
     'ngInject';
+    this.Auth = Auth;
     this.getCurrentUser = Auth.getCurrentUser;
     this.user = Auth.getCurrentUserSync();
     this.$stateParams = $stateParams;
-    this.groupe = [];
     this.myfilterlist = [];
-    this.groupe = Group.get({id: $stateParams.grpID});
+    this.groupe = Group.get({
+      id: $stateParams.grpID
+    });
+    this.isAdminOf = 0;
+    this.getCurrentUser().then(u => {
+      var r = u.adminOf.filter(o => o._id === $stateParams.grpID);
+      this.isAdminOf = r.length
+      if ((this.groupe.name == "Tous") && !this.isAdminOf) {
+        alert("Opération Interdite")
+        return
+      }
+    })
+
   }
 
   mailtoAdr() {
+    if ((this.groupe.name == "Tous") && !this.isAdminOf) {
+      alert("Opération Interdite")
+      return
+    }
     var liste = '';
     this.myfilterlist.forEach(function(o, index) {
       liste = liste + o.email + ', ';
@@ -23,6 +39,10 @@ export class DirectoryComponent {
     window.location.href = 'mailto:' + liste;
   }
   copyAdr() {
+    if ((this.groupe.name == "Tous") && !this.isAdminOf) {
+      alert("Opération Interdite")
+      return
+    }
     var liste = '';
     this.myfilterlist.forEach(function(o, index) {
       liste = liste + o.email + ', ';

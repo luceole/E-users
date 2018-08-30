@@ -12,10 +12,11 @@
 import jsonpatch from 'fast-json-patch';
 import Group from './group.model';
 var config = require('../../config/environment');
+
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
-    if(entity) {
+    if (entity) {
       return res.status(statusCode).json(entity);
     }
     return null;
@@ -26,7 +27,7 @@ function patchUpdates(patches) {
   return function(entity) {
     try {
       jsonpatch.apply(entity, patches, /*validate*/ true);
-    } catch(err) {
+    } catch (err) {
       return Promise.reject(err);
     }
     return entity.save();
@@ -35,7 +36,7 @@ function patchUpdates(patches) {
 
 function removeEntity(res) {
   return function(entity) {
-    if(entity) {
+    if (entity) {
       return entity.remove()
         .then(() => {
           return res.status(204).end();
@@ -46,7 +47,7 @@ function removeEntity(res) {
 
 function handleEntityNotFound(res) {
   return function(entity) {
-    if(!entity) {
+    if (!entity) {
       res.status(404).end();
       return null;
     }
@@ -72,26 +73,37 @@ export function index(req, res) {
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
+
+
+export function commun(req, res) {
+  Group.find({
+      name: "Tous"
+    }, '_id, name, info')
+    .exec()
+    .then(respondWithResult(res))
+    .catch(handleError(res))
+
+}
 // Get list of groups of one owner
 
 export function byowner(req, res) {
   var owner = req.query.owner;
   Group.find({
-    owner
-  })
+      owner
+    })
     .populate('participants', 'uid info note')
     .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
 
-  // Get list of open groupes
+// Get list of open groupes
 export function isopen(req, res) {
   Group.find({
-    type: {
-      $lt: 10
-    }
-  })
+      type: {
+        $lt: 10
+      }
+    })
     .populate('owner', 'uid')
     .populate('participants', 'uid info note')
     .exec()
@@ -102,8 +114,8 @@ export function isopen(req, res) {
 // Gets a single Group from the DB
 export function show(req, res) {
   return Group.findById(req.params.id)
-  .populate('participants', 'surname name email structure')
-  .exec()
+    .populate('participants', 'surname name email structure')
+    .exec()
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -118,24 +130,24 @@ export function create(req, res) {
 
 // Upserts the given Group in the DB at the specified ID
 export function upsert(req, res) {
-  if(req.body._id) {
+  if (req.body._id) {
     delete req.body._id;
   }
 
   return Group.findOneAndUpdate({
-    _id: req.params.id
-  }, req.body, {
-    upsert: true,
-    setDefaultsOnInsert: true,
-    runValidators: true
-  }).exec()
+      _id: req.params.id
+    }, req.body, {
+      upsert: true,
+      setDefaultsOnInsert: true,
+      runValidators: true
+    }).exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
 
 // Updates an existing Group in the DB
 export function patch(req, res) {
-  if(req.body._id) {
+  if (req.body._id) {
     delete req.body._id;
   }
   return Group.findById(req.params.id).exec()
@@ -158,31 +170,31 @@ export function eventsofgroup(req, res) {
   console.log(groupe);
   var events = [];
   Group.findById(req.params.id).lean()
-  .populate('events.participants', 'uid name surname email structure')
-  .exec(function(err, groupe) {
-    if(err) {
-      return handleError(res, err);
-    }
-    if(!groupe) {
-      return res.send(404);
-    }
-    //events.push.apply(events, groupe.events);
-    return res.json(groupe.events);
-  });
+    .populate('events.participants', 'uid name surname email structure')
+    .exec(function(err, groupe) {
+      if (err) {
+        return handleError(res, err);
+      }
+      if (!groupe) {
+        return res.send(404);
+      }
+      //events.push.apply(events, groupe.events);
+      return res.json(groupe.events);
+    });
 }
 
 export function eventparticipate(req, res) {
   Group.findById(req.params.id, function(err, groupe) {
-    if(err) {
+    if (err) {
       return handleError(res, err);
     }
-    if(!groupe) {
+    if (!groupe) {
       return res.send(404);
     }
     var ev = groupe.events.id(req.body._id);
-    if(ev) { // inscription/Dé-inscription
+    if (ev) { // inscription/Dé-inscription
       var index = ev.participants.indexOf(req.body.UserId);
-      if(index === -1) // Pas inscrit
+      if (index === -1) // Pas inscrit
       {
         console.log('inscription ' + req.body.UserId);
         ev.participants.push(req.body.UserId);
@@ -194,7 +206,7 @@ export function eventparticipate(req, res) {
       return res.send(404);
     }
     groupe.save(function(err, groupe) {
-      if(err) {
+      if (err) {
         console.log(err);
         return handleError(res, err);
       }
@@ -206,36 +218,35 @@ export function eventparticipate(req, res) {
 
 // Create or Updates Events an existing groupe in the DB.
 export function eventupdate(req, res) {
-    /* if (req.body._id) {
-         delete req.body._id;
-     }*/
-  if((req.user.role !== 'admin') && (req.user.adminOf.indexOf(req.params.id) === -1)) {
+  /* if (req.body._id) {
+       delete req.body._id;
+   }*/
+  if ((req.user.role !== 'admin') && (req.user.adminOf.indexOf(req.params.id) === -1)) {
     return res.send(403);
   }
   Group.findById(req.params.id, function(err, groupe) {
-    if(err) {
+    if (err) {
       return handleError(res, err);
     }
-    if(!groupe) {
+    if (!groupe) {
       return res.send(404);
     }
     var ev = groupe.events.id(req.body._id);
-    if(ev) { // Drag and Drop
+    if (ev) { // Drag and Drop
       console.log('Drag/Drop');
       ev.startsAt = req.body.startsAt;
       ev.allDay = req.body.allDay;
-      if(req.body.title) ev.title = req.body.title;
-      if(req.body.info) ev.info = req.body.info;
-      if(req.body.lieu) ev.lieu = req.body.lieu;
-      if(req.body.endsAt) {
+      if (req.body.title) ev.title = req.body.title;
+      if (req.body.info) ev.info = req.body.info;
+      if (req.body.lieu) ev.lieu = req.body.lieu;
+      if (req.body.endsAt) {
         ev.endsAt = req.body.endsAt;
-      }
-      else {
+      } else {
         ev.endsAt = req.body.startsAt;
       }
       //console.log(ev);
       groupe.save(function(err, groupe) {
-        if(err) {
+        if (err) {
           console.log('**');
           console.log(err);
           return handleError(res, err);
@@ -243,11 +254,8 @@ export function eventupdate(req, res) {
         console.log('Groupe EventUpdate ' + groupe.name);
         return res.json(groupe.events);
       });
-    }
-
-
-    else {
-        // PAD
+    } else {
+      // PAD
 
       var args = {
         groupID: groupe.groupPadID,
@@ -256,10 +264,9 @@ export function eventupdate(req, res) {
       };
 
       etherpad.createGroupPad(args, function(error, data) {
-        if(error) {
+        if (error) {
           console.error('Error creating pad: ' + error.message);
-        }
-        else {
+        } else {
           console.log('New pad created: ' + data.padID);
           req.body.eventPadID = data.padID;
         }
@@ -267,7 +274,7 @@ export function eventupdate(req, res) {
         console.log(req.body.eventPadID);
         groupe.events.push(req.body);
         groupe.save(function(err, groupe) {
-          if(err) {
+          if (err) {
             console.log('**');
             console.log(err);
             return handleError(res, err);
@@ -277,41 +284,41 @@ export function eventupdate(req, res) {
         });
       });
     }
-      /*    groupe.save(function (err, groupe) {
-            if (err) {
-              console.log(err);
-              return handleError(res, err);
-            }
-            console.log("Groupe EventUpdate " + groupe.name);
-            console.log(req.body);
-            return res.json(groupe.events);
-          });*/
+    /*    groupe.save(function (err, groupe) {
+          if (err) {
+            console.log(err);
+            return handleError(res, err);
+          }
+          console.log("Groupe EventUpdate " + groupe.name);
+          console.log(req.body);
+          return res.json(groupe.events);
+        });*/
   });
 }
 
 export function eventdelete(req, res) {
   console.log('eventdelete');
   //console.log(req.user);
-  if(req.body._id) {
+  if (req.body._id) {
     delete req.body._id;
   }
-  if((req.user.role !== 'admin') && (req.user.adminOf.indexOf(req.params.id) === -1)) {
+  if ((req.user.role !== 'admin') && (req.user.adminOf.indexOf(req.params.id) === -1)) {
     return res.send(403);
   }
   Group.findById(req.params.id, function(err, groupe) {
-    if(err) {
+    if (err) {
       return handleError(res, err);
     }
-    if(!groupe) {
+    if (!groupe) {
       return res.send(404);
     }
     var ev = groupe.events.id(req.body.id);
-    if(!ev) {
+    if (!ev) {
       return res.send(404);
     }
     ev.remove(function(err) {
       groupe.save(function(err, groupe) {
-        if(err) {
+        if (err) {
           return handleError(res, err);
         }
         console.log('Groupe Update ' + groupe.name);

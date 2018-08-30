@@ -8,6 +8,7 @@ var router = express.Router();
 
 router.get('/', auth.hasRole('admin'), controller.index);
 router.get('/byowner', auth.isAuthenticated(), controller.byowner);
+router.get('/commun', auth.isAuthenticated(), controller.commun);
 router.get('/isopen', auth.isAuthenticated(), controller.isopen);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.get('/events', controller.events);
