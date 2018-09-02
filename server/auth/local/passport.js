@@ -6,9 +6,10 @@ import email from 'emailjs/email';
 import config from '../../config/environment';
 
 function localAuthenticate(User, uid, password, done) {
+  var email = uid.toLowerCase();
   User.findOne({
-    uid,
-    //mailValid: true
+    //uid,
+    $or: [{ uid}, { email}]
   }).exec()
     .then(user => {
       if(!user) {
@@ -27,6 +28,9 @@ function localAuthenticate(User, uid, password, done) {
             message: 'Erreur Identification!'
           });
         } else if(!user.mailValid) {
+          if(!email.server) {
+            return done(null, false, {message: 'Compte avec courriel non validé.'});
+          }
           var server = email.server.connect({
             user: config.mail.user,
             password: config.mail.password,
