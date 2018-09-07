@@ -23,8 +23,8 @@ export default class LostpwdController {
 
   register(form) {
     this.submitted = true;
-    if(form.$valid) {
-      this.Auth.lostPassword(this.email)
+    if (form.$valid) {
+      this.Auth.lostPassword(this.email.toLOwerCase())
         .then(() => {
           this.message = `Initialisation du mot de passe: courriel envoyé à ${this.email}`;
         })
