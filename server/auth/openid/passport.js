@@ -3,13 +3,31 @@ import {
   Strategy
 } from 'openid-client';
 import config from '../../config/environment';
+import sleep from 'sleep';
+
+function retry(maxRetries, fn) {
+  return fn().catch(function(err) {
+    //  yield setTimeout(suspend.resume(), 1000);
+    if (maxRetries <= 0) {
+      throw err;
+    }
+    console.log("Fail to contact SSO : retry ");
+    sleep.sleep(6);
+    return retry(maxRetries - 1, fn);
+  });
+}
 
 export function setup(User, config) {
   const Issuer = require('openid-client').Issuer;
 
   if (config.OauthActif) {
     var urlDiscover = `${config.openid.discover}.well-known/openid-configuration`;
-    Issuer.discover(urlDiscover) // => Promise
+
+
+    //  Issuer.discover(urlDiscover) // => Promise
+    retry(20, function() {
+        return Issuer.discover(urlDiscover)
+      })
       .then(function(myIssuer) {
         console.log('OPenID: Discovered issuer %s', myIssuer.issuer);
         const client = new myIssuer.Client({
