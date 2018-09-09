@@ -48,14 +48,20 @@
             </div>
             <div class="col-md-6">
               <h3>Informations:</h3> Pour profiter des services en ligne vous devez avoir un compte.
-              <br> Pour éviter le spam les demandes d'inscription sont soumises à modération.
+              <span class="hidden-sm hidden-xs"> Pour éviter le spam les demandes d'inscription sont soumises à modération.</span>
               <br> <br>
-              <span class="alert alert-info"><a href="/signup"> Inscrivez vous.</a></span>
+              <a href="/signup" class="btn btn-default"> Inscription.</a>
               <br>
-              <div ng-if="vm.Infos">
+              <div class="hidden-sm hidden-xs">
+              <br> <br>Si vous avez perdu votre mot de passe, vous pouvez le réinitialiser via le mail
+              <br><br>
+              <a href="/lostpwd" class="btn btn-default"> Mot de passe perdu.</a>
+            </div>
+              <div ng-if="vm.Infos" class="hidden-xs">
                 <br><br>
                 <div class="alert alert-warning" ng-bind-html="vm.Infos"> </div>
               </div>
+              <p>
 
             </div>
 
