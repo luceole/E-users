@@ -213,7 +213,7 @@ export class CollaborateComponent {
     this.calendarEventTitle.monthViewTooltip = this.calendarEventTitle.weekViewTooltip = this.calendarEventTitle.dayViewTooltip = function(event) {
       var msg = '<br>Participation: Oui';
       if (event.color == calendarConfig.colorTypes.important)
-        msg = 'Participation: Non';
+        msg = '<br>Participation: Non';
       return event.info + '<br>' + event.lieu + msg;
     };
     this.eventSources = [
