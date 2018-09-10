@@ -161,11 +161,9 @@ export class CollaborateComponent {
           }).length) {
           console.log("inscription");
           this.Auth.groupecommun().then(r => {
-            console.log(r[0]._id)
+            //console.log(r[0]._id)
             this.Auth.addUserGroup(r[0]._id)
           });
-
-          //  this.Auth.addUserGroup()
         }
 
 
@@ -465,9 +463,12 @@ export class CollaborateComponent {
         });
     });
   }
-
+  goSettings() {
+    this.$state.go('settings', {
+      'Tab': 2
+    });
+  }
   goDirectory(gp) {
-    console.log(gp._id);
     this.$state.go('directory', {
       'grpID': gp._id
     });

@@ -10,7 +10,7 @@ export class DirectoryComponent {
     this.Auth = Auth;
     this.getCurrentUser = Auth.getCurrentUser;
     this.user = Auth.getCurrentUserSync();
-    this.$stateParams = $stateParams;
+    //this.$stateParams = $stateParams;
     this.myfilterlist = [];
     this.groupe = Group.get({
       id: $stateParams.grpID

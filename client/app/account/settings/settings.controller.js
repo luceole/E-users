@@ -1,7 +1,7 @@
 'use strict';
 export default class SettingsController {
   /*@ngInject*/
-  constructor(Auth, Group, Message) {
+  constructor(Auth, Group, Message, $stateParams) {
     this.Auth = Auth;
     this.Group = Group;
     this.Message = Message;
@@ -10,6 +10,7 @@ export default class SettingsController {
     //  this.errors = {};
     this.editMessage = '';
     this.groups = Group.listopengroups(); // Groupe OPEN
+    this.Active = $stateParams.Tab ? Number($stateParams.Tab) : 0;
   }
   $onInit() {
     this.Message.get()
@@ -19,16 +20,19 @@ export default class SettingsController {
         this.Structures = this.myconfig.Structures;
       });
   }
+
+
+
   edit(form) {
     this.submitted = true;
     this.editMessage = '';
-    if(form.$valid) {
+    if (form.$valid) {
       return this.Auth.updateMe(this.user._id, {
-        name: this.user.name,
-        surname: this.user.surname,
-        structure: this.user.structure,
-        email: this.user.email
-      })
+          name: this.user.name,
+          surname: this.user.surname,
+          structure: this.user.structure,
+          email: this.user.email
+        })
         .then(() => {
           this.editMessage = 'Mise à jour prise en compte';
         })
@@ -52,7 +56,7 @@ export default class SettingsController {
   changePassword(form) {
     this.submitted = true;
     //  console.log(this.user.oldPassword, this.user.newPassword)
-    if(form.$valid) {
+    if (form.$valid) {
       this.Auth.changePassword(this.user.oldPassword, this.user.newPassword)
         .then(() => {
           this.message = 'Modification du mot de passe effectuée.';
@@ -83,63 +87,63 @@ export default class SettingsController {
 
   addusergroup(groupe) {
     var grpId = groupe._id;
-    if(groupe.type == 0)   //Ouvert
+    if (groupe.type == 0) //Ouvert
     {
       this.Auth.addUserGroup(grpId, (err, u) => {
-        if(err) {
+        if (err) {
           alert(`Erreur MAJ ${err.data}`);
           console.log(err);
         }
-      //console.log(u);
-      // Force =>  Read User
+        //console.log(u);
+        // Force =>  Read User
         this.user = this.Auth.getCurrentUserSync();
         this.groups = this.Group.listopengroups();
-      //console.log(  this.groups)
+        //console.log(  this.groups)
       });
     } else // Reservé
-  {
+    {
       console.log('reservé');
       this.Auth.candidatUserGroup(grpId, (err, u) => {
-        if(err) {
+        if (err) {
           alert(`Erreur MAJ ${err.data}`);
           console.log(err);
         }
-      //console.log(u);
-      // Force =>  Read User
+        //console.log(u);
+        // Force =>  Read User
         this.user = this.Auth.getCurrentUserSync();
         this.groups = this.Group.listopengroups();
-      //console.log(  this.groups)
+        //console.log(  this.groups)
       });
     }
   }
 
   delusergroup(groupe, moderate) {
     var grpId = groupe._id;
-    if(!moderate)   //Ouvert
+    if (!moderate) //Ouvert
     {
       this.Auth.delUserGroup(grpId, (err, u) => {
-        if(err) {
+        if (err) {
           alert(`Erreur MAJ ${err.data}`);
           console.log(err);
         }
-      //  console.log(u)
-      // Force =>  Read User
+        //  console.log(u)
+        // Force =>  Read User
         this.user = this.Auth.getCurrentUserSync();
         this.groups = this.Group.listopengroups();
       });
     } else // Reservé
-  {
+    {
       console.log('reservé');
       this.Auth.nocandidatUserGroup(grpId, (err, u) => {
-        if(err) {
+        if (err) {
           alert(`Erreur MAJ ${err.data}`);
           console.log(err);
         }
-    //console.log(u);
-    // Force =>  Read User
+        //console.log(u);
+        // Force =>  Read User
         this.user = this.Auth.getCurrentUserSync();
         this.groups = this.Group.listopengroups();
-    //console.log(  this.groups)
+        //console.log(  this.groups)
       });
     }
   }

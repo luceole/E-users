@@ -4,11 +4,11 @@ export default function routes($stateProvider) {
   'ngInject';
 
   $stateProvider.state('login', {
-    url: '/login',
-    template: require('./login/login.html'),
-    controller: 'LoginController',
-    controllerAs: 'vm'
-  })
+      url: '/login',
+      template: require('./login/login.html'),
+      controller: 'LoginController',
+      controllerAs: 'vm'
+    })
     .state('logout', {
       url: '/logout?referrer',
       referrer: 'main',
@@ -40,7 +40,7 @@ export default function routes($stateProvider) {
       controllerAs: 'vm'
     })
     .state('settings', {
-      url: '/settings',
+      url: '/settings/:Tab',
       template: require('./settings/settings.html'),
       controller: 'SettingsController',
       controllerAs: 'vm',

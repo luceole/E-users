@@ -2,10 +2,12 @@
 
   <div class="col-lg-10">
 
+    <span ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0"> Vous êtes inscrit dans : {{collaborateCtrl.getCurrentUser().memberOf.length}} groupe(s) </span>
+    <button ng-click="collaborateCtrl.goSettings()" style="float: right;">Gérer vos Inscriptions</button >
+    <span ng-if="collaborateCtrl.getCurrentUser().memberOf.length == 0">Vous êtes inscrit dans aucun groupe - Modifiez vos paramètres </span>
     <uib-tabset>
     <uib-tab heading="Services">
-      <span ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0">Vous êtes inscrit dans : {{collaborateCtrl.getCurrentUser().memberOf.length}} groupe(s) </span>
-      <span ng-if="collaborateCtrl.getCurrentUser().memberOf.length == 0">Vous êtes inscrit dans aucun groupe - Modifiez vos paramètres </span>
+      <br>
       <form >
         <input ng-show="collaborateCtrl.getCurrentUser().memberOf.length > 0" ng-model="search.$" placeholder="Recherche globale">
       </form>
@@ -32,11 +34,10 @@
 
      </uib-tab>
     <uib-tab ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0" heading="Agenda">
-        <span ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0">Vous êtes inscrit dans : {{collaborateCtrl.getCurrentUser().memberOf.length}} groupe(s) </span>
+      <br>
     <div class="alert alert-info">
     <div class="text-center">
         <h4> Agenda de vos groupes</h4>
-        <p class="text-center">{{ collaborateCtrl.calendarTitle }}</p>
 
         <div class="btn-group">
           <label class="btn btn-primary" ng-model="collaborateCtrl.calendarView" uib-btn-radio="'year'" ng-click="collaborateCtrl.cellIsOpen = false">Année</label>
@@ -64,7 +65,7 @@
   </uib-tab>
 
 <uib-tab ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0" heading="Sondage">
-    <span ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0">Vous êtes inscrit dans : {{collaborateCtrl.getCurrentUser().memberOf.length}} groupe(s) </span>
+  <br>
    <div  class="text text-warning" ng-if="collaborateCtrl.polls.length == 0"> Aucun Sondage </div>
   <form >
     <input   ng-show="collaborateCtrl.polls.length" ng-model="searchText" placeholder="Recherche globale">
