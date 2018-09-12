@@ -71,14 +71,14 @@ coucou
                   Groupe Obligatoire
                 </p>
               </div>
-              <div ng-if="!modalEditEvCtrl.newEv">
+              <!-- <div ng-if="!modalEditEvCtrl.newEv"> -->
 
               Titre
               <input type="text" name="title" class="form-control" ng-model="modalEditEvCtrl.event.title" required style="width:450px" />
               <p class="help-block" ng-show="editerForm.title.$error.required && modalEditEvCtrl.submitted">
                 Titre Obligatoire
               </p>
-            </div>
+            <!-- </div> -->
               Description
               <input type="text" name="info" class="form-control" ng-model="modalEditEvCtrl.event.info" ng-init="modalEditEvCtrl.event.info" required style="width:450px" />
               <p class="help-block" ng-show="editerForm.info.$error.required && modalEditEvCtrl.submitted">

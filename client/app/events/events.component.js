@@ -23,8 +23,10 @@ export class ModalEditEvComponent {
       this.newEv = true;
       this.updateEvent = {
         title: 'Réunion',
-        startsAt: moment().startOf('hour').toDate(),
-        endsAt: moment().startOf('hour').add(1, 'hours').toDate(),
+        startsAt: moment().startOf('day').toDate(),
+        endsAt: moment().endOf('day').toDate(),
+      //  startsAt: moment().startOf('hour').toDate(),
+      //  endsAt: moment().startOf('hour').add(1, 'hours').toDate(),
         allDay: true,
         info: '',
         lieu: '',
@@ -122,7 +124,7 @@ export class ModalEditEvComponent {
     if(form.$valid) {
       if(self.newEv) {
         self.event.group = self.grp;
-        self.event.title = self.grp.info;
+        //self.event.title = self.grp.info;
       }
       if(this.moment(self.event.endsAt).isBefore(self.event.startsAt)) {
         self.event.endsAt = self.event.startsAt;
@@ -233,7 +235,12 @@ export class EventsComponent {
     };
 
     this.calendarEventTitle.monthViewTooltip = this.calendarEventTitle.weekViewTooltip = this.calendarEventTitle.dayViewTooltip = function(event) {
-      var msg = 'Participants : ' + event.participants.length;
+      var msg = '';
+      if(!event.allDay) {
+        msg = moment(event.startsAt).format('LT') + '-' + moment(event.endsAt).format('LT') + '<br>';
+      }
+      msg = msg + 'Participants : ' + event.participants.length; moment(event.startsAt).format('LT');
+
       return event.info + '<br>Lieu :' + event.lieu + '<br> ' + msg;
     };
   }

@@ -14,7 +14,7 @@ export class PollComponent {
     this.repuser = [];
     this.totx = [];
     this.doTxt = function(r, i) {
-      if (r) {
+      if(r) {
         this.totx[i] = this.totx[i] + 1;
       }
     };
@@ -42,11 +42,11 @@ export class PollComponent {
     this.resultats = this.poll.resultats;
     this.resultats.forEach((resultat) => {
       resultat.reponses.forEach((r, index) => {
-        if (r) this.totx[index] = this.totx[index] + 1;
+        if(r) this.totx[index] = this.totx[index] + 1;
       });
     });
     this.found = this.resultats.filter(o => o.user.email === this.user.email);
-    if (this.found.length) {
+    if(this.found.length) {
       // Remplacer directement
       var i = this.resultats.indexOf(this.found[0]);
       // console.log(this.resultats[i].reponses)
@@ -68,9 +68,9 @@ export class PollComponent {
       reponses: this.repuser
     };
     this.Auth.votePoll(this.poll._id, {
-        resultats: this.poll.resultats,
-        vote: newRep
-      })
+      resultats: this.poll.resultats,
+      vote: newRep
+    })
       .then(function(r) {
         //console.log('Maj is OK ');
         self.$uibModalInstance.close();
@@ -146,6 +146,7 @@ export class CollaborateComponent {
     this.socket = socket;
     this.Auth = Auth;
     this.Group = Group;
+    this.moment = moment;
     this.myconfig = {};
     this.isLoggedIn = Auth.isLoggedInSync;
     this.isAdmin = Auth.isAdminSync;
@@ -156,16 +157,15 @@ export class CollaborateComponent {
       .then(data => {
         var userGroupes = data.memberOf;
         // Force Group Commun
-        if (!userGroupes.filter(item => {
-            return ((item) && item.name == "Tous");
-          }).length) {
-          console.log("inscription");
+        if(!userGroupes.filter(item => {
+          return ((item) && item.name == 'Tous');
+        }).length) {
+          console.log('inscription');
           this.Auth.groupecommun().then(r => {
             //console.log(r[0]._id)
-            this.Auth.addUserGroup(r[0]._id)
+            this.Auth.addUserGroup(r[0]._id);
           });
         }
-
 
 
         var userGrp = [];
@@ -190,6 +190,7 @@ export class CollaborateComponent {
     // this.OauthActif = true;
     // this.DeviseSite = appConfig.DeviseSite || 'Eco-système Libre';
     // this.TitreSite = appConfig.TitreSite || 'Libre Communauté';
+
     moment.locale('fr');
     this.calendarView = 'week';
     this.cellIsOpen = false;
@@ -210,9 +211,9 @@ export class CollaborateComponent {
         self.openPadEv(args);
       }
     }];
-    this.calendarEventTitle.monthViewTooltip = this.calendarEventTitle.weekViewTooltip = this.calendarEventTitle.dayViewTooltip = function(event) {
+    this.calendarEventTitle.monthViewTooltip = this.calendarEventTitle.weekViewTooltip = this.calendarEventTitle.dayViewTooltip = (event) => {
       var msg = '<br>Participation: Oui';
-      if (event.color == calendarConfig.colorTypes.important)
+      if(event.color == calendarConfig.colorTypes.important)
         msg = '<br>Participation: Non';
       return event.info + '<br>' + event.lieu + msg;
     };
@@ -237,15 +238,20 @@ export class CollaborateComponent {
     });
   }
 
+  gteToday(ev) {
+    var evDate = new Date(ev).setHours(0, 0, 0, 0);
+    var toDay = new Date().setHours(0, 0, 0, 0);
+    return evDate >= toDay;
+  }
   eventClicked(event) {
     var message = '';
     var self = this;
     var color = {};
     var myUid = this.getCurrentUser()._id;
-
-    if (event.participants.filter(function(item) {
-        return ((item) && item._id == myUid);
-      }).length) {
+    if(!event.newEv) return;
+    if(event.participants.filter(function(item) {
+      return ((item) && item._id == myUid);
+    }).length) {
       message = 'Dé-inscription de ' + event.title + ' effectuée';
       //  color = self.calendarConfig.colorTypes.important;
     } else {
@@ -253,17 +259,17 @@ export class CollaborateComponent {
       //  color = self.calendarConfig.colorTypes.info;
     }
     this.Auth.eventparticipate(event.group._id, {
-        _id: event._id,
-        UserId: myUid
-      })
-      .then(function(data) {
+      _id: event._id,
+      UserId: myUid
+    })
+      .then((data) => {
         self.refreshEvents(true);
         self.alert = {
           type: 'success',
           msg: message
         };
       })
-      .catch(function(err) {
+      .catch((err) => {
         self.refreshEvents(true);
         self.alert = {
           type: 'error',
@@ -297,30 +303,38 @@ export class CollaborateComponent {
     // });
     // });
 
-    if (raz) this.eventSources = [];
+    if(raz) this.eventSources = [];
 
     //var workEvents = [];
     //var couleur = ['DotgerBlue', 'chocolate', 'ForestGreen', 'DarkRed', 'FireBrick', 'Tan', 'Peru', 'oliveDrab', 'Lavender', 'GoldenRod', 'CornFlowerBlue', 'LightSkyBlue', 'grey'];
     var myUid = this.getCurrentUser()._id;
     var userGroupes = this.getCurrentUser().memberOf;
     //console.log(userGroupes);
-    angular.forEach(userGroupes, function(grp, index) {
+    angular.forEach(userGroupes, (grp, index) => {
       //console.log(grp._id);
       Auth.eventsofgroup(grp._id)
-        .then(function(data) {
-          if (data.length > 0) {
+        .then((data) => {
+          if(data.length > 0) {
             //eventsGroupe.events = data;
-            angular.forEach(data, function(ev, ind) {
-              if (ev.participants.filter(function(item) {
-                  return ((item) && item._id == myUid);
-                }).length) {
+            angular.forEach(data, (ev, ind) => {
+              if(ev.participants.filter((item) => {
+                return ((item) && item._id == myUid);
+              }).length) {
                 ev.color = calendarConfig.colorTypes.info;
+                ev.participate = true;
               } else {
                 ev.color = calendarConfig.colorTypes.important;
+                ev.participate = false;
               }
+              ev.newEv = this.gteToday(ev.startsAt);
               ev.actions = self.actions;
               ev.startsAt = new Date(ev.startsAt);
               ev.endsAt = new Date(ev.endsAt);
+              if(ev.allDay)
+                ev.start = this.moment(ev.startsAt).format('ll');
+              else {
+                ev.start = this.moment(ev.startsAt).format('ll') + '<br>' + this.moment(ev.startsAt).format('LT') + ' - ' + this.moment(ev.endsAt).format('LT');
+              }
               ev.group = {
                 _id: grp._id,
                 info: grp.info
@@ -348,7 +362,7 @@ export class CollaborateComponent {
     var hostname;
     //find & remove protocol (http, ftp, etc.) and get hostname
 
-    if (url.indexOf('://') > -1) {
+    if(url.indexOf('://') > -1) {
       hostname = url.split('/')[2];
     } else {
       hostname = url.split('/')[0];
@@ -369,10 +383,10 @@ export class CollaborateComponent {
 
     //extracting the root domain here
     //if there is a subdomain
-    if (arrLen > 2) {
+    if(arrLen > 2) {
       domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
       //check to see if it's using a Country Code Top Level Domain (ccTLD) (i.e. ".me.uk")
-      if (splitArr[arrLen - 2].length == 2 && splitArr[arrLen - 1].length == 2) {
+      if(splitArr[arrLen - 2].length == 2 && splitArr[arrLen - 1].length == 2) {
         //this is using a ccTLD
         domain = splitArr[arrLen - 3] + '.' + domain;
       }
@@ -385,16 +399,16 @@ export class CollaborateComponent {
       .$promise
       .then(result => {
         this.myconfig = result;
-        if (this.myconfig.etherpadUrl) {
+        if(this.myconfig.etherpadUrl) {
           this.urlPad = this.myconfig.etherpadUrl;
         }
-        if (this.myconfig.etherpadHost) {
+        if(this.myconfig.etherpadHost) {
           this.hostPad = this.myconfig.etherpadHost;
         }
-        if (this.myconfig.ethercalcUrl) {
+        if(this.myconfig.ethercalcUrl) {
           this.urlCal = this.myconfig.ethercalcUrl;
         }
-        if (this.myconfig.boardUrl) {
+        if(this.myconfig.boardUrl) {
           this.urlBoard = this.myconfig.boardUrl;
         }
         //console.log(this.myconfig);
@@ -479,20 +493,20 @@ export class CollaborateComponent {
     console.log('grpID:' + grpID);
     var authorID = this.getCurrentUser().authorPadID;
     this.$http.post('/api/pads', {
-        authorID,
-        groupID: grpID
-      }).success(data => {
-        if (data) {
-          this.$cookies.put('sessionID', data.sessionID);
-          var mydomain = this.extractRootDomain(this.urlPad);
-          this.$cookies.put('sessionID', data.sessionID, {
-            domain: mydomain
-          });
-          var url = `${this.urlPad}/p/${padID}?userName=${this.getCurrentUser().name}`;
+      authorID,
+      groupID: grpID
+    }).success(data => {
+      if(data) {
+        this.$cookies.put('sessionID', data.sessionID);
+        var mydomain = this.extractRootDomain(this.urlPad);
+        this.$cookies.put('sessionID', data.sessionID, {
+          domain: mydomain
+        });
+        var url = `${this.urlPad}/p/${padID}?userName=${this.getCurrentUser().name}`;
           //this.$window.open('//localhost:9001/p/' + grp.groupPadID + "$" + grp.name + "?userName=" + this.getCurrentUser().name);
-          this.$window.open(url);
-        } else alert(' Pad  non trouvé ou vous n\'êtes pas autorisé');
-      })
+        this.$window.open(url);
+      } else alert(' Pad  non trouvé ou vous n\'êtes pas autorisé');
+    })
       .error(function(err) {
         console.log(`err :${err}`);
         alert('Serveur Pad  non actif');
@@ -502,20 +516,20 @@ export class CollaborateComponent {
   openPad(grp) {
     var authorID = this.getCurrentUser().authorPadID;
     this.$http.post('/api/pads', {
-        authorID,
-        groupID: grp.groupPadID
-      }).success(data => {
-        if (data) {
-          this.$cookies.put('sessionID', data.sessionID);
-          var mydomain = this.extractRootDomain(this.urlPad);
-          this.$cookies.put('sessionID', data.sessionID, {
-            domain: mydomain
-          });
-          var url = `${this.urlPad}/p/${grp.groupPadID}$${grp.name}?userName=${this.getCurrentUser().name}`;
+      authorID,
+      groupID: grp.groupPadID
+    }).success(data => {
+      if(data) {
+        this.$cookies.put('sessionID', data.sessionID);
+        var mydomain = this.extractRootDomain(this.urlPad);
+        this.$cookies.put('sessionID', data.sessionID, {
+          domain: mydomain
+        });
+        var url = `${this.urlPad}/p/${grp.groupPadID}$${grp.name}?userName=${this.getCurrentUser().name}`;
           //this.$window.open('//localhost:9001/p/' + grp.groupPadID + "$" + grp.name + "?userName=" + this.getCurrentUser().name);
-          this.$window.open(url);
-        } else alert(`${url}\n Pad  non trouvé ou vous n'êtes pas autorisé`);
-      })
+        this.$window.open(url);
+      } else alert(`${url}\n Pad  non trouvé ou vous n'êtes pas autorisé`);
+    })
       .error(function(err) {
         console.log(`err :${err}`);
         alert('Serveur Pad  non actif');

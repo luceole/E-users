@@ -15,10 +15,10 @@
         <input ng-show="collaborateCtrl.getCurrentUser().memberOf.length > 0" ng-model="search.$" placeholder="Recherche globale">
       </form>
       <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"
-      template-url="/assets/dirPagination.tpl.html"></dir-pagination-controls>
+      template-url="/assets/dirPagination.tpl.html"  pagination-id="grp"></dir-pagination-controls>
       <br>
       <table class="table table-striped ">
-        <tr dir-paginate="group in collaborateCtrl.getCurrentUser().memberOf | orderBy: 'name'| filter:search:strict | itemsPerPage : '12' ">
+        <tr dir-paginate="group in collaborateCtrl.getCurrentUser().memberOf | orderBy: 'name'| filter:search:strict | itemsPerPage : '12' "pagination-id="grp">
           <td>
             <button class="btn  btn-default btn-sm btn-primary" ng-click="collaborateCtrl.openNote(group)"><span class="glyphicon .glyphicon-info-sign"></span>Informations </button>
             <button ng-if="collaborateCtrl.urlPad" class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openPad(group)" >Groupe PAD </button>
@@ -41,7 +41,8 @@
     <div class="alert alert-info">
     <div class="text-center">
         <h4> Agenda de vos groupes</h4>
-
+        <div ng-if="!collaborateCtrl.eventSources.length">Pas de réunion planifiée pour vos groupes</div>
+        <!-- <div ng-if="collaborateCtrl.eventSources.length">{{collaborateCtrl.eventSources.length}} réunion(s) planifiée(s)</div> -->
         <div class="btn-group">
           <label class="btn btn-primary" ng-model="collaborateCtrl.calendarView" uib-btn-radio="'year'" ng-click="collaborateCtrl.cellIsOpen = false">Année</label>
           <label class="btn btn-primary" ng-model="collaborateCtrl.calendarView" uib-btn-radio="'month'" ng-click="collaborateCtrl.cellIsOpen = false">Mois</label>
@@ -63,8 +64,50 @@
         <mwl-calendar events="collaborateCtrl.eventSources" view="collaborateCtrl.calendarView" view-title="collaborateCtrl.calendarTitle" view-date="collaborateCtrl.viewDate" on-event-click="collaborateCtrl.eventClicked(calendarEvent)" on-event-times-changed="collaborateCtrl.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
           cell-is-open="collaborateCtrl.cellIsOpen" day-view-start="08:00" day-view-end="19:59" day-view-split="30" cell-modifier="collaborateCtrl.modifyCell(calendarCell)" cell-auto-open-disabled="false" on-timespan-click="collaborateCtrl.timespanClicked(calendarDate, calendarCell)">
         </mwl-calendar>
-      </div>
+          </div>
+
     </div>
+
+  </uib-tab>
+      <uib-tab ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0" heading="Réunions">
+    <div ng-if="!collaborateCtrl.eventSources.length"> <h3>Pas de réunion planifiée pour vos groupes</h3></div>
+  <div ng-if="collaborateCtrl.eventSources.length">
+   <form>
+     <!-- <input ng-show="collaborateCtrl.getCurrentUser().memberOf.length > 0" ng-model="search.$" placeholder="Recherche globale"> -->
+    Voir les anciennes réunions
+   <input type="checkbox" ng-model="search.newEv" ng-init="search.newEv=true" ng-true-value="" ng-false-value="true">
+   </form>
+   <dir-pagination-controls  boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" pagination-id="evt"></dir-pagination-controls>
+    <table class="table table-striped ">
+      <tr dir-paginate="evt in collaborateCtrl.eventSources| orderBy: 'startsAt' | filter:search:strict | itemsPerPage :'8' " pagination-id="evt">
+        <td>
+          <button class="btn btn-warning btn-xs" type="button" ng-if="!evt.participate" ng-click="collaborateCtrl.eventClicked(evt)" rel="tooltip" title="S'inscrire">
+            <span class="glyphicon glyphicon-ok"></span>
+          </button>
+          <button type="button" class="btn btn-success btn-xs" ng-if="evt.participate" ng-click="collaborateCtrl.eventClicked(evt)" rel="tooltip" title="Se dé-inscrire">
+    <span class="glyphicon glyphicon-ok"></span>
+          </button>
+        </td>
+        <td>
+        <strong><span ng-bind-html="evt.start"></strong>
+      </td>
+        <td>
+        {{evt.groupe}}
+          </td>
+        <td>
+          {{evt.title}}
+        </td>
+        <td> <span ng-bind-html="evt.info"></span>
+        </td>
+       <!-- <td>
+         {{evt}}
+       </td> -->
+        <td  >
+          <span ng-bind-html="evt.lieu"></span>
+        </td>
+      </tr>
+    </table>
+</div>
   </uib-tab>
 
 <uib-tab ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0" heading="Sondage">
@@ -73,11 +116,11 @@
   <form >
     <input   ng-show="collaborateCtrl.polls.length" ng-model="searchText" placeholder="Recherche globale">
   </form>
-  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html">
+  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html" pagination-id="poll">
   </dir-pagination-controls>
   <br>
   <table class="table table-striped ">
-    <tr dir-paginate="poll in collaborateCtrl.polls |  filter:searchText:strict | itemsPerPage :'12' ">
+    <tr dir-paginate="poll in collaborateCtrl.polls |  filter:searchText:strict | itemsPerPage :'12' " pagination-id="poll">
       <td>
         <button class="btn btn-warning btn-xs"  ng_if="!collaborateCtrl.rep(poll)" type="button" ng-click="collaborateCtrl.openPoll(poll)" rel="tooltip" title="Répondre au sondage">
           <span class="glyphicon glyphicon-star"></span>Répondre
