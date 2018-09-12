@@ -50,27 +50,34 @@ export class MainController {
         //console.log(this.myconfig);
       });
 
-    if(this.$state.current.name == 'discoursesso') {
+    if (this.$state.current.name == 'discoursesso') {
       this.MSG = ' ***  REDIRECTION Forum Discourse en cours ..';
       this.Auth.getCurrentUser()
         .then(u => {
-          if(u._id) {
+          if (u._id) {
             var sso = this.$stateParams.sso;
             var sig = this.$stateParams.sig;
             this.Auth.discourseSso(u._id, {
-              sso,
-              sig
-            })
+                sso,
+                sig
+              })
               .then(rep => {
                 this.w.location.href = rep.url;
               });
+          } else {
+            this.$state.go('main');
           }
+        })
+        .catch(err => {
+          console.log(err);
+          this.msg = err.message;
+          this.$state.go('main');
         });
     }
     this.MSG = '';
   }
   addThing() {
-    if(this.newThing) {
+    if (this.newThing) {
       this.$http.post('/api/things', {
         info: this.newThing.info,
         name: this.newThing.name
@@ -90,25 +97,26 @@ export class MainController {
     this.msg = '';
 
 
-    if(form.$valid) {
+    if (form.$valid) {
       this.Auth.login({
-        uid: this.user.uid,
-        password: this.user.password
-      })
+          uid: this.user.uid,
+          password: this.user.password
+        })
         .then(u => {
-          if(this.$state.current.name == 'discoursesso') {
+          if (this.$state.current.name == 'discoursesso') {
             this.MSG = ' ***  REDIRECTION en cours ..';
             var sso = this.$stateParams.sso;
             var sig = this.$stateParams.sig;
             this.Auth.discourseSso(u._id, {
-              sso,
-              sig
-            })
+                sso,
+                sig
+              })
               .then(rep => {
                 this.w.location.href = rep.url;
               });
           } else {
             //Logged in , redirect to home
+
             this.$state.go('main');
           }
         })
