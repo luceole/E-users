@@ -21,7 +21,20 @@ Gestion des utilisateurs: {{usersCtrl.users.length}} inscrits</span>
 	<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.addgroupselected()" rel="tooltip" title="Inscrire les {{usersCtrl.myfilterlist.length}} utilisateurs ">
 	  <span class="glyphicon glyphicon-star"></span>Inscrire dans un groupe
 	</button>
-	<table class="table table-striped ">
+	 <div class="table-responsive">
+	<table class="table table-striped">
+		<thead>
+		 <tr>
+			 <th></th>
+			 <th>Nom</th>
+			 <th class="hidden-xs">Uid</th>
+			 <th class="hidden-xs">Role</th>
+				 <th>Structure</th>
+				 	 <th class="hidden-xs">Connexion</th>
+				  <th>Email</th>
+
+		 </tr>
+	 </thead>
 		<tr dir-paginate="user in usersCtrl.myfilterlist=( usersCtrl.users | orderBy:'name' | filter:usersCtrl.search:strict )| itemsPerPage :'12' ">
 			<td>
 				<button class="btn btn-warning btn-xs" type="button" ng-if="!user.isactif" ng-click="usersCtrl.active(user)" rel="tooltip" title="Autoriser cet utilisateur">
@@ -46,22 +59,26 @@ Gestion des utilisateurs: {{usersCtrl.users.length}} inscrits</span>
 				<strong>{{user.name}}</strong>
 				<strong>{{user.surname}}</strong>
 			</td>
-			<td> <div class=" hidden-xs">{{user.uid}}  </div></td>
-			<td> <div class=" hidden-xs">{{user.role}}  </div></td>
-			<td> <div class="hidden-sm hidden-xs">{{user.creationDate | date: "dd/MM/yyyy"}} </div></td>
+			<td class=" hidden-xs"> <div >{{user.uid}}  </div></td>
+			<td class=" hidden-xs"> <div >{{user.role}}  </div></td>
+
+			<!-- <td> <div class="hidden-sm hidden-xs">{{user.creationDate | date: "dd/MM/yyyy"}} </div></td> -->
 			<td >
 				<strong> {{user.structure}} </strong>
 			</td>
-			<td>
-				<span class="text-muted "><a href=mailto:{{user.email}} rel="tooltip" title="Envoyer un courriel"> {{user.email}}  </a> </span>
-				<span ng-show="user.uid!='admin'">
-          <a href ng-click="usersCtrl.delete(user)" rel="tooltip" title="Effacer" class="trash">
-            <div class="glyphicon glyphicon-trash pull-right"></div>
-          </a>
-        </span>
+			<td class="hidden-xs"> {{user.lastloginDate | date: "dd/MM/yyyy"}} </td>
 			</td>
+			<td>
+				<span class="text-muted "><a href=mailto:{{user.email}} rel="tooltip" title="Envoyer un courriel"> {{user.email}}  </a>
+				</span>
+				<span ng-show="user.uid!='admin'">
+			<a href ng-click="usersCtrl.delete(user)" rel="tooltip" title="Effacer" class="trash">
+				<div class="glyphicon glyphicon-trash pull-right"></div>
+			</a>
+    </span>
 		</tr>
 	</table>
+</div>
 
 <script type="text/ng-template" id="modalAddGroup.html">
 	<div class="modal-header">

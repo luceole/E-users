@@ -19,7 +19,7 @@ function localAuthenticate(User, uid, password, done) {
       }
 
 
-      user.authenticate(password, function(authError, authenticated) {
+      user.authenticate(password, (authError, authenticated) => {
         if(authError) {
           return done(authError);
         }
@@ -49,6 +49,19 @@ function localAuthenticate(User, uid, password, done) {
             message: 'Compte avec courriel non validé. Message envoyé à nouveau '
           });
         } else {
+          var query = {
+            'uid': user.uid
+          };
+          var d = Date(Date.now());
+          var update = {
+            lastloginDate: d
+          };
+          console.log(d.toString() + ' login : ' + user.name);
+          User.findOneAndUpdate(query, update, function(err, user) {
+            if(err) {
+              console.log(err);
+            }
+          });
           return done(null, user);
         }
       });

@@ -38,7 +38,7 @@ var UserSchema = new Schema({
   pwdToken: String,
   urlToken: String,
   mailValid: Boolean,
-  firstdate: Date,
+  lastloginDate: Date,
   creationDate: {
     type: Date,
     default: Date.now

@@ -8,10 +8,10 @@ import sleep from 'sleep';
 function retry(maxRetries, fn) {
   return fn().catch(function(err) {
     //  yield setTimeout(suspend.resume(), 1000);
-    if (maxRetries <= 0) {
+    if(maxRetries <= 0) {
       throw err;
     }
-    console.log("Fail to contact SSO : retry ");
+    console.log('Fail to contact SSO : retry ');
     sleep.sleep(6);
     return retry(maxRetries - 1, fn);
   });
@@ -20,14 +20,14 @@ function retry(maxRetries, fn) {
 export function setup(User, config) {
   const Issuer = require('openid-client').Issuer;
 
-  if (config.OauthActif) {
+  if(config.OauthActif) {
     var urlDiscover = `${config.openid.discover}.well-known/openid-configuration`;
 
 
     //  Issuer.discover(urlDiscover) // => Promise
     retry(20, function() {
-        return Issuer.discover(urlDiscover)
-      })
+      return Issuer.discover(urlDiscover);
+    })
       .then(function(myIssuer) {
         console.log('OPenID: Discovered issuer %s', myIssuer.issuer);
         const client = new myIssuer.Client({
@@ -52,16 +52,29 @@ export function setup(User, config) {
           // console.log('userinfo', userinfo);
 
           User.findOne({
-              email: userinfo.email
-            },
+            email: userinfo.email
+          },
             function(err, user) {
-              if (err) return done(err);
-              if (!user) return done(err, false, 'Compte inconnu !');
+              if(err) return done(err);
+              if(!user) return done(err, false, 'Compte inconnu !');
               user.openid = {
                 tokenset,
                 issuer: config.openid.issuer,
                 client: config.openid.client
               };
+              var query = {
+                'uid': user.uid
+              };
+              var d = Date(Date.now());
+              var update = {
+                lastloginDate: d
+              };
+              console.log(d.toString() + ' login : ' + user.name);
+              User.findOneAndUpdate(query, update, function(err, user) {
+                if(err) {
+                  console.log(err);
+                }
+              });
               return done(null, user);
             });
         }));
@@ -88,7 +101,7 @@ export function setup(User, config) {
       .catch(err => {
         console.log('Le serveur Oauth ne répond pas : ' + urlDiscover);
         return err;
-      })
+      });
   } else {
     console.log('Warning: OpenID not active ');
   }
