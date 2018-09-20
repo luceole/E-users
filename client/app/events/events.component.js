@@ -195,7 +195,9 @@ export class EventsComponent {
       year: 'YYYY'
     };
     this.openPad = (args) => {
-      var padID = args.calendarEvent.eventPadID;
+      if (args.calendarEvent) {
+        var padID = args.calendarEvent.eventPadID
+      } else var padID = args.eventPadID
       var grpID = padID.split('\$')[0];
       console.log('grpID:' + grpID);
       var authorID = this.getCurrentUser().authorPadID;
@@ -223,7 +225,7 @@ export class EventsComponent {
     var args;
     var self = this;
     this.actions = [{
-      label: '<i class=\'glyphicon glyphicon-pencil\'></i>',
+      label: '<i class=\'glyphicon glyphicon-eye-open\'></i>',
       onClick(args) {
         self.openPad(args);
       }
@@ -308,7 +310,6 @@ export class EventsComponent {
           if (data.length > 0) {
             //eventsGroupe.events = data;
             angular.forEach(data, (ev, ind) => {
-              //console.log(ev.eventPadID);
               ev.startsAt = new Date(ev.startsAt);
               //if(self.moment(ev.endsAt).isbefore(self.moment(ev.startsAt))) ev.endsAt = ev.startsAt;
               if (!ev.endsAt) ev.endsAt = ev.startsAt;

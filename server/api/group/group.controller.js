@@ -10,6 +10,7 @@
 
 'use strict';
 import jsonpatch from 'fast-json-patch';
+import moment from 'moment';
 import Group from './group.model';
 var config = require('../../config/environment');
 
@@ -256,11 +257,14 @@ export function eventupdate(req, res) {
       });
     } else {
       // PAD
+      //dateStartEv = new Date(req.body.startsAt);
+
+      var dateStart = moment(req.body.startsAt).format('ll');
 
       var args = {
         groupID: groupe.groupPadID,
         padName: req.body.title + req.body.startsAt,
-        text: `Bienvenu sur le PAD  ${req.body.title} - ${req.body.startsAt}`
+        text: `Bienvenu sur le PAD  ${req.body.title} \n  Date: ${dateStart} \n Groupe:  ${groupe.name} \n`
       };
 
       etherpad.createGroupPad(args, function(error, data) {
