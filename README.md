@@ -1,8 +1,6 @@
 # E-USERS
 
-Groups work application (Alpha Realease)
-
-- Manage Users and Groups
+Group Work App: Manage Users, Groups, Meetings, and Polls
 
  - Access to :
 
@@ -10,6 +8,7 @@ Groups work application (Alpha Realease)
       - Collaborative text editor (EtherPad)
       - Collaborative spreadsheet (Ethercal)
       - Notes Text(ckeditor)
+      - ...
 
 
 
