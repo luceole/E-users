@@ -12,6 +12,9 @@ coucou
           </li>
         </ul>
       </div> -->
+    <uib-tabset active="collaborateCtrl.Active"  >
+    <uib-tab heading="Agenda">
+
     <div class="alert alert-info">
       <div class="text-center">
         <h4> Organisez vos Réunions</h4>
@@ -46,6 +49,48 @@ coucou
           custom-template-urls="{calendarViewCell: 'customMonthCell.html'}">
       </mwl-calendar>
     </div>
+  </uib-tab>
+    <uib-tab heading="Liste">
+      <form>
+          <!-- <input ng-show="collaborateCtrl.getCurrentUser().memberOf.length > 0" ng-model="search.$" placeholder="Recherche globale"> -->
+         Voir les anciennes réunions
+        <input type="checkbox" ng-model="search.newEv" ng-init="search.newEv=true" ng-true-value="" ng-false-value="true">
+        </form>
+        <dir-pagination-controls  boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" pagination-id="evt"></dir-pagination-controls>
+         <table class="table table-striped ">
+           <tr dir-paginate="evt in eventsCtrl.eventSources| orderBy: 'startsAt' | filter:search:strict | itemsPerPage :'8' " pagination-id="evt">
+
+             <td>
+                <button type="button" class="btn  btn-xs"  ng-click="eventsCtrl.eventClicked(evt)" rel="tooltip" title="Modifier">
+                <span class="glyphicon glyphicon-pencil"></span>
+               </button>
+
+             </td>
+             <td>
+             <strong><span ng-bind-html="evt.start"></strong>
+           </td>
+             <td>
+             {{evt.groupe}}
+               </td>
+             <td>
+               {{evt.title}}
+             </td>
+             <td> <span ng-bind-html="evt.info"></span>
+             </td>
+            <!-- <td>
+              {{evt}}
+            </td> -->
+             <td  >
+               <span ng-bind-html="evt.lieu"></span>
+             </td>
+             <td>
+               {{evt.participants.length}}
+             </td>
+
+           </tr>
+         </table>
+    </uib-tab>
+  </uib-tabset>
   </div>
   <script type="text/ng-template" id="modalEv.html">
     <div class="modal-header">

@@ -13,7 +13,7 @@ export class ModalEditEvComponent {
     this.moment = moment;
     this.getCurrentUser = Auth.getCurrentUserSync;
     this.updateEvent = updateEvent;
-    if(updateEvent.group) {
+    if (updateEvent.group) {
       this.titre = 'Modification: ';
       this.libDate = moment(updateEvent.startsAt).format('LLLL');
       this.newEv = false;
@@ -25,8 +25,8 @@ export class ModalEditEvComponent {
         title: 'Réunion',
         startsAt: moment().startOf('day').toDate(),
         endsAt: moment().endOf('day').toDate(),
-      //  startsAt: moment().startOf('hour').toDate(),
-      //  endsAt: moment().startOf('hour').add(1, 'hours').toDate(),
+        //  startsAt: moment().startOf('hour').toDate(),
+        //  endsAt: moment().startOf('hour').add(1, 'hours').toDate(),
         allDay: true,
         info: '',
         lieu: '',
@@ -72,14 +72,14 @@ export class ModalEditEvComponent {
 
   delete() {
     var self = this;
-    if(this.event.participants.length > 0) {
-      if(!confirm('Attention des participants sont inscrits \nConfirmez vous la suppression?')) {
+    if (this.event.participants.length > 0) {
+      if (!confirm('Attention des participants sont inscrits \nConfirmez vous la suppression?')) {
         return;
       }
     }
     this.Auth.eventdelete(this.event.group._id, {
-      id: this.event._id
-    })
+        id: this.event._id
+      })
       .then(function() {
         self.$uibModalInstance.close();
       })
@@ -121,26 +121,26 @@ export class ModalEditEvComponent {
     var self = this;
     self.submitted = true;
     self.editMessage = '';
-    if(form.$valid) {
-      if(self.newEv) {
+    if (form.$valid) {
+      if (self.newEv) {
         self.event.group = self.grp;
         //self.event.title = self.grp.info;
       }
-      if(this.moment(self.event.endsAt).isBefore(self.event.startsAt)) {
+      if (this.moment(self.event.endsAt).isBefore(self.event.startsAt)) {
         self.event.endsAt = self.event.startsAt;
       }
       return self.Auth.eventupdate(self.event.group._id, {
-        _id: self.event._id,
-        title: self.event.title,
-        startsAt: new Date(self.event.startsAt),
-        endsAt: new Date(self.event.endsAt),
-        allDay: self.event.allDay,
-        info: self.event.info,
-        lieu: self.event.lieu,
-        groupe: self.event.group.info,
-        eventPadID: String,
-        participants: self.event.participants
-      })
+          _id: self.event._id,
+          title: self.event.title,
+          startsAt: new Date(self.event.startsAt),
+          endsAt: new Date(self.event.endsAt),
+          allDay: self.event.allDay,
+          info: self.event.info,
+          lieu: self.event.lieu,
+          groupe: self.event.group.info,
+          eventPadID: String,
+          participants: self.event.participants
+        })
         .then(() => {
           this.editMessage = 'Mise à jour prise en compte';
           self.$uibModalInstance.close();
@@ -200,20 +200,20 @@ export class EventsComponent {
       console.log('grpID:' + grpID);
       var authorID = this.getCurrentUser().authorPadID;
       this.$http.post('/api/pads', {
-        authorID,
-        groupID: grpID
-      }).success(data => {
-        if(data) {
-          this.$cookies.put('sessionID', data.sessionID);
-          var mydomain = this.extractRootDomain(this.urlPad);
-          this.$cookies.put('sessionID', data.sessionID, {
-            domain: mydomain
-          });
-          var url = `${this.urlPad}/p/${padID}?userName=${this.getCurrentUser().name}`;
+          authorID,
+          groupID: grpID
+        }).success(data => {
+          if (data) {
+            this.$cookies.put('sessionID', data.sessionID);
+            var mydomain = this.extractRootDomain(this.urlPad);
+            this.$cookies.put('sessionID', data.sessionID, {
+              domain: mydomain
+            });
+            var url = `${this.urlPad}/p/${padID}?userName=${this.getCurrentUser().name}`;
             //this.$window.open('//localhost:9001/p/' + grp.groupPadID + "$" + grp.name + "?userName=" + this.getCurrentUser().name);
-          this.$window.open(url);
-        } else alert(' Pad  non trouvé ou vous n\'êtes pas autorisé');
-      })
+            this.$window.open(url);
+          } else alert(' Pad  non trouvé ou vous n\'êtes pas autorisé');
+        })
         .error(function(err) {
           console.log(`err :${err}`);
           alert('Serveur Pad  non actif');
@@ -236,19 +236,27 @@ export class EventsComponent {
 
     this.calendarEventTitle.monthViewTooltip = this.calendarEventTitle.weekViewTooltip = this.calendarEventTitle.dayViewTooltip = function(event) {
       var msg = '';
-      if(!event.allDay) {
+      if (!event.allDay) {
         msg = moment(event.startsAt).format('LT') + '-' + moment(event.endsAt).format('LT') + '<br>';
       }
-      msg = msg + 'Participants : ' + event.participants.length; moment(event.startsAt).format('LT');
+      msg = msg + 'Participants : ' + event.participants.length;
+      moment(event.startsAt).format('LT');
 
       return event.info + '<br>Lieu :' + event.lieu + '<br> ' + msg;
     };
   }
+
+  gteToday(ev) {
+    var evDate = new Date(ev).setHours(0, 0, 0, 0);
+    var toDay = new Date().setHours(0, 0, 0, 0);
+    return evDate >= toDay;
+  }
+
   extractHostname(url) {
     var hostname;
     //find & remove protocol (http, ftp, etc.) and get hostname
 
-    if(url.indexOf('://') > -1) {
+    if (url.indexOf('://') > -1) {
       hostname = url.split('/')[2];
     } else {
       hostname = url.split('/')[0];
@@ -268,10 +276,10 @@ export class EventsComponent {
 
     //extracting the root domain here
     //if there is a subdomain
-    if(arrLen > 2) {
+    if (arrLen > 2) {
       domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
       //check to see if it's using a Country Code Top Level Domain (ccTLD) (i.e. ".me.uk")
-      if(splitArr[arrLen - 2].length == 2 && splitArr[arrLen - 1].length == 2) {
+      if (splitArr[arrLen - 2].length == 2 && splitArr[arrLen - 1].length == 2) {
         //this is using a ccTLD
         domain = splitArr[arrLen - 3] + '.' + domain;
       }
@@ -285,7 +293,7 @@ export class EventsComponent {
     var calendarConfig = this.calendarConfig;
     //console.log(calendarConfig);
     self = this;
-    if(raz) this.eventSources = [];
+    if (raz) this.eventSources = [];
     //var workEvents = [];
     //var couleur = ['DotgerBlue', 'chocolate', 'ForestGreen', 'DarkRed', 'FireBrick', 'Tan', 'Peru', 'oliveDrab', 'Lavender', 'GoldenRod', 'CornFlowerBlue', 'LightSkyBlue', 'grey'];
     // var myUid = self.getCurrentUser()._id;
@@ -293,19 +301,25 @@ export class EventsComponent {
     var myUid = this.getCurrentUser()._id;
     var userGroupes = this.getCurrentUser().adminOf;
     //console.log(userGroupes);
-    angular.forEach(userGroupes, function(grp, index) {
+    angular.forEach(userGroupes, (grp, index) => {
       //console.log(grp._id);
       Auth.eventsofgroup(grp._id)
-        .then(function(data) {
-          if(data.length > 0) {
+        .then((data) => {
+          if (data.length > 0) {
             //eventsGroupe.events = data;
-            angular.forEach(data, function(ev, ind) {
+            angular.forEach(data, (ev, ind) => {
               //console.log(ev.eventPadID);
               ev.startsAt = new Date(ev.startsAt);
               //if(self.moment(ev.endsAt).isbefore(self.moment(ev.startsAt))) ev.endsAt = ev.startsAt;
-              if(!ev.endsAt) ev.endsAt = ev.startsAt;
+              if (!ev.endsAt) ev.endsAt = ev.startsAt;
               //if(ev.allDay) ev.endsAt = ev.startsAt;
               ev.endsAt = new Date(ev.endsAt);
+              ev.newEv = this.gteToday(ev.startsAt);
+              if (ev.allDay)
+                ev.start = this.moment(ev.startsAt).format('ll');
+              else {
+                ev.start = this.moment(ev.startsAt).format('ll') + '<br>' + this.moment(ev.startsAt).format('LT') + ' - ' + this.moment(ev.endsAt).format('LT');
+              }
               ev.draggable = true;
               ev.resizable = true;
               ev.actions = self.actions;
@@ -338,13 +352,13 @@ export class EventsComponent {
       .$promise
       .then(result => {
         this.myconfig = result;
-        if(this.myconfig.etherpadUrl) {
+        if (this.myconfig.etherpadUrl) {
           this.urlPad = this.myconfig.etherpadUrl;
         }
-        if(this.myconfig.etherpadHost) {
+        if (this.myconfig.etherpadHost) {
           this.hostPad = this.myconfig.etherpadHost;
         }
-        if(this.myconfig.ethercalcUrl) {
+        if (this.myconfig.ethercalcUrl) {
           this.urlCal = this.myconfig.ethercalcUrl;
         }
         this.refreshEvents(true);
@@ -372,31 +386,51 @@ export class EventsComponent {
       self.refreshEvents(true);
     });
   }
-  timespanClicked(calendarDate, calendarCell) {
+  eventEdit(ev) {
+    self = this;
+    var uibModalInstance = this.$uibModal.open({
+      controller: ModalEditEvComponent,
+      controllerAs: 'modalEditEvCtrl',
+      templateUrl: 'modalEv.html',
+      backdrop: 'static',
 
+      resolve: {
+        Sdate() {
+          return ev.startsAt;
+        },
+        updateEvent() {
+          return ev;
+        }
+      }
+    });
+    uibModalInstance.closed.then(function() {
+      self.refreshEvents(true);
+    });
   }
+
+  timespanClicked(calendarDate, calendarCell) {}
   eventTimesChanged(event) {
     self = this;
     this.viewDate = event.startsAt;
     //  console.log(event);
-    if(event.participants.length > 0) {
-      if(!confirm('Des participants sont déja inscrits: Etes vous sur ?')) {
+    if (event.participants.length > 0) {
+      if (!confirm('Des participants sont déja inscrits: Etes vous sur ?')) {
         self.refreshEvents(true);
         return;
       }
     }
     this.Auth.eventupdate(event.group._id, {
-      _id: event._id,
-      allDay: event.allDay,
-      startsAt: new Date(event.startsAt),
-      endsAt: new Date(event.endsAt)
-    }).then(function(data) {
-      self.alert = {
-        type: 'error',
-        msg: 'Modification Effectuée'
-      };
-      self.refreshEvents(true);
-    })
+        _id: event._id,
+        allDay: event.allDay,
+        startsAt: new Date(event.startsAt),
+        endsAt: new Date(event.endsAt)
+      }).then(function(data) {
+        self.alert = {
+          type: 'error',
+          msg: 'Modification Effectuée'
+        };
+        self.refreshEvents(true);
+      })
       .catch(function(err) {
         self.refreshEvents(true);
         self.alert = {
