@@ -106,7 +106,7 @@
      </div>
 
           <table class="table table-striped">
-          <tr ng-repeat="p in modalAddAdminPollCtrl.propositions | orderBy:'stdate' | itemsPerPage :'10' ">
+          <tr ng-repeat="p in modalAddAdminPollCtrl.propositions |  itemsPerPage :'10' ">
             <td>
               - {{p.stdate}}
             </td>
@@ -144,7 +144,7 @@
                 <button ng-click="modalAddAdminPollCtrl.dup(3)">Dupliquer</button>
               </th>
             </tr>
-            <tr ng-repeat="p in modalAddAdminPollCtrl.propositions | orderBy:'chx' |  itemsPerPage :'10' ">
+            <tr ng-repeat="p in modalAddAdminPollCtrl.propositions | itemsPerPage :'10' ">
               <td>
                 {{p.stdate}}:
               </td>

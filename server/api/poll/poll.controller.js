@@ -162,31 +162,6 @@ exports.mypolls = function(req, res) {
     .catch(handleError(res));
 };
 
-//  $or: [ { quantity: { $lt: 20 } }, { price: 10 } ]
-// export function mypolls(req, res) {
-//   Poll.find({
-//       isActif: true,
-//       $or: [{
-//           type: {
-//             $lt: 10
-//           }
-//         },
-//         {
-//           groupeName: {
-//             $in: req.query.mygrp
-//           }
-//         }
-//       ]
-//     },
-//     function(err, polls) {
-//       if (err) {
-//         console.log(err);
-//         return handleError(res, err);
-//       }
-//       return res.status(200).json(polls);
-//     });
-// }
-
 // vote an existing poll in the DB.
 exports.vote = function(req, res) {
   if (req.body._id) {

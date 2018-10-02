@@ -135,6 +135,10 @@ export class modalAddAdminPoll {
         return (item.stdate == prop.stdate);
       }).length) {
       this.propositions.push(prop);
+      //  console.log(this.propositions)
+      this.propositions.sort((a, b) => {
+        return new Date(a.date) - new Date(b.date)
+      })
     }
   }
   delChx(chx) {
