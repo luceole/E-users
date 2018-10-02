@@ -266,16 +266,29 @@ export function eventupdate(req, res) {
         padName: req.body.title + req.body.startsAt,
         text: `Bienvenu sur le PAD  ${req.body.title} \n  Date: ${dateStart} \n Groupe:  ${groupe.name} \n`
       };
-
-      etherpad.createGroupPad(args, function(error, data) {
-        if (error) {
-          console.error('Error creating pad: ' + error.message);
-        } else {
-          console.log('New pad created: ' + data.padID);
-          req.body.eventPadID = data.padID;
-        }
-        console.log('**********************');
-        console.log(req.body.eventPadID);
+      if (config.etherpad) {
+        etherpad.createGroupPad(args, function(error, data) {
+          if (error) {
+            console.error('Error creating pad: ' + error.message);
+          } else {
+            console.log('New pad created: ' + data.padID);
+            req.body.eventPadID = data.padID;
+          }
+          console.log('**********************');
+          console.log(req.body.eventPadID);
+          groupe.events.push(req.body);
+          groupe.save(function(err, groupe) {
+            if (err) {
+              console.log('**');
+              console.log(err);
+              return handleError(res, err);
+            }
+            console.log('Groupe EventUpdate ' + groupe.name);
+            return res.json(groupe.events);
+          });
+        });
+      } // EtherPAD?
+      else {
         groupe.events.push(req.body);
         groupe.save(function(err, groupe) {
           if (err) {
@@ -286,7 +299,7 @@ export function eventupdate(req, res) {
           console.log('Groupe EventUpdate ' + groupe.name);
           return res.json(groupe.events);
         });
-      });
+      }
     }
     /*    groupe.save(function (err, groupe) {
           if (err) {

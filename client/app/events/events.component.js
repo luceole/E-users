@@ -355,6 +355,8 @@ export class EventsComponent {
         this.myconfig = result;
         if (this.myconfig.etherpadUrl) {
           this.urlPad = this.myconfig.etherpadUrl;
+        } else {
+          this.actions = [];
         }
         if (this.myconfig.etherpadHost) {
           this.hostPad = this.myconfig.etherpadHost;

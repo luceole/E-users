@@ -401,6 +401,8 @@ export class CollaborateComponent {
         this.myconfig = result;
         if (this.myconfig.etherpadUrl) {
           this.urlPad = this.myconfig.etherpadUrl;
+        } else {
+          this.actions = [];
         }
         if (this.myconfig.etherpadHost) {
           this.hostPad = this.myconfig.etherpadHost;
@@ -411,6 +413,7 @@ export class CollaborateComponent {
         if (this.myconfig.boardUrl) {
           this.urlBoard = this.myconfig.boardUrl;
         }
+
         //console.log(this.myconfig);
         this.refreshEvents(false);
       });

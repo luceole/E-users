@@ -87,7 +87,7 @@
           <button type="button" class="btn btn-success btn-xs" ng-if="evt.participate" ng-click="collaborateCtrl.eventClicked(evt)" rel="tooltip" title="Se dé-inscrire">
     <span class="glyphicon glyphicon-ok"></span>
           </button>
-          <button type="button" class="btn  btn-xs"  ng-click="collaborateCtrl.openPadEv(evt)" rel="tooltip" title="Voir le Pad">
+          <button type="button" class="btn  btn-xs" ng-if="collaborateCtrl.urlPad" ng-click="collaborateCtrl.openPadEv(evt)" rel="tooltip" title="Voir le Pad">
           <span class="glyphicon glyphicon-eye-open"></span>
          </button>
         </td>
