@@ -17,7 +17,7 @@ import config from '../../config/environment';
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
-    if(entity) {
+    if (entity) {
       return res.status(statusCode).json(entity);
     }
     return null;
@@ -28,7 +28,7 @@ function patchUpdates(patches) {
   return function(entity) {
     try {
       jsonpatch.apply(entity, patches, /*validate*/ true);
-    } catch(err) {
+    } catch (err) {
       return Promise.reject(err);
     }
 
@@ -38,7 +38,7 @@ function patchUpdates(patches) {
 
 function removeEntity(res) {
   return function(entity) {
-    if(entity) {
+    if (entity) {
       return entity.remove()
         .then(() => {
           res.status(204).end();
@@ -49,12 +49,13 @@ function removeEntity(res) {
 
 function handleEntityNotFound(res) {
   return function(entity) {
-    if(!entity) {
+    if (!entity) {
       res.status(404).end();
       return null;
     }
     return entity;
-  }; return Message.find().exec()
+  };
+  return Message.find().exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
@@ -77,10 +78,22 @@ export function index(req, res) {
   var TitreSite = config.TitreSite ? config.TitreSite : 'TitreSite';
   var onlineServices = config.onlineServices ? config.onlineServices : [];
   var Structures = config.Structures ? config.Structures : [];
-  return res.status(200).json({OauthActif: config.OauthActif, boardUrl, ethercalcUrl, etherpadUrl, etherHost, DeviseSite, TitreSite, onlineServices, Structures, Infos});
-    // return Message.find().exec(),
-    //   .then(respondWithResult(res))
-    //   .catch(handleError(res));
+  return res.status(200).json({
+    OauthActif: config.OauthActif,
+    ForceSSO: config.ForceSSO,
+    boardUrl,
+    ethercalcUrl,
+    etherpadUrl,
+    etherHost,
+    DeviseSite,
+    TitreSite,
+    onlineServices,
+    Structures,
+    Infos
+  });
+  // return Message.find().exec(),
+  //   .then(respondWithResult(res))
+  //   .catch(handleError(res));
 }
 
 // Gets a single Message from the DB
@@ -100,10 +113,16 @@ export function create(req, res) {
 
 // Upserts the given Message in the DB at the specified ID
 export function upsert(req, res) {
-  if(req.body._id) {
+  if (req.body._id) {
     delete req.body._id;
   }
-  return Message.findOneAndUpdate({_id: req.params.id}, req.body, {upsert: true, setDefaultsOnInsert: true, runValidators: true}).exec()
+  return Message.findOneAndUpdate({
+      _id: req.params.id
+    }, req.body, {
+      upsert: true,
+      setDefaultsOnInsert: true,
+      runValidators: true
+    }).exec()
 
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -111,7 +130,7 @@ export function upsert(req, res) {
 
 // Updates an existing Message in the DB
 export function patch(req, res) {
-  if(req.body._id) {
+  if (req.body._id) {
     delete req.body._id;
   }
   return Message.findById(req.params.id).exec()

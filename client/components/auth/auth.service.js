@@ -55,10 +55,11 @@ export function AuthService($window, $location, $http, $cookies, $q, appConfig, 
     /**
      * Delete access token and user info
      */
+
+
     logout() {
       $cookies.remove('token');
       currentUser = new _User();
-      //$window.location = '/logout';
     },
 
     /**
