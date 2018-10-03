@@ -2,6 +2,7 @@
   <center> Authentification SSO en cours ...</center>
 </div>
 <div class="container" ng-if="!$ctrl.isLoggedIn()">
+
 </div>
 
 <div class="container" ng-if="$ctrl.isLoggedIn()&& !$ctrl.sso " ng-init="CalInit()">
@@ -20,7 +21,7 @@
       <h3 ng-if="$ctrl.MSG">Informations:</h3> {{$ctrl.MSG }}
     </div>
 
-      <div class="row ">
+      <div class="row"  ng-if="$ctrl.getCurrentUser().isactif">
         <div class="table table-striped alert-info">
           <br>
           <uib-accordion>
