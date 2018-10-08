@@ -84,7 +84,8 @@ module.exports = {
     secret: '1234567890',
     url: 'http://mydiscourse.domain.lan/session/sso_login?'
   },
-  OauthActif: true,
+  ForceSSO: false,
+  OauthActif: false,
   openid: {
     discover: 'https://server.mondomaine.fr/.well-known/openid-configuration',
     issuer: {

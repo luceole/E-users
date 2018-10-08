@@ -21,6 +21,16 @@ export default function routes($stateProvider) {
         $state.go(referrer);
       }
     })
+    .state('logoutSSO', {
+      url: '/logoutSSO',
+      template: '',
+      controller($state, $window, Auth) {
+        'ngInject';
+        var referrer = $state.params.referrer || $state.current.referrer || 'main';
+        Auth.logout();
+        $window.location.href = `/auth/openid/logout`;
+      }
+    })
     .state('signup', {
       url: '/signup',
       template: require('./signup/signup.html'),

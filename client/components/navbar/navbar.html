@@ -58,7 +58,8 @@
             <p class="navbar-text "><span  class="glyphicon glyphicon-user">{{ $ctrl.getCurrentUser().surname}}</span></p>
           </li>
           <li ng-show="$ctrl.isActif() " ui-sref-active="active "><a ui-sref="settings "><span class="glyphicon glyphicon-cog " rel="tooltip " title="Mon Profils" alt="Mes Parametres "></span></a></li>
-          <li ng-show="$ctrl.isLoggedIn() "><a ui-sref="logout " rel="tooltip " title="Quitter " alt="Quitter "><span class="glyphicon glyphicon-log-out "></span> &nbsp;</a></li>
+          <li ng-show="$ctrl.isLoggedIn() && !$ctrl.ForceSSO "><a ui-sref="logout" rel="tooltip " title="Quitter " alt="Quitter "><span class="glyphicon glyphicon-log-out "></span> &nbsp;</a></li>
+          <li ng-show="$ctrl.isLoggedIn()&& $ctrl.ForceSSO  "><a  ui-sref="logoutSSO" rel="tooltip "  title="Quitter " alt="Quitter "><span class="glyphicon glyphicon-log-out "></span> &nbsp;</a></li>
         </ul>
 
         </div>
