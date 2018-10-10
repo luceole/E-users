@@ -6,7 +6,7 @@
   <form>
     <input ng-model="search.$" placeholder="Recherche globale">
   </form>
-  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html">
+  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html" pagination-id="PR" >
   </dir-pagination-controls>
   <br>
   <span>
@@ -15,7 +15,7 @@
     </a>
   </span>
   <table class="table table-striped ">
-    <tr dir-paginate="poll in adminpollCtrl.polls | orderBy:'name' | filter:search:strict | itemsPerPage :'12' ">
+    <tr dir-paginate="poll in adminpollCtrl.polls | orderBy:'name' | filter:search:strict | itemsPerPage :'12' " pagination-id="PR" >
       <td>
         <span>
         <button class="btn btn-warning btn-xs" type="button" ng-if="!poll.isActif" ng-click=" adminpollCtrl.active(poll)"rel="tooltip" title="Publier ce sondage">
@@ -201,7 +201,7 @@
         <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html">
         </dir-pagination-controls>
 
-          <tr dir-paginate="r in modalViewPollCtrl.resultats  |  itemsPerPage :'12' ">
+          <tr dir-paginate="r in modalViewPollCtrl.resultats  |  itemsPerPage :'2' ">
 
           <td>{{r.user.email}}</td>
           <td ng-repeat="w in modalViewPollCtrl.rep(r) track by $index" >{{w|ouinon}}</td>
