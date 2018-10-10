@@ -1,9 +1,6 @@
 <div ng-show="$ctrl.sso" class="alert alert-info">
   <center> Authentification SSO en cours ...</center>
 </div>
-<div class="container" ng-if="!$ctrl.isLoggedIn()">
-
-</div>
 
 <div class="container" ng-if="$ctrl.isLoggedIn()&& !$ctrl.sso " ng-init="CalInit()">
   <div class="row">

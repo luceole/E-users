@@ -1,13 +1,13 @@
 <div ng-hide="vm.isLoggedIn()">
-  <header class="hero-unit" id="banner" >
-    <div class="container">
+  <header  class="hero-unit" id="banner" >
+    <div class="container"  >
       <h1>{{vm.TitreSite}} &nbsp;</h1>
       <p class="lead">{{vm.DeviseSite}}&nbsp;</p>
       {{banTitre}}
       <img src="assets/images/LogoPLLPt.png " alt="Pôle Logiciels Libres">
     </div>
   </header>
-  <div class="container" ng-if="!vm.ForceSSO">
+  <div class="container" ng-if="!vm.ForceSSO ||vm.forceLocal">
     <div class="row">
       <div class="col-lg-12">
         <div class="col-sm-2"></div>

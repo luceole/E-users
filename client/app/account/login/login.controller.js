@@ -2,10 +2,11 @@
 
 export default class LoginController {
   /*@ngInject*/
-  constructor(Auth, appConfig, Message, $state, $window) {
+  constructor(Auth, appConfig, Message, $state, $stateParams, $window) {
     this.Auth = Auth;
     this.Message = Message;
     this.$state = $state;
+    this.forceLocal = $stateParams.Local;
     this.$window = $window
   }
 
@@ -19,7 +20,7 @@ export default class LoginController {
         this.OauthActif = this.myconfig.OauthActif;
         this.Infos = this.myconfig.Infos;
         this.ForceSSO = this.myconfig.ForceSSO;
-        if (this.ForceSSO)
+        if (this.ForceSSO && this.forceLocal != "locale")
           this.$window.location.href = `/auth/openid`;
       });
   }

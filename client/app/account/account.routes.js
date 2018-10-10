@@ -4,11 +4,21 @@ export default function routes($stateProvider) {
   'ngInject';
 
   $stateProvider.state('login', {
-      url: '/login',
+      url: '/login/:Local',
       template: require('./login/login.html'),
       controller: 'LoginController',
       controllerAs: 'vm'
     })
+    .state('local', {
+      url: '/local',
+      template: '',
+      controller($state) {
+        $state.go('login', {
+          'Local': 'locale'
+        })
+      }
+    })
+
     .state('logout', {
       url: '/logout?referrer',
       referrer: 'main',
