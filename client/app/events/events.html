@@ -1,5 +1,4 @@
 <script id="customMonthCell.html" type="text/ng-template">
-coucou
 </script>
 
 <div class="container">
@@ -188,7 +187,7 @@ coucou
             <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html">
             </dir-pagination-controls>
             <table class="table table-striped ">
-              <tr dir-paginate="user in modalEditEvCtrl.event.participants | orderBy:'groupeInfo' | filter:search:strict | itemsPerPage :'8' ">
+              <tr dir-paginate="user in modalEditEvCtrl.event.participants | orderBy:'user.name' | filter:search:strict | itemsPerPage :'8' ">
                 <td>
                   <strong>{{user.name}}</strong> {{user.surname}}
                 </td>

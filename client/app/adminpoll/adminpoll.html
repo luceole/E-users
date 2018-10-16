@@ -198,10 +198,10 @@
         </tr>
       </thead>
       <tbody>
-        <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html">
+        <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html"  pagination-id="PR1">
         </dir-pagination-controls>
 
-          <tr dir-paginate="r in modalViewPollCtrl.resultats  |  itemsPerPage :'2' ">
+          <tr dir-paginate="r in modalViewPollCtrl.resultats  |  itemsPerPage :'12' "  pagination-id="PR1">
 
           <td>{{r.user.email}}</td>
           <td ng-repeat="w in modalViewPollCtrl.rep(r) track by $index" >{{w|ouinon}}</td>
