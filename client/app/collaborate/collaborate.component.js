@@ -2,6 +2,7 @@
 const angular = require('angular');
 const uiRouter = require('angular-ui-router');
 import routes from './collaborate.routes';
+//import JitsiMeetExternalAPI from './external_api'
 
 export class PollComponent {
   /*@ngInject*/
@@ -147,6 +148,7 @@ export class CollaborateComponent {
     this.Auth = Auth;
     this.Group = Group;
     this.moment = moment;
+
     this.myconfig = {};
     this.isLoggedIn = Auth.isLoggedInSync;
     this.isAdmin = Auth.isAdminSync;
@@ -233,6 +235,7 @@ export class CollaborateComponent {
     this.hostPad = '';
     this.urlCal = '';
     this.urlBoard = '';
+    this.urlVisio = '';
     $scope.$on('$destroy', function() {
       socket.unsyncUpdates('thing');
     });
@@ -413,6 +416,9 @@ export class CollaborateComponent {
         if (this.myconfig.boardUrl) {
           this.urlBoard = this.myconfig.boardUrl;
         }
+        if (this.myconfig.visioUrl) {
+          this.urlVisio = this.myconfig.visioUrl;
+        }
 
         //console.log(this.myconfig);
         this.refreshEvents(false);
@@ -490,6 +496,7 @@ export class CollaborateComponent {
       'grpID': gp._id
     });
   }
+
   openPadEv(args) {
     if (args.calendarEvent) {
       var padID = args.calendarEvent.eventPadID
@@ -553,6 +560,29 @@ export class CollaborateComponent {
     this.$window.open(url);
   }
 
+  openVisio(grp) {
+    var url = `${this.urlVisio}/Mim${grp.name}`;
+    this.$window.open(url);
+  }
+  // this.$uibModal.open({
+  //   template: 'modalVisio.html',
+  //   controller: function() {
+  //     var domain = "jitsi.mim.ovh";
+  //     var options = {
+  //       roomName: "JitsiMeetAPIExample",
+  //       height: 700,
+  //       parent: undefined
+  //     }
+  //     //var meet = new JitsiMeetExternalAPI(domain, options);
+  //   },
+  //   //controllerAs: 'VC',
+  //   resolve: {
+  //     grp() {
+  //       return grp;
+  //     }
+  //   }
+  // });
+  // }
 }
 export default angular.module('eUsersApp.collaborate', [uiRouter])
   .config(routes)

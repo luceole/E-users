@@ -1,3 +1,4 @@
+<script src="https://jitsi.mim.ovh/external_api.js"></script>
 <div class="container">
 
   <div class="col-lg-10">
@@ -23,7 +24,8 @@
             <button class="btn  btn-default btn-sm btn-primary" ng-click="collaborateCtrl.openNote(group)"><span class="glyphicon .glyphicon-info-sign"></span>Informations </button>
             <button ng-if="collaborateCtrl.urlPad" class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openPad(group)" > Pad </button>
             <button ng-if="collaborateCtrl.urlCal" class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openCalc(group)" >Calc </button>
-            <button ng-if="collaborateCtrl.urlBoard" class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openBoard(group)">Board</button>
+            <button ng-if="collaborateCtl.urlBoard" class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openBoard(group)">Board</button>
+            <button class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openVisio(group)">Visio</button>
             <button class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.goDirectory(group)">Annuaire</button>
           </td>
           <td>
@@ -156,6 +158,34 @@
 
   <div ng-include=" 'components/footer/footer.html' "></div>
 </div>
+
+<script type="text/ng-template " id="modalVisio.html ">
+  <!-- <script>
+  var domain = "jitsi.mim.ovh";
+    var options = {
+      roomName: "JitsiMeetAPIExample",
+      height: 700,
+      parent: undefined
+    }
+   var meet = new JitsiMeetExternalAPI(domain, options);
+               meet.on('ready', function() {
+                  var interfaceConfig = {
+                      TOOLBAR_BUTTONS: ['microphone', 'camera', 'desktop', 'fullscreen', 'hangup', 'settings'],
+                      SETTINGS_SECTIONS: ['language', 'devices'],
+                      DEFAULT_REMOTE_DISPLAY_NAME: 'John Doe',
+                  };
+                  var options = {};
+                  options.interfaceConfig = interfaceConfig;
+                  var conference = meet.join('Test1234', '#meet', options);
+                  conference.on('joined', function() {
+                      console.log('We are in!');
+                  });
+              });
+
+  </script> -->
+        <div id="meet">jitsi.mim.ovh</div>
+
+</script>
 
   <script type="text/ng-template " id="modalNote.html ">
     <h3 class="modal-title"> Note du groupe: {{NC.groupe.info}}

@@ -73,6 +73,7 @@ export function index(req, res) {
   var etherpadUrl = config.etherpad ? config.etherpad.url : '';
   var etherHost = config.etherpad ? config.etherpad.host : '';
   var boardUrl = config.board ? config.board.url : '';
+  var visioUrl = config.visio ? config.visio.url : '';
   var Infos = config.Infos ? config.Infos : '';
   var DeviseSite = config.DeviseSite ? config.DeviseSite : 'DeviseSite';
   var TitreSite = config.TitreSite ? config.TitreSite : 'TitreSite';
@@ -82,6 +83,7 @@ export function index(req, res) {
     OauthActif: config.OauthActif,
     ForceSSO: config.ForceSSO,
     boardUrl,
+    visioUrl,
     ethercalcUrl,
     etherpadUrl,
     etherHost,
