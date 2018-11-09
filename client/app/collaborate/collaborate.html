@@ -25,7 +25,7 @@
             <button ng-if="collaborateCtrl.urlPad" class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openPad(group)" > Pad </button>
             <button ng-if="collaborateCtrl.urlCal" class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openCalc(group)" >Calc </button>
             <button ng-if="collaborateCtl.urlBoard" class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openBoard(group)">Board</button>
-            <button class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openVisio(group)">Visio</button>
+            <button ng-if="collaborateCtl.urlVisio"  class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.openVisio(group)">Visio</button>
             <button class="btn  btn-default btn-sm  btn-primary" ng-click="collaborateCtrl.goDirectory(group)">Annuaire</button>
           </td>
           <td>
