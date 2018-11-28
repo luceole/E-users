@@ -12,27 +12,48 @@
         <br>Consultez votre boite au lettre.
         <br> La connexion à ce service ne sera possible qu'après validation de votre courriel.
       </div>
-      <div class="alert alert-warning" ng-if="!$ctrl.getCurrentUser().isactif"> Votre compte est en attende de validation par le modérateur. </div>
-    </div>
-    <div ng-if="$ctrl.getCurrentUser().isactif">
-      <h3 ng-if="$ctrl.MSG">Informations:</h3> {{$ctrl.MSG }}
-    </div>
+        <div class="alert alert-warning" ng-if="!$ctrl.getCurrentUser().isactif"> Votre compte est en attende de validation par le modérateur. </div>
+      </div>
+      <div ng-if="$ctrl.getCurrentUser().isactif">
+        <h3 ng-if="$ctrl.MSG">Informations:</h3> {{$ctrl.MSG }}
+      </div>
 
-      <div class="row"  ng-if="$ctrl.getCurrentUser().isactif">
-        <div class="table table-striped alert-info">
+      <div ng-if="$ctrl.getCurrentUser().isactif">
+        <!-- <div class="table table-striped alert-info"> -->
           <br>
           <uib-accordion>
             <div uib-accordion-group is-open=true heading="Services en lignes ">
-              <ul class="nav nav-tabs nav-stacked  col-lg-4 col-sm-6   " ng-repeat="service in $ctrl.onlineServices">
-                <li "> <span class="glyphicon {{service.glyphicon}} "><a href="{{service.url}}" target="{{service.target}}" style="text-decoration:none;"> {{service.title}}</a></span></li>
-              </ul>
-          </div>
+
+              <md-content layout="row" layout-wrap >
+
+
+                  <md-card ng-repeat="service in  $ctrl.onlineServices" >
+                    <md-card-title>
+                      <md-card-title-text>
+                        <span class="md-headline  sm-headline">{{service.title}}</span>
+                        <span class="md-subhead  sm-subhead">{{service.title}}</span>
+                      </md-card-title-text>
+                      <md-card-title-media>
+                        <div class="md-media">
+                          <img src="https://platon.ac-dijon.fr/wordpress/pll/wp-content/uploads/sites/3/2015/06/LogoPLLPt.png" class="md-card-image"></img>
+                        </div>
+                      </md-card-title-media>
+                    </md-card-title>
+                    <md-card-actions layout="row" layout-align="end center">
+                      <md-button>GO</md-button>
+                    </md-card-actions>
+                  </md-card>
+
+              </md-content>
+            </div>
+
+
 
             <div uib-accordion-group class="panel-default " ng-if="$ctrl.awesomeThings.length " heading="Brèves d 'actualités">
 
-                  <ul class="nav nav-tabs nav-stacked  col-lg-4 col-sm-6" ng-repeat="thing in $ctrl.awesomeThings">
-                    <li><a uib-tooltip="{{thing.info}}">{{thing.name}}<button type="button" ng-if="$ctrl.isAdmin()" class="close" ng-click="$ctrl.deleteThing(thing)">&times;</button></a></li>
-                  </ul>
+              <ul class="nav nav-tabs nav-stacked  col-lg-4 col-sm-6" ng-repeat="thing in $ctrl.awesomeThings">
+                <li><a uib-tooltip="{{thing.info}}">{{thing.name}}<button type="button" ng-if="$ctrl.isAdmin()" class="close" ng-click="$ctrl.deleteThing(thing)">&times;</button></a></li>
+              </ul>
             </div>
 
 
@@ -40,7 +61,7 @@
               <form class="thing-form">
 
                 <p class="input-group">
-            <input type="text" class="form-control" placeholder="Titre" ng-model="$ctrl.newThing.name" style="width:280px">
+                  <input type="text" class="form-control" placeholder="Titre" ng-model="$ctrl.newThing.name" style="width:280px">
                   <input type="text" class="form-control" placeholder="Saisisez votre brève." ng-model="$ctrl.newThing.info" style="width:400px>
       <span class=" input-group-btn "></p>
         <button type="submit " class="btn btn-primary " ng-click="$ctrl.addThing() ">Ajoutez</button>
@@ -50,5 +71,5 @@
 
   </uib-accordion>
   <br>
-  </div>
+  <!-- </div> -->
   </div>
