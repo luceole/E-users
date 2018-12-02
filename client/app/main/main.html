@@ -19,26 +19,32 @@
       </div>
 
       <div ng-if="$ctrl.getCurrentUser().isactif">
-        <!-- <div class="table table-striped alert-info"> -->
-          <br>
+        <div class="table table-striped alert-info">
+          <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="..." alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+          </div>
           <uib-accordion>
             <div uib-accordion-group is-open=true heading="Services en lignes ">
-
               <md-content layout="row" layout-wrap >
-
-
                   <md-card ng-repeat="service in  $ctrl.onlineServices" >
                     <md-card-title>
                       <md-card-title-text>
                         <span class="md-headline  sm-headline">{{service.title}}</span>
-                        <span class="md-subhead  sm-subhead">{{service.title}}</span>
+                        <span class="md-subhead  sm-subhead">{{service.name}}</span>
                       </md-card-title-text>
                       <md-card-title-media>
                         <div class="md-media">
-                          <img src="https://platon.ac-dijon.fr/wordpress/pll/wp-content/uploads/sites/3/2015/06/LogoPLLPt.png" class="md-card-image"></img>
+                          <img src={{service.logo}} class="md-card-image"></img>
                         </div>
                       </md-card-title-media>
                     </md-card-title>
+                    bla bla
+                    bla
                     <md-card-actions layout="row" layout-align="end center">
                       <md-button>GO</md-button>
                     </md-card-actions>
@@ -71,5 +77,5 @@
 
   </uib-accordion>
   <br>
-  <!-- </div> -->
+</div>
   </div>
