@@ -367,7 +367,24 @@ export class EventsComponent {
         this.refreshEvents(true);
       });
   }
-
+  delete(evt) {
+    var self = this;
+    if (evt.participants.length > 0) {
+      if (!confirm('Attention des participants sont inscrits \nConfirmez vous la suppression?')) {
+        return;
+      }
+    }
+    this.Auth.eventdelete(evt.group._id, {
+        id: evt._id
+      })
+      .then(function() {
+        self.refreshEvents(true);
+      })
+      .catch(function(err) {
+        err = err.data;
+        console.log(err);
+      });
+  }
   eventClicked(ev) {
     self = this;
     var uibModalInstance = this.$uibModal.open({

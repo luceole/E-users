@@ -29,7 +29,7 @@ function patchUpdates(patches) {
   return function(entity) {
     try {
       jsonpatch.apply(entity, patches, /*validate*/ true);
-    } catch(err) {
+    } catch (err) {
       return Promise.reject(err);
     }
     return entity.save();
@@ -38,7 +38,7 @@ function patchUpdates(patches) {
 
 function handleEntityNotFound(res) {
   return function(entity) {
-    if(!entity) {
+    if (!entity) {
       res.status(404).end();
       return null;
     }
@@ -76,10 +76,10 @@ export function index(req, res) {
 
 export function listadmgrp(req, res) {
   return User.find({
-    role: {
-      $in: ['admin', 'admin_grp']
-    },
-  }, '-salt -password', ).exec()
+      role: {
+        $in: ['admin', 'admin_grp']
+      },
+    }, '-salt -password', ).exec()
     .then(users => {
       return res.status(200).json(users);
     })
@@ -88,10 +88,10 @@ export function listadmgrp(req, res) {
 
 export function listadmin(req, res) {
   return User.find({
-    role: {
-      $in: ['admin']
-    },
-  }, '-salt -password', ).exec()
+      role: {
+        $in: ['admin']
+      },
+    }, '-salt -password', ).exec()
     .then(users => {
       return res.status(200).json(users);
     })
@@ -112,7 +112,7 @@ export function demandes(req, res) {
   };
 
   return User.paginate(query, options, function(err, result) {
-    if(err) return res.send(500, err);
+    if (err) return res.send(500, err);
     res.json(200, {
       docs: result.docs,
       total: result.total
@@ -184,7 +184,7 @@ export function validEmail(req, res) {
     //Put  whiteDomain in config ?
     var whiteDomain1 = /^ac-[a-z\-]*\.fr/;
     var whiteDomain2 = /^[a-z\-]*\.gouv\.fr/;
-    if((whiteDomain1.test(domaineMail)) || (whiteDomain2.test(domaineMail))) {
+    if ((whiteDomain1.test(domaineMail)) || (whiteDomain2.test(domaineMail))) {
       user.isdemande = false;
       user.isactif = true;
       console.log('Validation auto :' + user.email);
@@ -217,12 +217,12 @@ export function validEmail(req, res) {
 export function lostPassword(req, res) {
   var email = req.query.email;
   console.log(`Lost PWD =>${email}`);
-  if(!email) return res.sendStatus(404);
+  if (!email) return res.sendStatus(404);
   return User.findOne({
-    email
-  }).exec()
+      email
+    }).exec()
     .then(user => {
-      if(!user) return res.sendStatus(404);
+      if (!user) return res.sendStatus(404);
       user.pwdToken = randtoken.generate(16);
       user.save()
         .then(user => {
@@ -236,13 +236,13 @@ export function lostPassword(req, res) {
 
 export function resetPassword(req, res) {
   var pwdToken = req.body.pwdToken;
-  if(!pwdToken) return res.sendStatus(404);
+  if (!pwdToken) return res.sendStatus(404);
   var newPass = String(req.body.newPassword);
   User.findOne({
-    pwdToken
-  }).exec()
+      pwdToken
+    }).exec()
     .then(user => {
-      if(!user) return res.sendStatus(404);
+      if (!user) return res.sendStatus(404);
       console.log(`ReInit PASSWD${user.name}`);
       user.password = newPass;
       user.pwdToken = '';
@@ -272,7 +272,7 @@ export function show(req, res, next) {
     .populate('adminOf', 'info note groupPadID name')
     .exec()
     .then(user => {
-      if(!user) {
+      if (!user) {
         return res.status(404).end();
       }
       res.json(user.profile);
@@ -283,13 +283,13 @@ export function show(req, res, next) {
 export function me(req, res, next) {
   var userId = req.user._id;
   return User.findOne({
-    _id: userId
-  }, '-salt -password')
-    .populate('memberOf', 'name info note digest groupPadID')
+      _id: userId
+    }, '-salt -password')
+    .populate('memberOf', 'name info note digest groupPadID participants')
     .populate('adminOf', 'name info  groupPadID ')
     .exec()
     .then(user => { // don't ever give out the password or salt
-      if(!user) {
+      if (!user) {
         return res.status(401).end();
       }
       return res.json(user);
@@ -310,7 +310,7 @@ export function destroy(req, res) {
 }
 
 export function update(req, res) {
-  if(req.body._id) {
+  if (req.body._id) {
     delete req.body._id;
   }
   // return User.findById(req.params.id).exec()
@@ -337,10 +337,10 @@ export function usersupgroup(req, res) {
   //console.log('del memberOf');
   listusers.forEach(function(userId) {
     User.findById(userId).exec()
-        .then(user => {
-          user.memberOf.pull(idgrp);
-          user.save();
-        });
+      .then(user => {
+        user.memberOf.pull(idgrp);
+        user.save();
+      });
   });
 }
 export function usersupcandidat(req, res) {
@@ -349,24 +349,24 @@ export function usersupcandidat(req, res) {
   //console.log('del candidat');
   listusers.forEach(function(userId) {
     User.findById(userId).exec()
-        .then(user => {
-          user.candidatOf.pull(idgrp);
-          user.save();
-        });
+      .then(user => {
+        user.candidatOf.pull(idgrp);
+        user.save();
+      });
   });
 }
 //export function useraddcandidat(req, res) {
-  // var listusers = req.body.listusers;
-  // var idgrp = req.body.idgrp;
-  // console.log('add candidat to groupe');
-  // listusers.forEach(function(userId) {
-  //   User.findById(userId).exec()
-  //       .then(user => {
-  //         user.candidatOf.pull(idgrp);
-  //         user.memberOf.push(idgrp);
-  //         user.save();
-  //       });
-  // });
+// var listusers = req.body.listusers;
+// var idgrp = req.body.idgrp;
+// console.log('add candidat to groupe');
+// listusers.forEach(function(userId) {
+//   User.findById(userId).exec()
+//       .then(user => {
+//         user.candidatOf.pull(idgrp);
+//         user.memberOf.push(idgrp);
+//         user.save();
+//       });
+// });
 //}
 export function useradmingroup(req, res) {
   var listusers = req.body.listusers;
@@ -375,12 +375,12 @@ export function useradmingroup(req, res) {
   listusers.forEach(function(userId) {
     //console.log(`grp=${idgrp}`);
     User.findById(userId, function(err, user) {
-      if(err) {
+      if (err) {
         return err;
       }
       user.adminOf.pull(idgrp);
       user.save(function(err) {
-        if(err) {
+        if (err) {
           return err;
         }
         return res.status(200).end();
@@ -403,13 +403,13 @@ export function addusergroup(req, res) {
       return user.save()
         .then(user => {
           Group.findById(groupId, function(err, group) {
-            if(err) {
+            if (err) {
               console.log(err);
               return err;
             }
             group.participants.push(userId);
             group.save(function(err) {
-              if(err) {
+              if (err) {
                 console.log(err);
               }
             });
@@ -424,20 +424,20 @@ export function candidatusergroup(req, res) {
   var userId = req.params.id;
   var groupId = String(req.body.idGroup);
   return User.findById(userId, '-salt -hashedPassword')
-  //  .populate('memberOf', 'info')
+    //  .populate('memberOf', 'info')
     .exec()
     .then(user => {
       user.candidatOf.push(groupId);
       return user.save()
         .then(user => {
           Group.findById(groupId, function(err, group) {
-            if(err) {
+            if (err) {
               console.log(err);
               return err;
             }
             group.demandes.push(userId);
             group.save(function(err) {
-              if(err) {
+              if (err) {
                 console.log(err);
               }
             });
@@ -458,13 +458,13 @@ export function delusergroup(req, res) {
       return user.save()
         .then(user => {
           Group.findById(groupId, function(err, group) {
-            if(err) {
+            if (err) {
               console.log(err);
               return err;
             }
             group.participants.pull(userId);
             group.save(function(err) {
-              if(err) {
+              if (err) {
                 console.log(err);
               }
             });
@@ -487,13 +487,13 @@ export function nocandidatusergroup(req, res) {
       return user.save()
         .then(user => {
           Group.findById(groupId, function(err, group) {
-            if(err) {
+            if (err) {
               console.log(err);
               return err;
             }
             group.demandes.pull(userId);
             group.save(function(err) {
-              if(err) {
+              if (err) {
                 console.log(err);
               }
             });
@@ -505,23 +505,23 @@ export function nocandidatusergroup(req, res) {
 }
 
 export function discourseSso(req, res) {
-  if(req.body._id) {
+  if (req.body._id) {
     delete req.body._id;
   }
   User.findById(req.params.id, function(err, user) {
-    if(err) {
+    if (err) {
       return handleError(res, err);
     }
-    if(!user) {
+    if (!user) {
       return res.send(404);
     }
-    if(!user.isactif) {
+    if (!user.isactif) {
       return res.send(404);
     }
     var sso = new discourse_sso(config.discourse_sso.secret);
     var payload = String(req.body.sso);
     var sig = String(req.body.sig);
-    if(sso.validate(payload, sig)) {
+    if (sso.validate(payload, sig)) {
       var nonce = sso.getNonce(payload);
       var userparams = {
         // Required, will throw exception otherwise
@@ -553,7 +553,7 @@ export function updateMe(req, res) {
       user.name = newUser.name;
       user.surname = newUser.surname;
       user.structure = newUser.structure;
-      if(user.email != newUser.email) {
+      if (user.email != newUser.email) {
         MailChange = true;
         newUser.urlToken = randtoken.generate(16);
         user.email = newUser.email;
@@ -562,7 +562,7 @@ export function updateMe(req, res) {
       }
       return user.save()
         .then(user => {
-          if(MailChange) {
+          if (MailChange) {
             var server = email.server.connect({
               user: config.mail.user,
               password: config.mail.password,
@@ -570,14 +570,14 @@ export function updateMe(req, res) {
               ssl: config.mail.ssl
             });
             server.send({
-              text: `Bonjour, Ceci est un courriel de confirmation suite à la modification de votre courriel; Pour ré-activer votre compte cliquez sur le lien : ${config.mail.url}${newUser.urlToken}`,
-              from: config.mail.sender,
-              to: user.email,
-              subject: 'Votre inscription'
-            },
-            function(err, message) {
-              console.log(err || message);
-            });
+                text: `Bonjour, Ceci est un courriel de confirmation suite à la modification de votre courriel; Pour ré-activer votre compte cliquez sur le lien : ${config.mail.url}${newUser.urlToken}`,
+                from: config.mail.sender,
+                to: user.email,
+                subject: 'Votre inscription'
+              },
+              function(err, message) {
+                console.log(err || message);
+              });
           }
           res.status(204).end();
         })
@@ -591,7 +591,7 @@ export function changePassword(req, res) {
   var newPass = String(req.body.newPassword);
   return User.findById(userId).exec()
     .then(user => {
-      if(user.authenticate(oldPass)) {
+      if (user.authenticate(oldPass)) {
         user.password = newPass;
         return user.save()
           .then(() => res.status(204).end())

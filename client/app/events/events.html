@@ -51,9 +51,15 @@
   </uib-tab>
     <uib-tab heading="Liste">
       <form>
+
+        <a href ng-click="eventsCtrl.eventClicked({})" rel="tooltip" title="Ajouter" class="trash">
+          <div class="glyphicon glyphicon-plus">Créer une réunion</div>
+        </a>
+         &nbsp;&nbsp; 
+        Voir les anciennes réunions
+       <input type="checkbox" ng-model="search.newEv" ng-init="search.newEv=true" ng-true-value="" ng-false-value="true">
           <!-- <input ng-show="collaborateCtrl.getCurrentUser().memberOf.length > 0" ng-model="search.$" placeholder="Recherche globale"> -->
-         Voir les anciennes réunions
-        <input type="checkbox" ng-model="search.newEv" ng-init="search.newEv=true" ng-true-value="" ng-false-value="true">
+
         </form>
         <dir-pagination-controls  boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" pagination-id="evt"></dir-pagination-controls>
          <table class="table table-striped ">
@@ -82,13 +88,17 @@
             <!-- <td>
               {{evt}}
             </td> -->
-             <td  >
+             <td>
                <span ng-bind-html="evt.lieu"></span>
              </td>
              <td>
-               {{evt.participants.length}}
+               Participant(s): {{evt.participants.length}}
              </td>
-
+             <td>
+               <a href ng-click="eventsCtrl.delete(evt)" rel="tooltip" title="Effacer" class="trash">
+                 <div class="glyphicon glyphicon-trash pull-right"></div>
+               </a>
+             </td>
            </tr>
          </table>
     </uib-tab>

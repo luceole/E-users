@@ -214,10 +214,10 @@ export class CollaborateComponent {
       }
     }];
     this.calendarEventTitle.monthViewTooltip = this.calendarEventTitle.weekViewTooltip = this.calendarEventTitle.dayViewTooltip = (event) => {
-      var msg = '<br>Participation: Oui';
+      var msg = '<br>Inscrit: Oui';
       if (event.color == calendarConfig.colorTypes.important)
-        msg = '<br>Participation: Non';
-      return event.info + '<br>' + event.lieu + msg;
+        msg = '<br>Inscrit: Non';
+      return event.info + '<br>' + event.lieu + msg + '<br> Participant(s): ' + event.participants.length;
     };
     this.eventSources = [
       //   {

@@ -34,6 +34,9 @@
           <td>
             {{group.info}}
           </td>
+          <td>
+              Membre(s): {{group.participants.length}}
+            </td>
         </tr>
       </table>
 
@@ -104,11 +107,15 @@
         </td>
         <td> <span ng-bind-html="evt.info"></span>
         </td>
+
        <!-- <td>
          {{evt}}
        </td> -->
         <td  >
           <span ng-bind-html="evt.lieu"></span>
+        </td>
+        <td>
+          Participant(s): {{evt.participants.length}}
         </td>
       </tr>
     </table>
@@ -148,7 +155,7 @@
         {{poll.info}}
       </td>
       <td>
-        {{poll.resultats.length}}
+        Réponse(s): {{poll.resultats.length}}
       </td>
     </tr>
   </table>
