@@ -20,36 +20,39 @@
 
       <div ng-if="$ctrl.getCurrentUser().isactif">
         <div class="table table-striped alert-info">
-          <div class="card" style="width: 18rem;">
-            <img class="card-img-top" src="..." alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-          </div>
+
           <uib-accordion>
             <div uib-accordion-group is-open=true heading="Services en lignes ">
               <md-content layout="row" layout-wrap >
-                  <md-card ng-repeat="service in  $ctrl.onlineServices" >
-                    <md-card-title>
-                      <md-card-title-text>
-                        <span class="md-headline  sm-headline">{{service.title}}</span>
-                        <span class="md-subhead  sm-subhead">{{service.name}}</span>
-                      </md-card-title-text>
-                      <md-card-title-media>
-                        <div class="md-media">
-                          <img src={{service.logo}} class="md-card-image"></img>
-                        </div>
-                      </md-card-title-media>
-                    </md-card-title>
-                    bla bla
-                    bla
-                    <md-card-actions layout="row" layout-align="end center">
-                      <md-button>GO</md-button>
-                    </md-card-actions>
-                  </md-card>
+                <md-card ng-repeat="service in  $ctrl.onlineServices" >
+                  <md-card-title  style="height: 90px;  overflow-x: scroll">
+                    <img ng-src={{service.logo}}  alt="Logo">
+                    <md-card-title-text class="md-subhead  sm-subhead">
+                    {{service.name}}
+                    </md-card-title-text>
 
+                  </md-card-title>
+
+                  <md-card-content  style="height: 100px; overflow-y: auto">
+
+                  <span  class="md-headline  sm-headline"> {{service.title}} </span>
+                  <div >
+                   {{service.description}}
+                 </div>
+
+
+
+
+                 </md-card-content>
+                  <md-card-actions layout="row" layout-align="end">
+                    <!-- <md-button class="md-fab md-mini  "> -->
+                     <!-- <span class="glyphicon glyphicon-heart "/> -->
+                   <!-- </md-button> -->
+                      <md-button  class="md-mini" aria-label="GO"  ng-href="{{service.url}}" ng-attr-target="{{service.target}">
+                  <span class="glyphicon glyphicon-new-window "/>
+                </md-button>
+                </md-card-actions>
+                  </md-card>
               </md-content>
             </div>
 

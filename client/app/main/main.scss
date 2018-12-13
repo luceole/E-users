@@ -2055,11 +2055,17 @@ $card-box-shadow: $whiteframe-shadow-1dp !default;
 md-card {
   box-sizing: border-box;
   margin: 0 16px 16px 0;
-  width: 280px;
+  width: 210px;
+  height: 240px;
   flex-direction: column;
   margin: $baseline-grid;
   box-shadow: $card-box-shadow;
 
+sm-card-image {
+  width: auto;
+  height: auto;
+
+}
   md-card-header {
     padding: $card-padding;
     display: flex;
