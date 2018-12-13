@@ -20,7 +20,6 @@ module.exports = {
   // Control debug level for modules using visionmedia/debug
   DEBUG: '',
 
-
   mail: {
     user: 'login SMTP',
     password: 'Password SMTP',
@@ -30,52 +29,53 @@ module.exports = {
     site: 'http://localhost:3000',
     url: 'http://localhost:3000/api/users/validate/'
   },
-  onlineServices: [{
+
+  ModCard: true,
+  onlineServices: [
+    {
       glyphicon: 'glyphicon-bullhorn',
       url: 'https://forum.domain.fr',
       title: ' Forum Libre Communauté',
-      target: '_self'
-    },
-    {
+      target: '_self',
+      name: 'Discourse',
+      logo: 'assets/images/logoMedium.png ',
+      description: 'Long text ...'
+    }, {
       glyphicon: 'glyphicon-certificate',
       url: 'https://chat.domain.fr',
-      title: 'Chat Libre Communauté'
-      target: '_blank'
+      title: 'Chat Libre Communauté',
+      target: '_blank',
+      name: '',
+      logo: 'https://rocket.chat/images/default/logo--dark.svg',
+      description: 'RocketChat is a good chat !'
     }
   ],
-  Structures: [{
+  Structures: [
+    {
       id: 'Education',
       value: 'Education'
-    },
-    {
+    }, {
       id: 'Ecologie',
       value: 'Ecologie'
-    },
-    {
+    }, {
       id: 'Affaires Etrangères',
       value: 'Affaires Etrangères'
-    },
-    {
+    }, {
       id: 'Intérieur',
       value: 'Intérieur'
-    },
-    {
+    }, {
       id: 'Affaires Sociales',
       value: 'Affaires Sociales'
-    },
-    {
+    }, {
       id: 'Finance',
       value: 'Finance'
-    },
-    {
+    }, {
       id: 'Justice',
       value: 'Justice'
-    },
-    {
+    }, {
       id: 'Collectivité',
       value: 'Collectivité'
-    },
-    {
+    }, {
       id: 'Autre',
       value: 'Autre'
     }
@@ -100,9 +100,8 @@ module.exports = {
     client: {
       client_id: 'e-users',
       client_secret: '...................................',
-      redirect_uris: [`${process.env.DOMAIN || ''}/auth/openid/callback`],
+      redirect_uris: [`${process.env.DOMAIN || ''}/auth/openid/callback`]
     }
   }
-
 
 };

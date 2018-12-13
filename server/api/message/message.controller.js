@@ -82,6 +82,7 @@ export function index(req, res) {
   return res.status(200).json({
     OauthActif: config.OauthActif,
     ForceSSO: config.ForceSSO,
+    ModCard : config.ModCard,
     boardUrl,
     visioUrl,
     ethercalcUrl,

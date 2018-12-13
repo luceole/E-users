@@ -7,6 +7,7 @@ client/bower_components
 client/index.html
 build
 dist
+build
 /server/config/local.env.js
 npm-debug.log
 coverage
