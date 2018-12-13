@@ -2,62 +2,62 @@
   Gestion des groupes ({{groupesCtrl.groups.length }} créés)
   <form>
     <input ng-model="search.name" placeholder="Recherche nom du groupe">
-    <input ng-model="search.adminby.uid" placeholder="Recherche sur l'animateur">
+    <input ng-model="search.adminby.$" placeholder="Recherche sur l'animateur">
+    <input ng-model="search.participants.$" placeholder="Recherche sur participants">
   </form>
-  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"
-  template-url="/assets/dirPagination.tpl.html"></dir-pagination-controls>
-  <br>
-  <span>
+    <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html"></dir-pagination-controls>
+    <br>
+    <span>
     <a href ng-click="groupesCtrl.add()" rel="tooltip" title="Ajouter" class="trash">
       <div class="glyphicon glyphicon-plus">Créer un groupe</div>
     </a>
   </span>
-  <table class="table table-striped ">
-    <tr dir-paginate="groupe in groupesCtrl.groups | orderBy:'name' | filter:search:strict | itemsPerPage :'12' ">
-      <td>
-        <span>
+    <table class="table table-striped ">
+      <tr dir-paginate="groupe in groupesCtrl.groups | orderBy:'name' | filter:search:strict | itemsPerPage :'12' ">
+        <td>
+          <span>
           <a href ng-click="groupesCtrl.edit(groupe)" rel="tooltip" title="Modifier" class="trash">
             <div class="glyphicon glyphicon-pencil pull-right"></div>
           </a>
         </span>
-      </td>
-      <td>
-        <strong>{{groupe.name}}</strong>
-      </td>
-      <td>
-        {{groupe.info}}
-      </td>
-      <td ng-switch="groupe.type">
-        <strong ng-switch-when="0">Ouvert</strong>
-        <strong ng-switch-when="5">Modéré</strong>
-        <strong ng-switch-when="10">Réservé</strong>
-        <strong ng-switch-default>{{groupe.type}}</strong>
-      </td>
-      <td>
-        {{groupe.owner.uid}}
-      </td>
-      <td>
-        {{groupe.adminby[0].uid}}
-      </td>
-      <td>
-        Membre(s): {{groupe.participants.length}}
-      </td>
-      <td>
-        <span ng-show="groupe.demandes.length>0">Demande(s): {{groupe.demandes.length}}</span>
-      </td>
-      <td>
-        <span ng-show="groupe.participants.length===0 && groupe.demandes.length===0">
+        </td>
+        <td>
+          <strong>{{groupe.name}}</strong>
+        </td>
+        <td>
+          {{groupe.info}}
+        </td>
+        <td ng-switch="groupe.type">
+          <strong ng-switch-when="0">Ouvert</strong>
+          <strong ng-switch-when="5">Modéré</strong>
+          <strong ng-switch-when="10">Réservé</strong>
+          <strong ng-switch-default>{{groupe.type}}</strong>
+        </td>
+        <td>
+          {{groupe.owner.uid}}
+        </td>
+        <td>
+          {{groupe.adminby[0].uid}}
+        </td>
+        <td>
+          Membre(s): {{groupe.participants.length}}
+        </td>
+        <td>
+          <span ng-show="groupe.demandes.length>0">Demande(s): {{groupe.demandes.length}}</span>
+        </td>
+        <td>
+          <span ng-show="groupe.participants.length===0 && groupe.demandes.length===0">
           <a href ng-click="groupesCtrl.delete(groupe)" rel="tooltip" title="Effacer" class="trash">
             <div class="glyphicon glyphicon-trash pull-right"></div>
           </a>
         </span>
-      </td>
-    </tr>
-  </table>
+        </td>
+      </tr>
+    </table>
 
 
-  <script type="text/ng-template" id="modalEditAdminGroup.html">
-    <div class="modal-header">
+    <script type="text/ng-template" id="modalEditAdminGroup.html">
+      <div class="modal-header">
       <h3 class="modal-title">Modification de {{ModalEditAdminGroupCtrl.groupe.name}}</h3>
     </div>
     <div class="modal-body">
@@ -105,22 +105,22 @@
                 </ui-select>
                 <button class="btn btn-primary" ng-click="ModalEditAdminGroupCtrl.addAdm(ModalEditAdminGroupCtrl.admin.selected,ModalEditAdminGroupCtrl.groupe.adminby)">Ajouter</button>
               </div>
-  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"  pagination-id="adm" template-url="/assets/dirPagination.tpl.html"></dir-pagination-controls>
-              <tr dir-paginate="user in ModalEditAdminGroupCtrl.groupe.adminby | orderBy:'uid' | filter:search:strict | itemsPerPage :'10' "  pagination-id="adm" >
+              <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"  pagination-id="adm" template-url="/assets/dirPagination.tpl.html">
+              </dir-pagination-controls>
+              <tr dir-paginate="user in ModalEditAdminGroupCtrl.groupe.adminby | orderBy:'uid' | filter:search:strict | itemsPerPage :'10' "  pagination-id="adm">
                 <td>
                   - {{user.uid}}
                 </td>
                 <td>
-                    {{user.name}} 
-                </td>>
-                <td> 
+                    {{user.name}}
+                </td>
+                <td>
                   {{user.structure}}
                 </td>
                 <td>
                   <a href ng-click="ModalEditAdminGroupCtrl.delAdm(user,ModalEditAdminGroupCtrl.groupe.adminby)" rel="tooltip" title="Effacer" class="trash">
                     <div class="glyphicon glyphicon-trash pull-right"></div>
                   </a>
-
                 </td>
               </tr>
             </table>
@@ -138,15 +138,18 @@
                 </ui-select>
                 <button class="btn btn-primary" ng-click="ModalEditAdminGroupCtrl.addUser(ModalEditAdminGroupCtrl.user.selected,ModalEditAdminGroupCtrl.groupe.participants)">Ajouter</button>
               </div>
+            <div align="right">
+              <input ng-model="search.$" placeholder="Recherche participants">  </div>
               <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"  pagination-id="participants" template-url="/assets/dirPagination.tpl.html"></dir-pagination-controls>
+
               <tr dir-paginate="user in ModalEditAdminGroupCtrl.groupe.participants| orderBy:'uid' | filter:search:strict | itemsPerPage :'10' "  pagination-id="participants" >
                 <td>
                   - {{user.uid}}
                 </td>
                 <td>
-                    {{user.name}} 
-                </td>>
-                <td> 
+                    {{user.name}}
+                </td>
+                <td>
                   {{user.structure}}
                 </td>
                 <td>
@@ -154,21 +157,17 @@
                   )" rel="tooltip" title="Effacer" class="trash">
                     <div class="glyphicon glyphicon-trash pull-right"></div>
                   </a>
-
                 </td>
               </tr>
             </table>
           </uib-tab>
           <uib-tab heading="Demandes">
-            <table class="table table-striped ">
-              <div>
-
-
-              <tr dir-paginate="user in ModalEditAdminGroupCtrl.groupe.demandes| orderBy:'uid' | filter:search:strict | itemsPerPage :'12' ">
-<td>  <button class="btn btn-success btn-xs"  ng-click="ModalEditAdminGroupCtrl.addDemande(user,ModalEditAdminGroupCtrl.groupe.demandes)"    type="button">Inscrire
-      <span class="glyphicon glyphicon-star"></span>
-  </button>
-</td>
+            <table class="table table-striped">
+            <tr dir-paginate="user in ModalEditAdminGroupCtrl.groupe.demandes| orderBy:'uid' | filter:search:strict | itemsPerPage :'12' ">
+            <td>  <button class="btn btn-success btn-xs"  ng-click="ModalEditAdminGroupCtrl.addDemande(user,ModalEditAdminGroupCtrl.groupe.demandes)"    type="button">Inscrire
+             <span class="glyphicon glyphicon-star"></span>
+               </button>
+                </td>
                 <td>
               {{user.surname}}  {{user.name}}  - {{user.email}} - {{user.structure}}
                 </td>
@@ -190,8 +189,8 @@
     </div>
   </script>
 
-  <script type="text/ng-template" id="modalAddAdminGroup.html">
-    <div class="modal-header">
+    <script type="text/ng-template" id="modalAddAdminGroup.html">
+      <div class="modal-header">
       <h3 class="modal-title">Création d'un groupe</h3>
     </div>
     <div class="modal-body">
@@ -249,4 +248,4 @@
         <button class="btn btn-warning " ng-click="ModalAddAdminGroupCtrl.cancel() ">Annuler</button>
       </div>
   </script>
-  </div>
+</div>

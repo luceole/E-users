@@ -28,12 +28,12 @@ export class ModalEditGroupComponent {
   //  console.log(this.participantsOld);
     var w = [];
     angular.forEach(this.groupe.adminby, function(o) {
-      w.push(o._id);
+      w.push(o);
     });
     this.adminbyOld = w.slice();
     w = [];
     angular.forEach(this.groupe.demandes, function(o) {
-      w.push(o._id);
+      w.push(o);
     });
     this.demandesOld = w.slice();
     this.person = {};

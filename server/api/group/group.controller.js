@@ -67,9 +67,9 @@ function handleError(res, statusCode) {
 export function index(req, res) {
   return Group.find()
     .populate('owner', 'uid')
-    .populate('participants', 'uid info note')
+    .populate('participants', 'uid name structure info note')
     .populate('demandes', 'uid name surname email')
-    .populate('adminby', 'uid')
+    .populate('adminby', 'uid name structure')
     .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -92,7 +92,7 @@ export function byowner(req, res) {
   Group.find({
       owner
     })
-    .populate('participants', 'uid info note')
+    .populate('participants', 'uid name structure info note')
     .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
