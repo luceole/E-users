@@ -22,7 +22,7 @@ export class ModalEditGroupComponent {
     this.addCandidat = [];
     var w = [];
     angular.forEach(this.groupe.participants, function(o) {
-      w.push(o._id);
+      w.push(o);
     });
     this.participantsOld = w.slice();
   //  console.log(this.participantsOld);

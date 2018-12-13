@@ -111,6 +111,12 @@
                   - {{user.uid}}
                 </td>
                 <td>
+                    {{user.name}} 
+                </td>>
+                <td> 
+                  {{user.structure}}
+                </td>
+                <td>
                   <a href ng-click="ModalEditAdminGroupCtrl.delAdm(user,ModalEditAdminGroupCtrl.groupe.adminby)" rel="tooltip" title="Effacer" class="trash">
                     <div class="glyphicon glyphicon-trash pull-right"></div>
                   </a>
@@ -138,6 +144,12 @@
                   - {{user.uid}}
                 </td>
                 <td>
+                    {{user.name}} 
+                </td>>
+                <td> 
+                  {{user.structure}}
+                </td>
+                <td>
                   <a href ng-click="ModalEditAdminGroupCtrl.delUser(user,ModalEditAdminGroupCtrl.groupe.participants
                   )" rel="tooltip" title="Effacer" class="trash">
                     <div class="glyphicon glyphicon-trash pull-right"></div>
@@ -158,7 +170,7 @@
   </button>
 </td>
                 <td>
-              {{user.surname}}  {{user.name}}  - {{user.email}}
+              {{user.surname}}  {{user.name}}  - {{user.email}} - {{user.structure}}
                 </td>
                 <td>
                   <a href ng-click="ModalEditAdminGroupCtrl.delDemande(user,ModalEditAdminGroupCtrl.groupe.demandes)" rel="tooltip" title="Effacer" class="trash">
