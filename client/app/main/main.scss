@@ -2055,7 +2055,8 @@ $card-box-shadow: $whiteframe-shadow-1dp !default;
 md-card {
   box-sizing: border-box;
   margin: 0 16px 16px 0;
-  width: 210px;
+  width: 18%;
+  min-width: 200px;
   height: 240px;
   flex-direction: column;
   margin: $baseline-grid;

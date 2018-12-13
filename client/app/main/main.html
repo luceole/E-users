@@ -17,67 +17,56 @@
       <div ng-if="$ctrl.getCurrentUser().isactif">
         <h3 ng-if="$ctrl.MSG">Informations:</h3> {{$ctrl.MSG }}
       </div>
-
       <div ng-if="$ctrl.getCurrentUser().isactif">
         <div class="table table-striped alert-info">
-
           <uib-accordion>
-            <div uib-accordion-group is-open=true heading="Services en lignes ">
-              <md-content layout="row" layout-wrap >
-                <md-card ng-repeat="service in  $ctrl.onlineServices" >
-                  <md-card-title  style="height: 90px;  overflow-x: scroll">
+            <div uib-accordion-group ng-if=$ctrl.ModCard is-open=true heading="Services ">
+              <md-content layout="row" layout-wrap>
+                <md-card ng-repeat="service in  $ctrl.onlineServices">
+                  <md-card-title style="height: 90px;  overflow-x: scroll">
                     <img ng-src={{service.logo}}  alt="Logo">
                     <md-card-title-text class="md-subhead  sm-subhead">
-                    {{service.name}}
+                      {{service.name}}
                     </md-card-title-text>
-
                   </md-card-title>
-
-                  <md-card-content  style="height: 100px; overflow-y: auto">
-
-                  <span  class="md-headline  sm-headline"> {{service.title}} </span>
-                  <div >
-                   {{service.description}}
-                 </div>
-
-
-
-
-                 </md-card-content>
+                  <md-card-content style="height: 100px; overflow-y: auto">
+                    <span  class="md-headline  sm-headline"> {{service.title}} </span>
+                    <div>
+                      {{service.description}}
+                    </div>
+                  </md-card-content>
                   <md-card-actions layout="row" layout-align="end">
                     <!-- <md-button class="md-fab md-mini  "> -->
-                     <!-- <span class="glyphicon glyphicon-heart "/> -->
-                   <!-- </md-button> -->
-                      <md-button  class="md-mini" aria-label="GO"  ng-href="{{service.url}}" ng-attr-target="{{service.target}">
+                    <!-- <span class="glyphicon glyphicon-heart "/> -->
+                    <!-- </md-button> -->
+                    <md-button class="md-mini" aria-label="GO" ng-href="{{service.url}}" ng-attr-target="{{service.target}">
                   <span class="glyphicon glyphicon-new-window "/>
                 </md-button>
                 </md-card-actions>
                   </md-card>
               </md-content>
             </div>
-
-
-
-            <div uib-accordion-group class="panel-default " ng-if="$ctrl.awesomeThings.length " heading="Brèves d 'actualités">
-
+            <div uib-accordion-group ng-if=!$ctrl.ModCard is-open=false heading="Services en lignes ">
+              <ul class="nav nav-tabs nav-stacked  col-lg-4 col-sm-6   " ng-repeat="service in $ctrl.onlineServices">
+                <li> <span class="glyphicon {{service.glyphicon}} "><a href="{{service.url}}" target="{{service.target}}" style="text-decoration:none;"> {{service.title}}</a></span></li>
+                      </ul>
+            </div>
+            <div uib-accordion-group ng-if="$ctrl.awesomeThings.length " heading="Brèves d 'actualités">
               <ul class="nav nav-tabs nav-stacked  col-lg-4 col-sm-6" ng-repeat="thing in $ctrl.awesomeThings">
                 <li><a uib-tooltip="{{thing.info}}">{{thing.name}}<button type="button" ng-if="$ctrl.isAdmin()" class="close" ng-click="$ctrl.deleteThing(thing)">&times;</button></a></li>
               </ul>
             </div>
-
-
             <div uib-accordion-group class="panel-default" ng-if="$ctrl.isAdmin()" heading="Ajouter une brève ">
               <form class="thing-form">
 
                 <p class="input-group">
                   <input type="text" class="form-control" placeholder="Titre" ng-model="$ctrl.newThing.name" style="width:280px">
-                  <input type="text" class="form-control" placeholder="Saisisez votre brève." ng-model="$ctrl.newThing.info" style="width:400px>
-      <span class=" input-group-btn "></p>
+                  <input type="text" class="form-control" placeholder="Saisisez votre brève." ng-model="$ctrl.newThing.info" style="width:400px">
+      <span class=" input-group-btn"></p>
         <button type="submit " class="btn btn-primary " ng-click="$ctrl.addThing() ">Ajoutez</button>
       </span>
   </form>
    </div>
-
   </uib-accordion>
   <br>
 </div>

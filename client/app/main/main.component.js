@@ -47,6 +47,7 @@ export class MainController {
         this.DeviseSite = this.myconfig.DeviseSite;
         this.OauthActif = this.myconfig.OauthActif;
         this.onlineServices = this.myconfig.onlineServices;
+         this.ModCard = this.myconfig.ModCard;
         //console.log(this.myconfig);
       });
 
