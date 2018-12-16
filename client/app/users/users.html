@@ -1,7 +1,7 @@
 <div class="container">
 
-Gestion des utilisateurs: {{usersCtrl.users.length}} inscrits</span>
-<p class="text-warning" ng-if="usersCtrl.users.length==0"> Chargement ...</p>
+	Gestion des utilisateurs: {{usersCtrl.users.length}} inscrits</span>
+	<p class="text-warning" ng-if="usersCtrl.users.length==0"> Chargement ...</p>
 	<form>
 		<input ng-model="usersCtrl.search.$" placeholder="Recherche globale">
 		<input ng-model="usersCtrl.search.email" placeholder="Recherche sur le Mel">
@@ -9,79 +9,86 @@ Gestion des utilisateurs: {{usersCtrl.users.length}} inscrits</span>
 		 Utilisateurs Non Actif
 		<input type="checkbox" ng-model="usersCtrl.search.isactif" ng-true-value=false ng-false-value="">
 	</form>
-	 <span ng-if="usersCtrl.users.length > 0">  selectionnés: {{usersCtrl.myfilterlist.length}}/{{usersCtrl.users.length}}</span>
-	<p class="text-warning" ng-if="usersCtrl.users.length==0"> Chargement ...</p>
-	<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"></dir-pagination-controls>
-	<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.activeselected()" rel="tooltip" title="Activer les {{usersCtrl.myfilterlist.length}} utilisateurs ">
+		<span ng-if="usersCtrl.users.length > 0">  selectionnés: {{usersCtrl.myfilterlist.length}}/{{usersCtrl.users.length}}</span>
+		<p class="text-warning" ng-if="usersCtrl.users.length==0"> Chargement ...</p>
+		<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"></dir-pagination-controls>
+		<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.activeselected()" rel="tooltip" title="Activer les {{usersCtrl.myfilterlist.length}} utilisateurs ">
 	  <span class="glyphicon glyphicon-star"></span>Activer les utilsateurs
 	</button>
-	<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.validmailselected()" rel="tooltip" title="Valider les mails des {{usersCtrl.myfilterlist.length}} utilisateurs ">
+		<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.validmailselected()" rel="tooltip" title="Valider les mails des {{usersCtrl.myfilterlist.length}} utilisateurs ">
 	  <span class="glyphicon glyphicon-star"></span>Valider les emails
 	</button>
-	<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.addgroupselected()" rel="tooltip" title="Inscrire les {{usersCtrl.myfilterlist.length}} utilisateurs ">
+		<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.addgroupselected()" rel="tooltip" title="Inscrire les {{usersCtrl.myfilterlist.length}} utilisateurs ">
 	  <span class="glyphicon glyphicon-star"></span>Inscrire dans un groupe
 	</button>
-	 <div class="table-responsive">
-	<table class="table table-striped">
-		<thead>
-		 <tr>
-			 <th></th>
-			 <th>Nom</th>
-			 <th class="hidden-xs">Uid</th>
-			 <th class="hidden-xs">Role</th>
-				 <th>Structure</th>
-				 	 <th class="hidden-xs">Connexion</th>
-				  <th>Email</th>
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th> <span class="sortorder"  ng-class="{reverse: usersCtrl.Reverse}"></span></th>
+						<th>
+							<button ng-click="usersCtrl.sortBy('name')">Nom</button>
+						</th>
+						<th class="hidden-xs"><button ng-click="usersCtrl.sortBy('uid')">UID</button></th>
+						<th class="hidden-xs"><button ng-click="usersCtrl.sortBy('role')">Rôle</button></th>
+						<th>
+							<button ng-click="usersCtrl.sortBy('structure')">Structure</button>
 
-		 </tr>
-	 </thead>
-		<tr dir-paginate="user in usersCtrl.myfilterlist=( usersCtrl.users | orderBy:'name' | filter:usersCtrl.search:strict )| itemsPerPage :'12' ">
-			<td>
-				<button class="btn btn-warning btn-xs" type="button" ng-if="!user.isactif" ng-click="usersCtrl.active(user)" rel="tooltip" title="Autoriser cet utilisateur">
+						<th class="hidden-xs"><button ng-click="usersCtrl.sortBy('lastloginDate')">Connexion</button></th>
+						<th><button ng-click="usersCtrl.sortBy('mail')">Email</button></th>
+					</tr>
+				</thead>
+				<tr dir-paginate="user in usersCtrl.myfilterlist=( usersCtrl.users | orderBy:usersCtrl.propertyName:usersCtrl.Reverse | filter:usersCtrl.search:strict )| itemsPerPage :'12' ">
+					<td>
+						<button class="btn btn-warning btn-xs" type="button" ng-if="!user.isactif" ng-click="usersCtrl.active(user)" rel="tooltip" title="Autoriser cet utilisateur">
           <span class="glyphicon glyphicon-ok"></span>
         </button>
-				<button type="button" class="btn btn-success btn-xs" ng-if="user.isactif" ng-click="usersCtrl.deactive(user)" rel="tooltip" title="Suspendre cet utilisateur">
+						<button type="button" class="btn btn-success btn-xs" ng-if="user.isactif" ng-click="usersCtrl.deactive(user)" rel="tooltip" title="Suspendre cet utilisateur">
   <span class="glyphicon glyphicon-remove"></span>
         </button>
-				<button class="btn btn-warning btn-xs" type="button" ng-if="!user.mailValid" ng-click="usersCtrl.validmail(user)" rel="tooltip" title="Valider le Courriel">
+						<button class="btn btn-warning btn-xs" type="button" ng-if="!user.mailValid" ng-click="usersCtrl.validmail(user)" rel="tooltip" title="Valider le Courriel">
             <span class="glyphicon glyphicon-envelope"></span>
           </button>
-				<button class="btn btn-success btn-xs" type="button" ng-if="user.mailValid" ng-click="usersCtrl.invalidmail(user)" rel="tooltip" title="Invalider le Courriel">
+						<button class="btn btn-success btn-xs" type="button" ng-if="user.mailValid" ng-click="usersCtrl.invalidmail(user)" rel="tooltip" title="Invalider le Courriel">
               <span class="glyphicon glyphicon-envelope"></span>
           </button>
 
-          <button class="btn  btn-xs" type="button"  ng-click="usersCtrl.edit(user)" rel="tooltip" title="Modifier" class="trash">
+						<button class="btn  btn-xs" type="button"  ng-click="usersCtrl.edit(user)" rel="tooltip" title="Modifier" class="trash">
             <span class="glyphicon glyphicon-pencil"></span>
           </button>
 
-			</td>
-			<td>
-				<strong>{{user.name}}</strong>
-				<strong>{{user.surname}}</strong>
-			</td>
-			<td class=" hidden-xs"> <div >{{user.uid}}  </div></td>
-			<td class=" hidden-xs"> <div >{{user.role}}  </div></td>
+					</td>
+					<td>
+						<strong>{{user.name}}</strong>
+						<strong>{{user.surname}}</strong>
+					</td>
+					<td class=" hidden-xs">
+						<div>{{user.uid}} </div>
+					</td>
+					<td class=" hidden-xs">
+						<div>{{user.role}} </div>
+					</td>
 
-			<!-- <td> <div class="hidden-sm hidden-xs">{{user.creationDate | date: "dd/MM/yyyy"}} </div></td> -->
-			<td >
-				<strong> {{user.structure}} </strong>
-			</td>
-			<td class="hidden-xs"> {{user.lastloginDate | date: "dd/MM/yyyy"}} </td>
-			</td>
-			<td>
-				<span class="text-muted "><a href=mailto:{{user.email}} rel="tooltip" title="Envoyer un courriel"> {{user.email}}  </a>
+					<!-- <td> <div class="hidden-sm hidden-xs">{{user.creationDate | date: "dd/MM/yyyy"}} </div></td> -->
+					<td>
+						<strong> {{user.structure}} </strong>
+					</td>
+					<td class="hidden-xs"> {{user.lastloginDate | date: "dd/MM/yyyy"}} </td>
+					</td>
+					<td>
+						<span class="text-muted "><a href=mailto:{{user.email}} rel="tooltip" title="Envoyer un courriel"> {{user.email}}  </a>
 				</span>
-				<span ng-show="user.uid!='admin'">
+						<span ng-show="user.uid!='admin'">
 			<a href ng-click="usersCtrl.delete(user)" rel="tooltip" title="Effacer" class="trash">
 				<div class="glyphicon glyphicon-trash pull-right"></div>
 			</a>
     </span>
-		</tr>
-	</table>
-</div>
+				</tr>
+			</table>
+		</div>
 
-<script type="text/ng-template" id="modalAddGroup.html">
-	<div class="modal-header">
+		<script type="text/ng-template" id="modalAddGroup.html">
+			<div class="modal-header">
 		<h3 class="modal-title" ng-show="modalAddGrouptCtrl.group.selected!=undefined">Inscrire les {{modalAddGrouptCtrl.selectedUsers.length}} utilisateurs dans le groupe {{modalAddGrouptCtrl.group.selected.name}}</h3>
 		<h3 class="modal-title" ng-show="modalAddGrouptCtrl.group.selected==undefined">Inscrire les {{modalAddGrouptCtrl.selectedUsers.length}} utilisateurs dans un groupe</h3>
 	</div>
@@ -114,8 +121,8 @@ Gestion des utilisateurs: {{usersCtrl.users.length}} inscrits</span>
 	</div>
 </script>
 
-	<script type="text/ng-template" id="modalEdit.html">
-		<div class="modal-header">
+		<script type="text/ng-template" id="modalEdit.html">
+			<div class="modal-header">
 			<h3 class="modal-title">Modification de {{ModalEditCtrl.user.uid}}</h3>
 		</div>
 		<div class="modal-body">
@@ -213,4 +220,4 @@ Gestion des utilisateurs: {{usersCtrl.users.length}} inscrits</span>
 		<button class="btn btn-warning" ng-click="ModalEditCtrl.cancel()">Annuler</button>
 	</div>
 	</script>
-	</div>
+</div>

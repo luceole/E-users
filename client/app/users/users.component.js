@@ -18,15 +18,13 @@ export class UsersModalComponent {
     this.myfilterlist = [];
   }
   $onInit() {
-    this.Message.get()
-      .$promise
-      .then(result => {
-        this.myconfig = result;
-        // this.TitreSite = this.myconfig.TitreSite;
-        // this.DeviseSite = this.myconfig.DeviseSite;
-        // this.OauthActif = this.myconfig.OauthActif;
-        this.Structures = this.myconfig.Structures;
-      });
+    this.Message.get().$promise.then(result => {
+      this.myconfig = result;
+      // this.TitreSite = this.myconfig.TitreSite;
+      // this.DeviseSite = this.myconfig.DeviseSite;
+      // this.OauthActif = this.myconfig.OauthActif;
+      this.Structures = this.myconfig.Structures;
+    });
   }
   ok() {
     this.user.isdemande = false;
@@ -41,12 +39,10 @@ export class UsersModalComponent {
       this.Save_user.isactif = this.user.isactif;
 
       this.$uibModalInstance.close('ok');
-    },
-    err => {
+    }, err => {
       alert('Adresse mail utiliséé avec un autre compte!');
       console.log(err.data);
-    }
-    );
+    });
   }
   initPadId() {
     console.log(this.user.authorPadID);
@@ -59,9 +55,8 @@ export class UsersModalComponent {
   }
 } // UserModal
 
-
 export class AddGroupComponent {
-    /*@ngInject*/
+  /* @ngInject */
   constructor(User, Group, Auth, $uibModalInstance, selectedUsers) {
     this.Auth = Auth;
     this.$uibModalInstance = $uibModalInstance;
@@ -72,8 +67,10 @@ export class AddGroupComponent {
   ok(grp) {
     console.log(grp.participants.length);
     angular.forEach(this.selectedUsers, (u) => {
-      if(grp.participants.findIndex(x => x._id === u._id) == -1) grp.participants.push(u);
-    });
+      if (grp.participants.findIndex(x => x._id === u._id) == -1)
+        grp.participants.push(u);
+      }
+    );
     console.log(grp.participants.length);
     this.Auth.updateGroup(grp._id, {
       // info: this.groupe.info,
@@ -81,10 +78,9 @@ export class AddGroupComponent {
       // owner: this.person.selected._id,
       // demandes: this.groupe.demandes,
       participants: grp.participants
-    })
-      .then(r => {
-        this.$uibModalInstance.close();
-      });
+    }).then(r => {
+      this.$uibModalInstance.close();
+    });
   }
 
   cancel() {
@@ -95,7 +91,7 @@ export class AddGroupComponent {
 //    PAGE Principale
 
 export class UsersComponent {
-  /*@ngInject*/
+  /* @ngInject */
   constructor(User, socket, $uibModal) {
     'ngInject';
     this.$uibModal = $uibModal;
@@ -103,6 +99,8 @@ export class UsersComponent {
     this.socket = socket;
     this.users = User.query();
     this.myfilterlist = [];
+    this.propertyName = 'name';
+    this.Reverse = false;
     // this.socket.syncUpdates('user', this.users);
     // this.$onDestroy = function() {
     //   console.log("destroy");
@@ -110,7 +108,11 @@ export class UsersComponent {
     // };
   }
 
+  sortBy(propertyName) {
+    this.Reverse = (this.propertyName === propertyName) ? !this.Reverse : false;
+    this.propertyName = propertyName
 
+  }
   active(user) {
     user.isactif = true;
     user.isdemande = false;
@@ -125,8 +127,7 @@ export class UsersComponent {
     });
   }
 
-  addgroupselected()
-  {
+  addgroupselected() {
     var filterlist = this.myfilterlist;
     var ModalInstance = this.$uibModal.open({
       templateUrl: 'modalAddGroup.html',
@@ -151,8 +152,8 @@ export class UsersComponent {
     });
   }
   deactive(user) {
-    if(user.role === 'admin') {
-      if(!confirm('Déactivation d\'un utilisateur avec role  ADMIN: Etes vous sur ?')) {
+    if (user.role === 'admin') {
+      if (!confirm('Déactivation d\'un utilisateur avec role  ADMIN: Etes vous sur ?')) {
         return;
       }
     }
@@ -167,8 +168,8 @@ export class UsersComponent {
   }
 
   invalidmail(user) {
-    if(user.role === 'admin') {
-      if(!confirm('Utilsateur avec role  ADMIN : Etes vous sur ?')) {
+    if (user.role === 'admin') {
+      if (!confirm('Utilsateur avec role  ADMIN : Etes vous sur ?')) {
         return;
       }
     }
@@ -177,7 +178,7 @@ export class UsersComponent {
   }
 
   delete(user) {
-    if(!confirm(` Efface l'utilisateur ${user.uid} : Etes vous sur ?`)) {
+    if (!confirm(` Efface l'utilisateur ${user.uid} : Etes vous sur ?`)) {
       return;
     }
     user.$remove();
@@ -203,11 +204,8 @@ export class UsersComponent {
   }
 } // Constructor
 
-export default angular.module('E-userApp.users', [uiRouter, modal])
-  .config(routes)
-  .component('users', {
-    template: require('./users.html'),
-    controller: UsersComponent,
-    controllerAs: 'usersCtrl'
-  })
-  .name;
+export default angular.module('E-userApp.users', [uiRouter, modal]).config(routes).component('users', {
+  template: require('./users.html'),
+  controller: UsersComponent,
+  controllerAs: 'usersCtrl'
+}).name;
