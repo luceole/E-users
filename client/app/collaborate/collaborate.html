@@ -1,7 +1,7 @@
 <script src="https://jitsi.mim.ovh/external_api.js"></script>
 <div class="container">
 
-  <div class="col-lg-10">
+  <div>
 
     <span  style="float: right;" ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0">
         Vous êtes inscrit dans : {{collaborateCtrl.getCurrentUser().memberOf.length}} groupe(s)
@@ -146,7 +146,6 @@
           <strong ng-switch-when="10">Groupe : </strong>   {{poll.groupeInfo}}
           <strong ng-switch-default>{{groupe.type}}</strong>
         </td>
-
       </td>
       <td>
         <strong>{{poll.name}}</strong>
@@ -162,8 +161,6 @@
   </uib-tab>
   </uib-tabset>
 </div>
-
-  <div ng-include=" 'components/footer/footer.html' "></div>
 </div>
 
 <script type="text/ng-template " id="modalVisio.html ">
