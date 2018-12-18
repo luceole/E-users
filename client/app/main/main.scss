@@ -923,6 +923,7 @@ button.md-button.md-fab md-icon {
     border: 1px solid #fff; } }
 
 md-card {
+
   box-sizing: border-box;
   display: -webkit-box;
   display: -webkit-flex;
@@ -932,7 +933,7 @@ md-card {
   -webkit-flex-direction: column;
           flex-direction: column;
   margin: 8px;
-  width: 240px;
+  width: 245px;
   height: 240px;
   //width: 18%;
   // min-width: 220px;
@@ -947,6 +948,8 @@ md-card {
      //width: 18%;
      // min-width: 200px;
      //  max-width: 200px;
+     width: 245px;
+     height: 240px;
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
     -webkit-flex-direction: row;
@@ -977,6 +980,7 @@ md-card {
         md-card md-card-header md-card-avatar + md-card-header-text .md-title {
           font-size: 14px; }
     md-card md-card-header md-card-header-text {
+
       display: -webkit-box;
       display: -webkit-flex;
       display: flex;
@@ -1002,6 +1006,7 @@ md-card {
     width: 100%;
     height: auto; }
   md-card md-card-title {
+      background:lightblue;
     padding: 24px 16px 16px;
     display: -webkit-box;
     display: -webkit-flex;
@@ -1459,6 +1464,7 @@ md-content {
   position: relative;
   overflow: auto;
   -webkit-overflow-scrolling: touch; }
+
   md-content[md-scroll-y] {
     overflow-y: auto;
     overflow-x: hidden; }

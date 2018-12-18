@@ -4,11 +4,11 @@
   <div>
 
     <span  style="float: right;" ng-if="collaborateCtrl.getCurrentUser().memberOf.length > 0">
-        Vous êtes inscrit dans : {{collaborateCtrl.getCurrentUser().memberOf.length}} groupe(s)
+        Inscrit dans : {{collaborateCtrl.getCurrentUser().memberOf.length}} groupe(s)
 <button class=" hidden-xs" ng-click="collaborateCtrl.goSettings()" >Gérer vos Inscriptions</button >
 
     </span>
-    <span ng-if="collaborateCtrl.getCurrentUser().memberOf.length == 0">Vous êtes inscrit dans aucun groupe - Modifiez vos paramètres </span>
+    <span class=" hidden-xs" ng-if="collaborateCtrl.getCurrentUser().memberOf.length == 0">Vous êtes inscrit dans aucun groupe - Modifiez vos paramètres </span>
     <uib-tabset active="collaborateCtrl.Active"  >
     <uib-tab heading="Services">
       <br>

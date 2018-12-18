@@ -6,7 +6,7 @@
   <form>
     <input ng-model="search.$" placeholder="Recherche globale">
   </form>
-  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html" pagination-id="PR" >
+  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"    template-url="/assets/dirPagination.tpl.html"    >
   </dir-pagination-controls>
   <br>
   <span>
@@ -15,7 +15,7 @@
     </a>
   </span>
   <table class="table table-striped ">
-    <tr dir-paginate="poll in adminpollCtrl.polls | orderBy:'name' | filter:search:strict | itemsPerPage :'12' " pagination-id="PR" >
+    <tr dir-paginate="poll in adminpollCtrl.polls | orderBy:'name' | filter:search:strict | itemsPerPage :'12' " >
       <td>
         <span>
         <button class="btn btn-warning btn-xs" type="button" ng-if="!poll.isActif" ng-click=" adminpollCtrl.active(poll)"rel="tooltip" title="Publier ce sondage">
@@ -79,7 +79,7 @@
             Type :
             <select name="type" required ng-model="modalAddAdminPollCtrl.poll.type" ng-options="o.id as o.name for o in modalAddAdminPollCtrl.typeoptions">
             </select>
-            <p class="help-block" ng-show="addForm.groupe.$error.required && modalAddAdminPollCtrl.submitted">
+            <p class="help-block" ng-show="addForm.type.$error.required && modalAddAdminPollCtrl.submitted">
              Type Obligatoire
            </p>
            <div ng-if="modalAddAdminPollCtrl.poll.type==10">
@@ -201,7 +201,7 @@
         <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html"  pagination-id="PR1">
         </dir-pagination-controls>
 
-          <tr dir-paginate="r in modalViewPollCtrl.resultats  |  itemsPerPage :'12' "  pagination-id="PR1">
+          <tr dir-paginate="r in modalViewPollCtrl.resultats  |  itemsPerPage :'12'"   pagination-id="PR1">
 
           <td>{{r.user.email}}</td>
           <td ng-repeat="w in modalViewPollCtrl.rep(r) track by $index" >{{w|ouinon}}</td>
