@@ -77,7 +77,7 @@ if (config.env !== 'production') {
           uid: 'admin',
           email: 'admin@admin.com',
           mailValid: true,
-          structure: 'MEN',
+          structure: 'Autre',
           isactif: true,
           password: 'admin'
         })

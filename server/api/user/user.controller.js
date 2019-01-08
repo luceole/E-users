@@ -325,7 +325,6 @@ export function update(req, res) {
       updated.isactif = req.body.isactif;
       return updated.save()
         .then(user => {
-          //res.status(200).json(user);
           return res.status(204).end();
         })
         .catch(validationError(res));
@@ -334,26 +333,36 @@ export function update(req, res) {
 export function usersupgroup(req, res) {
   var listusers = req.body.listusers;
   var idgrp = req.body.idgrp;
-  //console.log('del memberOf');
-  listusers.forEach(function(userId) {
-    User.findById(userId).exec()
+  //console.log('del memberOf ');
+  listusers.forEach(function(user) {
+    //console.log(user.uid)
+    User.findById(user._id).exec()
       .then(user => {
         user.memberOf.pull(idgrp);
-        user.save();
+        user.save(function(err) {
+          if (err) {
+            console.log(err);
+          }
+        })
       });
-  });
+  })
 }
 export function usersupcandidat(req, res) {
   var listusers = req.body.listusers;
   var idgrp = req.body.idgrp;
   //console.log('del candidat');
   listusers.forEach(function(userId) {
-    User.findById(userId).exec()
+    User.findById(userId._id).exec()
       .then(user => {
         user.candidatOf.pull(idgrp);
-        user.save();
+        user.save(function(err) {
+            if (err) {
+              console.log(err);
+            }
+          })
+          .catch(console.log("candidat Not found"));
       });
-  });
+  })
 }
 //export function useraddcandidat(req, res) {
 // var listusers = req.body.listusers;
@@ -371,7 +380,7 @@ export function usersupcandidat(req, res) {
 export function useradmingroup(req, res) {
   var listusers = req.body.listusers;
   var idgrp = req.body.idgrp;
-
+  console.log(" userAdmingroup")
   listusers.forEach(function(userId) {
     //console.log(`grp=${idgrp}`);
     User.findById(userId, function(err, user) {

@@ -25,7 +25,7 @@ export class ModalEditGroupComponent {
       w.push(o);
     });
     this.participantsOld = w.slice();
-  //  console.log(this.participantsOld);
+    //  console.log(this.participantsOld);
     var w = [];
     angular.forEach(this.groupe.adminby, function(o) {
       w.push(o);
@@ -42,17 +42,17 @@ export class ModalEditGroupComponent {
     this.forms = {};
 
     this.typeoptions = [{
-      id: 0,
-      name: 'Ouvert'
-    },
-    {
-      id: 5,
-      name: 'Modéré'
-    },
-    {
-      id: 10,
-      name: 'Réservé'
-    }
+        id: 0,
+        name: 'Ouvert'
+      },
+      {
+        id: 5,
+        name: 'Modéré'
+      },
+      {
+        id: 10,
+        name: 'Réservé'
+      }
     ];
     //this.groupe.type = 0;
   }
@@ -64,22 +64,22 @@ export class ModalEditGroupComponent {
   ok(form) {
     this.submitted = true;
 
-    if(this.forms.tab1.$valid) {
+    if (this.forms.tab1.$valid) {
       var Nadm = [];
       var SuppAdm = [];
       var Nparticipants = [];
       var SuppParticipants = [];
       angular.forEach(this.groupe.adminby, function(user) {
-        if(Nadm.indexOf(user._id) === -1) Nadm.push(user._id);
+        if (Nadm.indexOf(user._id) === -1) Nadm.push(user._id);
       });
       angular.forEach(this.groupe.participants, (user) => {
         Nparticipants.push(user._id);
       });
       angular.forEach(this.participantsOld, (u) => {
-        if(this.groupe.participants.findIndex(x => x._id === u) == -1) SuppParticipants.push(u);
+        if (this.groupe.participants.findIndex(x => x._id === u._id) == -1) SuppParticipants.push(u);
       });
-      angular.forEach(this.adminbyOld, function(u) {
-        if(Nadm.indexOf(u) === -1) SuppAdm.push(u);
+      angular.forEach(this.adminbyOld, (u) => {
+        if (this.groupe.adminby.findIndex(x => x._id === u._id) == -1) SuppAdm.push(u);
       });
 
       angular.forEach(this.addCandidat, u => {
@@ -87,28 +87,28 @@ export class ModalEditGroupComponent {
       });
 
       this.Auth.updateGroup(this.groupe._id, {
-        info: this.groupe.info,
-        type: this.groupe.type,
-        owner: this.person.selected._id,
-        demandes: this.groupe.demandes,
-        participants: Nparticipants,
-        adminby: Nadm
-      })
+          info: this.groupe.info,
+          type: this.groupe.type,
+          owner: this.person.selected._id,
+          demandes: this.groupe.demandes,
+          participants: Nparticipants,
+          adminby: Nadm
+        })
         .then(r => {
-          if(SuppAdm.length) {
+          if (SuppAdm.length) {
             this.Auth.userAdmingroup(this.groupe._id, SuppAdm).then(
-            //console.log('Maj adminby ' + SuppAdm)
+              console.log('Maj adminby ' + SuppAdm)
             );
           }
-          if(this.SuppCandidat.length) {
+          if (this.SuppCandidat.length) {
             this.Auth.userSuppCandidat(this.groupe._id, this.SuppCandidat).then(
-                // console.log('Maj candidatOf ')
-              );
+              // console.log('Maj candidatOf ')
+            );
           }
-          if(SuppParticipants.length) {
+          if (SuppParticipants.length) {
             this.Auth.userSupGroup(this.groupe._id, SuppParticipants).then(
-                // console.log('Maj memberOf ')
-              );
+              console.log('Maj memberOf ')
+            );
           }
           // This is made in pre update now
           // if(this.addCandidat.length) {
@@ -134,7 +134,7 @@ export class ModalEditGroupComponent {
   }
 
   addAdm(user, grpadm) {
-    if(grpadm.findIndex(x => x._id === user._id) == -1) grpadm.push(user);
+    if (grpadm.findIndex(x => x._id === user._id) == -1) grpadm.push(user);
   }
 
   delAdm(user, grpadm) {
@@ -149,7 +149,7 @@ export class ModalEditGroupComponent {
     this.addCandidat.push(user._id);
   }
   addUser(user, grppar) {
-    if(grppar.indexOf(user) === -1) {
+    if (grppar.indexOf(user) === -1) {
       grppar.push(user);
     }
   }
@@ -171,17 +171,17 @@ export class ModalAddGroupComponent {
     this.person = {};
     this.admin = {};
     this.typeoptions = [{
-      id: 0,
-      name: 'Ouvert'
-    },
-    {
-      id: 5,
-      name: 'Modéré'
-    },
-    {
-      id: 10,
-      name: 'Réservé'
-    }
+        id: 0,
+        name: 'Ouvert'
+      },
+      {
+        id: 5,
+        name: 'Modéré'
+      },
+      {
+        id: 10,
+        name: 'Réservé'
+      }
     ];
     this.groupe.type = 0;
   }
@@ -192,18 +192,18 @@ export class ModalAddGroupComponent {
 
   ok(form) {
     this.submitted = true;
-    if(form.$valid) {
-      if(this.admin.selected == undefined) this.admin.selected = this.person.selected;
+    if (form.$valid) {
+      if (this.admin.selected == undefined) this.admin.selected = this.person.selected;
       this.Auth.createGroup({
-        name: this.groupe.name,
-        info: this.groupe.info,
-        type: this.groupe.type,
-        owner: this.person.selected._id,
-        adminby: {
-          _id: this.admin.selected._id,
-          uid: this.admin.selected._uid
-        }
-      })
+          name: this.groupe.name,
+          info: this.groupe.info,
+          type: this.groupe.type,
+          owner: this.person.selected._id,
+          adminby: {
+            _id: this.admin.selected._id,
+            uid: this.admin.selected._uid
+          }
+        })
         .then(r => {
           //console.log(r)
           //console.log("Add is OK " + r.name + " " + r.info);
@@ -216,7 +216,7 @@ export class ModalAddGroupComponent {
         .catch(err => {
           var msg = ' ';
           err = err.data;
-          if(err.code == 11000) msg = ' Ce groupe existe dèja!';
+          if (err.code == 11000) msg = ' Ce groupe existe dèja!';
           else msg = err.errmsg;
           alert(`Erreur en création:${msg}`);
           console.log(err);
