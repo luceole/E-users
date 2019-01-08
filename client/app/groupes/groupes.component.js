@@ -73,8 +73,9 @@ export class ModalEditGroupComponent {
         if (Nadm.indexOf(user._id) === -1) Nadm.push(user._id);
       });
       angular.forEach(this.groupe.participants, (user) => {
-        Nparticipants.push(user._id);
+        if (Nparticipants.indexOf(user._id) === -1) Nparticipants.push(user._id);
       });
+
       angular.forEach(this.participantsOld, (u) => {
         if (this.groupe.participants.findIndex(x => x._id === u._id) == -1) SuppParticipants.push(u);
       });
@@ -149,9 +150,7 @@ export class ModalEditGroupComponent {
     this.addCandidat.push(user._id);
   }
   addUser(user, grppar) {
-    if (grppar.indexOf(user) === -1) {
-      grppar.push(user);
-    }
+    if (grppar.findIndex(x => x._id === user._id) == -1) grppar.push(user);
   }
 
   delUser(user, grppar) {

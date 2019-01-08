@@ -66,42 +66,40 @@ var GroupSchema = new Schema({
 
 
 // Modify User adminOf
-GroupSchema.pre('save', function(next) {
-  var grpId = this._id;
-  console.log('Init GROUP Pre-Save: Participants');
-  if (this.isModified('participants')) {
-    console.log('GROUP Pre-Save: Participants');
-  }
-  // if (this.isModified('adminby')) {
-  //   console.log('GROUP Pre-Save: ' + this._id + ' adminby: ' + this.adminby);
-  //   this.adminby.forEach(function(id) {
-  //     var query = {
-  //       _id: id
-  //     };
-  //     var update = {
-  //       $addToSet: {
-  //         adminOf: grpId
-  //       }
-  //     };
-  //     User.findOneAndUpdate(query, update, function(err, user) {
-  //       if (err) {
-  //         console.log(`erreur Adminby  : ${err}`);
-  //       }
-  //       return next(); // Always go on !
-  //     });
-  //   });
-  // }
-
-  return next(); // Always go on !
-});
+// GroupSchema.pre('save', function(next) {
+//   var grpId = this._id;
+//   console.log('Init GROUP Pre-Save: Participants');
+//   if (this.isModified('participants')) {
+//     console.log('GROUP Pre-Save: Participants');
+//   }
+//   // if (this.isModified('adminby')) {
+//   //   console.log('GROUP Pre-Save: ' + this._id + ' adminby: ' + this.adminby);
+//   //   this.adminby.forEach(function(id) {
+//   //     var query = {
+//   //       _id: id
+//   //     };
+//   //     var update = {
+//   //       $addToSet: {
+//   //         adminOf: grpId
+//   //       }
+//   //     };
+//   //     User.findOneAndUpdate(query, update, function(err, user) {
+//   //       if (err) {
+//   //         console.log(`erreur Adminby  : ${err}`);
+//   //       }
+//   //       return next(); // Always go on !
+//   //     });
+//   //   });
+//   // }
+//
+//   return next(); // Always go on !
+// });
 
 
 GroupSchema.pre('findOneAndUpdate', function(next) {
-  console.log("*********** " + this._update.participants)
-  console.log("*********** " + this.participants)
+  console.log('**GROUP Pre-findOneAndUpdate: ' + this._conditions._id);
   if (this._update.participants) {
-    console.log('GROUP Pre-findOneAndUpdate: Participants');
-    console.log(this._update.participants);
+    console.log(' - Force all Users Participants');
     var grpId = this._conditions._id;
     this._update.participants.forEach(function(id) {
       var query = {
@@ -116,8 +114,6 @@ GroupSchema.pre('findOneAndUpdate', function(next) {
           candidatOf: grpId
         }
       };
-
-      //  console.log(update);
       User.findOneAndUpdate(query, update, function(err, user) {
         if (err) {
           console.log(`erreur Participants : ${err}`);
@@ -127,7 +123,7 @@ GroupSchema.pre('findOneAndUpdate', function(next) {
     });
   }
   if (!this._update.adminby) return next();
-  console.log('**GROUP Pre-findOneAndUpdate: ' + this._conditions._id + ' adminby: ' + this._update.adminby);
+  console.log(' - Force all Users adminOf');
   //console.log(this._update);
   var grpId = this._conditions._id;
   this._update.adminby.forEach(function(id) {
@@ -140,8 +136,6 @@ GroupSchema.pre('findOneAndUpdate', function(next) {
         adminOf: grpId
       }
     };
-
-    //  console.log(update);
     User.findOneAndUpdate(query, update, function(err, user) {
       if (err) {
         console.log(`erreur Adminby  : ${err}`);
