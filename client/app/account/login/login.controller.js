@@ -29,7 +29,7 @@ export default class LoginController {
     this.msg = '';
     if (form.$valid) {
       this.Auth.login({
-          uid: this.user.uid,
+          uid: this.user.uid.toLowerCase(),
           password: this.user.password
         })
         .then(() => {

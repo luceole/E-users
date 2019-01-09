@@ -49,9 +49,9 @@
           </div>
           <div class="form-group" ng-class="{ 'has-success': registerForm.uid.$valid && vm.submitted,
                                     'has-error': registerForm.uid.$invalid && vm.submitted }">
-            <input type="uid" name="uid" class="form-control"
+            <input type="uid" name="uid" style="text-transform: lowercase; width:250px" class="form-control"
              ng-model="vm.user.uid" ng-focus="vm.myInit(registerForm,'uid')"
-              placeholder="Votre identifiant: courriel ou autre)" required mongoose-error style="width:250px" />
+              placeholder="Identifiant: courriel ou autre" required mongoose-error />
             <p class="help-block" ng-show="registerForm.uid.$error.uid && vm.submitted">
               Identifiant non valide.
             </p>

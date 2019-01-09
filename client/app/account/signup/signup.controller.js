@@ -34,7 +34,7 @@ export default class SignupController {
 
   myInit(form, field) {
     form[field].$setValidity('mongoose', true);
-    if(!this.user.uid) this.user.uid = this.user.email;
+    if (!this.user.uid) this.user.uid = this.user.email;
   }
 
   myReset(form, field) {
@@ -43,16 +43,16 @@ export default class SignupController {
 
   register(form) {
     this.submitted = true;
-    if(form.$valid) {
+    if (form.$valid) {
       return this.Auth.createUser({
-        uid: this.user.uid,
-        surname: this.user.surname,
-        name: this.user.name,
-        email: this.user.email,
-        password: this.user.password,
-        structure: this.user.structure,
-        isactif: false
-      })
+          uid: this.user.uid.toLowerCase(),
+          surname: this.user.surname,
+          name: this.user.name,
+          email: this.user.email,
+          password: this.user.password,
+          structure: this.user.structure,
+          isactif: false
+        })
         .then(() => {
           // Account created, redirect to home
           this.$state.go('main');
