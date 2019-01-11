@@ -66,70 +66,64 @@ var GroupSchema = new Schema({
 
 
 // Modify User adminOf
-GroupSchema.pre('save', function(next) {
-  var grpId = this._id;
-  if(this.isModified('participants')) {
-    console.log('GROUP Pre-Save: Participants');
-  }
-  if(this.isModified('adminby')) {
-    console.log('GROUP Pre-Save: ' + this._id + ' adminby: ' + this.adminby);
-    this.adminby.forEach(function(id) {
-      var query = {
-        _id: id
-      };
-      var update = {
-        $addToSet: {
-          adminOf: grpId
-        }
-      };
-      User.findOneAndUpdate(query, update, function(err, user) {
-        if(err) {
-          console.log(`erreur Adminby  : ${err}`);
-        }
-        return next(); // Always go on !
-      });
-    });
-  }
-
-  return next(); // Always go on !
-});
-
-// GroupSchema.pre('findOneAndUpdate', function(next) {
-//   console.log('pre');
-//   console.log(this._update.demandes);
-//     return next();
+// GroupSchema.pre('save', function(next) {
+//   var grpId = this._id;
+//   console.log('Init GROUP Pre-Save: Participants');
+//   if (this.isModified('participants')) {
+//     console.log('GROUP Pre-Save: Participants');
+//   }
+//   // if (this.isModified('adminby')) {
+//   //   console.log('GROUP Pre-Save: ' + this._id + ' adminby: ' + this.adminby);
+//   //   this.adminby.forEach(function(id) {
+//   //     var query = {
+//   //       _id: id
+//   //     };
+//   //     var update = {
+//   //       $addToSet: {
+//   //         adminOf: grpId
+//   //       }
+//   //     };
+//   //     User.findOneAndUpdate(query, update, function(err, user) {
+//   //       if (err) {
+//   //         console.log(`erreur Adminby  : ${err}`);
+//   //       }
+//   //       return next(); // Always go on !
+//   //     });
+//   //   });
+//   // }
+//
+//   return next(); // Always go on !
 // });
-GroupSchema.post('findOneAndUpdate', function(r) {
-  console.log('post update Group ' + r._id);
-});
+
+
 GroupSchema.pre('findOneAndUpdate', function(next) {
-  if(this._update.participants) {
-    //console.log('GROUP Pre-findOneAndUpdate: Participants');
-    //console.log(this._update.participants);
+  console.log('**GROUP Pre-findOneAndUpdate: ' + this._conditions._id);
+  if (this._update.participants) {
+    console.log(' - Force all Users Participants');
     var grpId = this._conditions._id;
     this._update.participants.forEach(function(id) {
       var query = {
         _id: id
       };
-    //  console.log('++++>' + id);
+      //  console.log('++++>' + id);
       var update = {
         $addToSet: {
           memberOf: grpId
         },
-        $pull: {candidatOf: grpId}
+        $pull: {
+          candidatOf: grpId
+        }
       };
-
-    //  console.log(update);
       User.findOneAndUpdate(query, update, function(err, user) {
-        if(err) {
-          console.log(`erreur Adminby  : ${err}`);
+        if (err) {
+          console.log(`erreur Participants : ${err}`);
         }
         return next(); // Always go on !
       });
     });
   }
-  if(!this._update.adminby) return next();
-  //console.log('GROUP Pre-findOneAndUpdate: ' + this._conditions._id + ' adminby: ' + this._update.adminby);
+  if (!this._update.adminby) return next();
+  console.log(' - Force all Users adminOf');
   //console.log(this._update);
   var grpId = this._conditions._id;
   this._update.adminby.forEach(function(id) {
@@ -142,10 +136,8 @@ GroupSchema.pre('findOneAndUpdate', function(next) {
         adminOf: grpId
       }
     };
-
-  //  console.log(update);
     User.findOneAndUpdate(query, update, function(err, user) {
-      if(err) {
+      if (err) {
         console.log(`erreur Adminby  : ${err}`);
       }
       return next(); // Always go on !
@@ -156,7 +148,7 @@ GroupSchema.pre('findOneAndUpdate', function(next) {
 
 //.pre(save) for EtherCalc
 GroupSchema.pre('save', function(next) {
-  if(!config.ethercalc) return next();
+  if (!config.ethercalc) return next();
   var myKey = config.ethercalc.key;
   const secret = myKey;
   const hash = crypto.createHmac('sha256', secret)
@@ -171,14 +163,14 @@ GroupSchema.pre('save', function(next) {
 GroupSchema.pre('save', function(next) {
   //  Digest Ethercalc
 
-  if(config.etherpad) {
+  if (config.etherpad) {
     var groupID = this.groupPadID;
-    if(groupID != undefined) {
+    if (groupID != undefined) {
       return next();
     }
     etherpad.createGroup((error, data) => {
       //etherpad.createGroupIfNotExistsFor({groupMapper: groupID},(error, data) => {
-      if(error) console.error(`Error creating group: ${groupID} ${error.message}`);
+      if (error) console.error(`Error creating group: ${groupID} ${error.message}`);
       else {
         this.groupPadID = data.groupID;
         var args = {
@@ -187,7 +179,7 @@ GroupSchema.pre('save', function(next) {
           text: `Bienvenu sur le PAD du groupe ${this.name}`
         };
         etherpad.createGroupPad(args, (error, data) => {
-          if(error) console.error(`Error creating pad: ${error.message}`);
+          if (error) console.error(`Error creating pad: ${error.message}`);
           else {
             console.log(`New pad for group${this.name} created: ${data.padID}`);
           }
@@ -201,7 +193,7 @@ GroupSchema.pre('save', function(next) {
 });
 
 GroupSchema.pre('remove', function(next) {
-//  console.log('pre remove ' + this.adminby);
+  console.log('pre remove ' + this.adminby);
   var grpId = this._id;
   // this.participants.forEach(function(id) {   // Pas utile => On n'autorise pas la suppression s'il y a des inscrits
   //   var query = {
@@ -230,7 +222,7 @@ GroupSchema.pre('remove', function(next) {
       },
     };
     User.findOneAndUpdate(query, update, function(err, user) {
-      if(err) {
+      if (err) {
         console.log(`erreur Adminby : ${err}`);
         return next();
       }
@@ -259,8 +251,8 @@ GroupSchema
     var self = this;
     //console.log(value)
     User.findById(value, function(err, user) {
-      if(err) throw err;
-      if(user) {
+      if (err) throw err;
+      if (user) {
         return respond(true);
       }
       return respond(false);
