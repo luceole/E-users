@@ -1,10 +1,58 @@
 'use strict';
+
+export class InfoComponent {
+  /*@ngInject*/
+  constructor(Group, Auth, $uibModalInstance, grp) {
+    //'ngInject';
+    this.groupe = grp;
+    this.Auth = Auth;
+    this.options = {
+      language: 'fr',
+      // uiColor: "#66AB16",
+      readOnly: true,
+      width: '98%',
+      height: 400
+    };
+    // this.isAdmin = Auth.isAdmin;
+    // this.isAdmin_grp = Auth.isAdmin_grp;
+    // console.log(this.Auth.getCurrentUserSync().adminOf);
+    // console.log(this.groupe._id);
+    // this.isAdminOf = this.Auth.getCurrentUserSync().adminOf.find(o => {
+    //   return o._id === this.groupe._id;
+    // });
+    // var r = this.Auth.getCurrentUserSync().adminOf.filter(o => o._id === this.groupe._id);
+    // this.isAdminOf = r.length;
+
+
+    //this.isAdminOf = this.Auth.getCurrentUserSync().adminOf == this.groupe._id;
+    this.$uibModalInstance = $uibModalInstance;
+    this.msg = '';
+  }
+
+
+  cancel() {
+    this.$uibModalInstance.dismiss('cancel');
+  }
+
+  // save() {
+  //   this.Auth.updateGroup(this.groupe._id, this.groupe)
+  //     .then(r => {
+  //       this.$uibModalInstance.close();
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //       this.msg = `Erreur :${err.statusText}`;
+  //     });
+  // }
+}
+
 export default class SettingsController {
   /*@ngInject*/
-  constructor(Auth, Group, Message, $stateParams) {
+  constructor(Auth, Group, Message, $stateParams, $uibModal) {
     this.Auth = Auth;
     this.Group = Group;
     this.Message = Message;
+    this.$uibModal = $uibModal;
     this.getCurrentUser = Auth.getCurrentUser;
     this.user = Auth.getCurrentUserSync();
     //  this.errors = {};
@@ -73,16 +121,16 @@ export default class SettingsController {
     var grpId = groupe._id;
     //this.user = this.Auth.getCurrentUserSync();
     var r = this.user.memberOf.filter(o => o._id == grpId);
-    return r.length;
+    return (r.length > 0);
   }
 
   isCandidatOf(groupe) {
     var grpId = groupe._id;
     //this.user = this.Auth.getCurrentUserSync();
-    // console.log(this.user.candidatOf);
-    // console.log(grpId);
+    //console.log(this.user.candidatOf);
+    //console.log(grpId);
     var r = this.user.candidatOf.filter(o => o == grpId);
-    return r.length;
+    return (r.length > 0);
   }
 
   addusergroup(groupe) {
@@ -147,4 +195,18 @@ export default class SettingsController {
       });
     }
   }
+
+  openNote(grp) {
+    this.$uibModal.open({
+      templateUrl: 'modalInfo.html',
+      controller: InfoComponent,
+      controllerAs: 'IC',
+      resolve: {
+        grp() {
+          return grp;
+        }
+      }
+    });
+  }
+
 }

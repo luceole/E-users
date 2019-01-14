@@ -1,8 +1,8 @@
 <div class="container">
   <div class="row">
-    <div class="col-sm-2"></div>
-    <div class="col-sm-10">
-      <uib-tabset active="vm.Active"   >
+    <!-- <div class="col-sm-2"></div> -->
+    <div class="col-sm-12">
+      <uib-tabset active="vm.Active">
         <uib-tab heading="Profil">
           <h3> Modification de votre compte : {{vm.user.uid}} </h3>
           <form class="form" name="modifForm" ng-submit="vm.edit(modifForm)" novalidate>
@@ -16,7 +16,7 @@
               </p>
             </div>
             <div class="form-group" ng-class="{ 'has-success': modifForm.surname.$valid && vm.submitted,
-                                    'has-error': modifForm.surname.$invalid && vm.submitted }">
+                          'has-error': modifForm.surname.$invalid && vm.submitted }">
 
               Prénom
               <input type="text" name="surname" class="form-control" ng-model="vm.user.surname" placeholder="Votre prénom" required style="width:250px" />
@@ -28,9 +28,9 @@
                                     'has-error': modifForm.structure.$invalid && vm.submitted }">
               <span>Structure de rattachement :
                 <select ng-model="vm.user.structure" ng-init="vm.user.structure='Education'">
-                   <option ng-repeat="option in vm.Structures" value="{{option.id}}">{{option.value}}</option>
+                  <option ng-repeat="option in vm.Structures" value="{{option.id}}">{{option.value}}</option>
                 </select>
-             </span>
+              </span>
               <p class="help-block" ng-show="modifForm.structure.$error.required && vm.submitted">
                 Structure de rattachement Obligatoire
               </p>
@@ -58,45 +58,46 @@
             </div>
           </form>
         </uib-tab>
+
         <uib-tab heading="Mot de passe">
-          <div class="row">
-            <div class="col-sm-12">
-              <h3>Changement de votre mot de passe: {{vm.user.uid}}</h3>
+          <!-- <div class="row">
+            <div class="col-sm-12"> -->
+          <h3>Changement de votre mot de passe: {{vm.user.uid}}</h3>
+          <!-- </div> -->
+
+          <!-- <div class="col-sm-12"> -->
+          <form class="form" name="passwdForm" ng-submit="vm.changePassword(passwdForm)" novalidate>
+            <div class="form-group">
+              <label>Mot de passe actuel</label>
+              <input type="password" name="password" class="form-control" ng-model="vm.user.oldPassword" ng-focus="vm.myInit(passwdForm,'password')" mongoose-error style="width:250px" />
+              <p class="help-block" ng-show="passwdForm.password.$error.mongoose">
+                {{ vm.errors.other }}
+              </p>
+            </div>
+            <div class="form-group">
+              <label>Nouveau mot de passe</label>
+
+              <input type="password" name="newPassword" class="form-control" ng-model="vm.user.newPassword" ng-minlength="8" required style="width:250px" />
+              <p class="help-block" ng-show="(passwdForm.newPassword.$error.minlength ||passwdForm.newPassword.$error.required) && (passwdForm.newPassword.$dirty || vm.submitted)">
+                8 caractères minimum.
+              </p>
             </div>
 
-            <div class="col-sm-12">
-              <form class="form" name="passwdForm" ng-submit="vm.changePassword(passwdForm)" novalidate>
-                <div class="form-group">
-                  <label>Mot de passe actuel</label>
-                  <input type="password" name="password" class="form-control" ng-model="vm.user.oldPassword" ng-focus="vm.myInit(passwdForm,'password')" mongoose-error style="width:250px" />
-                  <p class="help-block" ng-show="passwdForm.password.$error.mongoose">
-                    {{ vm.errors.other }}
-                  </p>
-                </div>
-                <div class="form-group">
-                  <label>Nouveau mot de passe</label>
+            <div class="form-group">
+              <label>Confirmez le mot de passe </label>
 
-                  <input type="password" name="newPassword" class="form-control" ng-model="vm.user.newPassword" ng-minlength="8" required style="width:250px" />
-                  <p class="help-block" ng-show="(passwdForm.newPassword.$error.minlength ||passwdForm.newPassword.$error.required) && (passwdForm.newPassword.$dirty || vm.submitted)">
-                    8 caractères minimum.
-                  </p>
-                </div>
-
-                <div class="form-group">
-                  <label>Confirmez le mot de passe </label>
-
-                  <input type="password" name="confirmPassword" class="form-control" ng-model="vm.user.confirmPassword" match="vm.user.newPassword" ng-minlength="8" required style="width:250px" />
-                  <p class="help-block" ng-show="passwdForm.confirmPassword.$error.match">
-                    Mot de passe différent!
-                  </p>
-                </div>
-                <p class="help-block"> {{ vm.message }} </p>
-                <button class="btn btn-lg btn-primary" ng-disabled="passwdForm.$invalid || passwdForm.$pending" type="submit">Modifier</button>
-              </form>
+              <input type="password" name="confirmPassword" class="form-control" ng-model="vm.user.confirmPassword" match="vm.user.newPassword" ng-minlength="8" required style="width:250px" />
+              <p class="help-block" ng-show="passwdForm.confirmPassword.$error.match">
+                Mot de passe différent!
+              </p>
             </div>
-          </div>
+            <p class="help-block"> {{ vm.message }} </p>
+            <button class="btn btn-lg btn-primary" ng-disabled="passwdForm.$invalid || passwdForm.$pending" type="submit">Modifier</button>
+          </form>
+          <!-- </div>
+          </div> -->
         </uib-tab>
-        <uib-tab heading="Vos Groupes" >
+        <uib-tab heading="Vos Groupes">
           Gestion des groupes de {{vm.user.uid}}
           <form>
             <input ng-model="search.$" placeholder="Recherche globale">
@@ -118,6 +119,11 @@
                 </button>
               </td>
               <td>
+                <md-button class="md-icon-button " aria-label="INFO" ng-click="vm.openNote(group)">
+                  <!-- <md-tooltip md-direction="top"   md-delay="1000">Voir la fiche</md-tooltip> -->
+                  <md-icon>info</md-icon>
+                </md-button>
+
                 <strong>{{group.name}}</strong>
               </td>
               <td>
@@ -134,8 +140,19 @@
             </tr>
           </table>
         </uib-tab>
-
       </uib-tabset>
     </div>
   </div>
 </div>
+
+<script type="text/ng-template " id="modalInfo.html ">
+  <h3 class="modal-title"> Note du groupe: {{IC.groupe.info}}
+       <button class="glyphicon glyphicon-remove pull-right" ng-click="IC.cancel()">
+      </button></h3>
+<div class="modal-body ">
+<div style="margin-left:10px;margin-right:10px">
+<div ng-bind-html="IC.groupe.note "></div>
+</div>
+
+</div>
+</script>
