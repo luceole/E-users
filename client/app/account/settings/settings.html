@@ -107,23 +107,21 @@
           <table class="table table-striped ">
             <tr dir-paginate="group in vm.groups | orderBy:'name' | filter:search:strict | itemsPerPage :'12' ">
               <td>
-                <button class="btn btn-success btn-xs" type="button" ng-if="vm.isMemberOf(group)" ng-click="vm.delusergroup(group,0)">
+                <button class="btn btn-success btn-xs" type="button" ng-if="vm.isMemberOf(group)"  aria-label="Quitter le groupe" ng-click="vm.delusergroup(group,0)">
                   <span class="glyphicon glyphicon-star"></span>Désinscrire
                 </button>
 
-                <button class="btn btn-warning btn-xs" type="button" ng-if="!vm.isMemberOf(group) && !vm.isCandidatOf(group)" ng-click="vm.addusergroup(group)">
+                <button class="btn btn-warning btn-xs" type="button" ng-if="!vm.isMemberOf(group) && !vm.isCandidatOf(group)" aria-label="Adhérer au groupe" ng-click="vm.addusergroup(group)">
                   <span class="glyphicon glyphicon-star"></span>Inscrire
                 </button>
-                <button class="btn btn-info btn-xs" type="button" ng-if="vm.isCandidatOf(group)" ng-click="vm.delusergroup(group,1)">
+                <button class="btn btn-info btn-xs" type="button" ng-if="vm.isCandidatOf(group)" ng-click="vm.delusergroup(group,1)" aria-label="Quitter le groupe">
                   <span class="glyphicon glyphicon-star"></span>Modération
                 </button>
               </td>
               <td>
-                <md-button class="md-icon-button " aria-label="INFO" ng-click="vm.openNote(group)">
-                  <!-- <md-tooltip md-direction="top"   md-delay="1000">Voir la fiche</md-tooltip> -->
-                  <md-icon>info</md-icon>
-                </md-button>
-
+                <button class="btn btn-info btn-xs" type="button"  aria-label="Voir les infos " ng-click="vm.openNote(group)">
+                <i class="fa fa-info">  </i>
+                  </button>
                 <strong>{{group.name}}</strong>
               </td>
               <td>

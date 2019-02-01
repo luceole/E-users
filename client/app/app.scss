@@ -35,3 +35,74 @@ $fa-font-path: '/assets/fonts/font-awesome/';
 @import '../components/modal/modal';
 @import '../components/oauth-buttons/oauth-buttons';
 /* endinject */
+
+
+
+button[aria-label]:hover:after {
+    opacity: 1;
+    transition: all 0.1s ease 1s;
+    visibility: visible;
+}
+button[aria-label]:after {
+    content: attr(aria-label);
+    position: absolute;
+    bottom: -2.6em;
+    left: 50%;
+    transform: translateX(-40%);
+    padding: 4px 4px 4px 8px;
+    color: #222;
+    white-space: nowrap;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0px 0px 4px #222;
+    -webkit-box-shadow: 0px 0px 4px #222;
+    box-shadow: 0px 0px 4px #222;
+    background-image: -moz-linear-gradient(top, #bbdae8, #cccccc);
+    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #f8f8f8),color-stop(1, #cccccc));
+    background-image: -webkit-linear-gradient(top, #bbdae8, #cccccc);
+    background-image: -moz-linear-gradient(top, #bbdae8, #cccccc);
+    background-image: -ms-linear-gradient(top,#bbdae8, #cccccc);
+    background-image: -o-linear-gradient(top, #bbdae8, #cccccc);
+    opacity: 0;
+    z-index: 999;
+    visibility: hidden;
+}
+button[aria-label] {
+    position: relative;  /* les .infobulle deviennent référents */
+    //cursor: help;
+}
+
+a[aria-label]:hover:after {
+    opacity: 1;
+    transition: all 0.1s ease 1s;
+    visibility: visible;
+}
+a[aria-label]:after {
+    content: attr(aria-label);
+    position: absolute;
+    bottom: -2.6em;
+    left: 50%;
+    transform: translateX(-40%);
+    padding: 4px 4px 4px 8px;
+    color: #222;
+    white-space: nowrap;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0px 0px 4px #222;
+    -webkit-box-shadow: 0px 0px 4px #222;
+    box-shadow: 0px 0px 4px #222;
+    background-image: -moz-linear-gradient(top, #bbdae8, #cccccc);
+    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #f8f8f8),color-stop(1, #cccccc));
+    background-image: -webkit-linear-gradient(top, #bbdae8, #cccccc);
+    background-image: -moz-linear-gradient(top, #bbdae8, #cccccc);
+    background-image: -ms-linear-gradient(top,#bbdae8, #cccccc);
+    background-image: -o-linear-gradient(top, #bbdae8, #cccccc);
+    opacity: 0;
+    z-index: 99999;
+    visibility: hidden;
+}
+a[aria-label] {
+    position: relative;
+}

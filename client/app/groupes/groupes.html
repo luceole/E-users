@@ -8,7 +8,7 @@
     <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/assets/dirPagination.tpl.html"></dir-pagination-controls>
     <br>
     <span>
-    <a href ng-click="groupesCtrl.add()" rel="tooltip" title="Ajouter" class="trash">
+    <a href ng-click="groupesCtrl.add()" class="trash">
       <div class="glyphicon glyphicon-plus">Créer un groupe</div>
     </a>
   </span>
@@ -16,12 +16,15 @@
       <tr dir-paginate="groupe in groupesCtrl.groups | orderBy:'name' | filter:search:strict | itemsPerPage :'12' ">
         <td>
           <span>
-          <a href ng-click="groupesCtrl.edit(groupe)" rel="tooltip" title="Modifier" class="trash">
+          <a href ng-click="groupesCtrl.edit(groupe)" rel="tooltip" aria-label="Modifier le groupe" class="trash">
             <div class="glyphicon glyphicon-pencil pull-right"></div>
           </a>
         </span>
         </td>
         <td>
+          <!-- <button class="btn btn-info btn-xs" type="button"  aria-label="Voir les infos " ng-click="groupesCtrl.openNote(group)">
+          <i class="fa fa-info">  </i>
+            </button> -->
           <strong>{{groupe.name}}</strong>
         </td>
         <td>
@@ -47,7 +50,7 @@
         </td>
         <td>
           <span ng-show="groupe.participants.length===0 && groupe.demandes.length===0">
-          <a href ng-click="groupesCtrl.delete(groupe)" rel="tooltip" title="Effacer" class="trash">
+          <a href ng-click="groupesCtrl.delete(groupe)"  aria-label="Effacer" class="trash">
             <div class="glyphicon glyphicon-trash pull-right"></div>
           </a>
         </span>
@@ -118,7 +121,7 @@
                   {{user.structure}}
                 </td>
                 <td>
-                  <a href ng-click="ModalEditAdminGroupCtrl.delAdm(user,ModalEditAdminGroupCtrl.groupe.adminby)" rel="tooltip" title="Effacer" class="trash">
+                  <a href ng-click="ModalEditAdminGroupCtrl.delAdm(user,ModalEditAdminGroupCtrl.groupe.adminby)"  aria-label="Effacer" class="trash">
                     <div class="glyphicon glyphicon-trash pull-right"></div>
                   </a>
                 </td>
@@ -154,7 +157,7 @@
                 </td>
                 <td>
                   <a href ng-click="ModalEditAdminGroupCtrl.delUser(user,ModalEditAdminGroupCtrl.groupe.participants
-                  )" rel="tooltip" title="Effacer" class="trash">
+                  )"  aria-label="Effacer" class="trash">
                     <div class="glyphicon glyphicon-trash pull-right"></div>
                   </a>
                 </td>

@@ -45,7 +45,7 @@ export class UsersModalComponent {
     });
   }
   initPadId() {
-    console.log(this.user.authorPadID);
+    //console.log(this.user.authorPadID);
     this.user.authorPadID = '';
     this.ok();
   }
@@ -65,13 +65,12 @@ export class AddGroupComponent {
   }
 
   ok(grp) {
-    console.log(grp.participants.length);
+    //console.log(grp.participants.length);
     angular.forEach(this.selectedUsers, (u) => {
       if (grp.participants.findIndex(x => x._id === u._id) == -1)
         grp.participants.push(u);
-      }
-    );
-    console.log(grp.participants.length);
+    });
+    //console.log(grp.participants.length);
     this.Auth.updateGroup(grp._id, {
       // info: this.groupe.info,
       // type: this.groupe.type,
@@ -129,6 +128,7 @@ export class UsersComponent {
 
   addgroupselected() {
     var filterlist = this.myfilterlist;
+    if (filterlist.length == 0) return;
     var ModalInstance = this.$uibModal.open({
       templateUrl: 'modalAddGroup.html',
       controller: AddGroupComponent,

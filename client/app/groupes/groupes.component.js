@@ -98,7 +98,7 @@ export class ModalEditGroupComponent {
         .then(r => {
           if (SuppAdm.length) {
             this.Auth.userAdmingroup(this.groupe._id, SuppAdm).then(
-              console.log('Maj adminby ' + SuppAdm)
+              //console.log('Maj adminby ' + SuppAdm)
             );
           }
           if (this.SuppCandidat.length) {
@@ -108,7 +108,7 @@ export class ModalEditGroupComponent {
           }
           if (SuppParticipants.length) {
             this.Auth.userSupGroup(this.groupe._id, SuppParticipants).then(
-              console.log('Maj memberOf ')
+              //console.log('Maj memberOf ')
             );
           }
           // This is made in pre update now
@@ -135,21 +135,26 @@ export class ModalEditGroupComponent {
   }
 
   addAdm(user, grpadm) {
+    if (user == undefined) return;
     if (grpadm.findIndex(x => x._id === user._id) == -1) grpadm.push(user);
   }
 
   delAdm(user, grpadm) {
+    if (user == undefined) return;
     grpadm.splice(grpadm.indexOf(user), 1);
   }
   delDemande(user, grpdem) {
+    if (user == undefined) return;
     grpdem.splice(grpdem.indexOf(user), 1);
     this.SuppCandidat.push(user._id);
   }
   addDemande(user, grpdem) {
+    if (user == undefined) return;
     grpdem.splice(grpdem.indexOf(user), 1);
     this.addCandidat.push(user._id);
   }
   addUser(user, grppar) {
+    if (user == undefined) return;
     if (grppar.findIndex(x => x._id === user._id) == -1) grppar.push(user);
   }
 
@@ -292,5 +297,4 @@ export default angular.module('E-userApp.groupes', [uiRouter, modal])
     template: require('./groupes.html'),
     controller: GroupesComponent,
     controllerAs: 'groupesCtrl'
-  })
-  .name;
+  }).name;

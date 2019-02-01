@@ -12,13 +12,13 @@
 		<span ng-if="usersCtrl.users.length > 0">  selectionnés: {{usersCtrl.myfilterlist.length}}/{{usersCtrl.users.length}}</span>
 		<p class="text-warning" ng-if="usersCtrl.users.length==0"> Chargement ...</p>
 		<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"></dir-pagination-controls>
-		<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.activeselected()" rel="tooltip" title="Activer les {{usersCtrl.myfilterlist.length}} utilisateurs ">
+		<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.activeselected()"  aria-label="Activer les {{usersCtrl.myfilterlist.length}} utilisateurs ">
 	  <span class="glyphicon glyphicon-star"></span>Activer les utilsateurs
 	</button>
-		<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.validmailselected()" rel="tooltip" title="Valider les mails des {{usersCtrl.myfilterlist.length}} utilisateurs ">
+		<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.validmailselected()"  aria-label="Valider les mails des {{usersCtrl.myfilterlist.length}} utilisateurs ">
 	  <span class="glyphicon glyphicon-star"></span>Valider les emails
 	</button>
-		<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.addgroupselected()" rel="tooltip" title="Inscrire les {{usersCtrl.myfilterlist.length}} utilisateurs ">
+		<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.addgroupselected()"  aria-label="Inscrire les {{usersCtrl.myfilterlist.length}} utilisateurs ">
 	  <span class="glyphicon glyphicon-star"></span>Inscrire dans un groupe
 	</button>
 		<div class="table-responsive">
@@ -39,21 +39,22 @@
 					</tr>
 				</thead>
 				<tr dir-paginate="user in usersCtrl.myfilterlist=( usersCtrl.users | orderBy:usersCtrl.propertyName:usersCtrl.Reverse | filter:usersCtrl.search:strict )| itemsPerPage :'12' ">
-					<td>
-						<button class="btn btn-warning btn-xs" type="button" ng-if="!user.isactif" ng-click="usersCtrl.active(user)" rel="tooltip" title="Autoriser cet utilisateur">
+						<td>
+						 	&nbsp;
+						<button class="btn btn-warning btn-xs" type="button" ng-if="!user.isactif" ng-click="usersCtrl.active(user)"  aria-label="Autoriser">
           <span class="glyphicon glyphicon-ok"></span>
         </button>
-						<button type="button" class="btn btn-success btn-xs" ng-if="user.isactif" ng-click="usersCtrl.deactive(user)" rel="tooltip" title="Suspendre cet utilisateur">
+						<button type="button" class="btn btn-success btn-xs" ng-if="user.isactif" ng-click="usersCtrl.deactive(user)"  aria-label="Exclure">
   <span class="glyphicon glyphicon-remove"></span>
         </button>
-						<button class="btn btn-warning btn-xs" type="button" ng-if="!user.mailValid" ng-click="usersCtrl.validmail(user)" rel="tooltip" title="Valider le Courriel">
+						<button class="btn btn-warning btn-xs" type="button" ng-if="!user.mailValid" ng-click="usersCtrl.validmail(user)"  aria-label="Valider le Courriel">
             <span class="glyphicon glyphicon-envelope"></span>
           </button>
-						<button class="btn btn-success btn-xs" type="button" ng-if="user.mailValid" ng-click="usersCtrl.invalidmail(user)" rel="tooltip" title="Invalider le Courriel">
+							<button class="btn btn-success btn-xs" type="button" ng-if="user.mailValid" ng-click="usersCtrl.invalidmail(user)"  aria-label="Invalider le Courriel">
               <span class="glyphicon glyphicon-envelope"></span>
           </button>
 
-						<button class="btn  btn-xs" type="button"  ng-click="usersCtrl.edit(user)" rel="tooltip" title="Modifier" class="trash">
+						<button class="btn  btn-xs" type="button"  ng-click="usersCtrl.edit(user)"  aria-label="Modifier" class="trash">
             <span class="glyphicon glyphicon-pencil"></span>
           </button>
 
@@ -76,10 +77,10 @@
 					<td class="hidden-xs"> {{user.lastloginDate | date: "dd/MM/yyyy"}} </td>
 					</td>
 					<td>
-						<span class="text-muted "><a href=mailto:{{user.email}} rel="tooltip" title="Envoyer un courriel"> {{user.email}}  </a>
+						<span class="text-muted "><a href=mailto:{{user.email}}  aria-label="Envoyer un courriel"> {{user.email}}  </a>
 				</span>
 						<span ng-show="user.uid!='admin'">
-			<a href ng-click="usersCtrl.delete(user)" rel="tooltip" title="Effacer" class="trash">
+			<a href ng-click="usersCtrl.delete(user)"  aria-label="Effacer" class="trash">
 				<div class="glyphicon glyphicon-trash pull-right"></div>
 			</a>
     </span>
