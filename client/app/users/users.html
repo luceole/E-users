@@ -1,5 +1,4 @@
 <div class="container">
-
 	Gestion des utilisateurs: {{usersCtrl.users.length}} inscrits</span>
 	<p class="text-warning" ng-if="usersCtrl.users.length==0"> Chargement ...</p>
 	<form>
@@ -9,19 +8,22 @@
 		 Utilisateurs Non Actif
 		<input type="checkbox" ng-model="usersCtrl.search.isactif" ng-true-value=false ng-false-value="">
 	</form>
-		<span ng-if="usersCtrl.users.length > 0">  selectionnés: {{usersCtrl.myfilterlist.length}}/{{usersCtrl.users.length}}</span>
+
+
 		<p class="text-warning" ng-if="usersCtrl.users.length==0"> Chargement ...</p>
 		<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"></dir-pagination-controls>
+<div align="left">
+	<span ng-if="usersCtrl.users.length > 0">  selectionnés: {{usersCtrl.myfilterlist.length}}/{{usersCtrl.users.length}}</span>
 		<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.activeselected()"  aria-label="Activer les {{usersCtrl.myfilterlist.length}} utilisateurs ">
-	  <span class="glyphicon glyphicon-star"></span>Activer les utilsateurs
-	</button>
+	  <span class="glyphicon glyphicon-star"></span>Activer
+	  </button>
 		<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.validmailselected()"  aria-label="Valider les mails des {{usersCtrl.myfilterlist.length}} utilisateurs ">
-	  <span class="glyphicon glyphicon-star"></span>Valider les emails
+	  <span class="glyphicon glyphicon-star"></span>Valider
 	</button>
 		<button class="btn btn-warning btn-xs" type="button"  ng-click="usersCtrl.addgroupselected()"  aria-label="Inscrire les {{usersCtrl.myfilterlist.length}} utilisateurs ">
-	  <span class="glyphicon glyphicon-star"></span>Inscrire dans un groupe
+	  <span class="glyphicon glyphicon-star"></span>Inscrire
 	</button>
-		<div class="table-responsive">
+</div>
 			<table class="table table-striped">
 				<thead>
 					<tr>
