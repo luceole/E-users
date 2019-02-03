@@ -43,7 +43,14 @@ button[aria-label]:hover:after {
     transition: all 0.1s ease 1s;
     visibility: visible;
 }
+// button[aria-label]:focus:after {
+//     opacity: 1;
+//     transition: all 0.1s ease 1s;
+//     visibility: visible;
+// }
+
 button[aria-label]:after {
+   //border: none;
     content: attr(aria-label);
     position: absolute;
     bottom: -2.6em;
@@ -70,6 +77,7 @@ button[aria-label]:after {
     visibility: hidden;
 }
 button[aria-label] {
+
     position: relative;  /* les .infobulle deviennent référents */
     //cursor: help;
 }

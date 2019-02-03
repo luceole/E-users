@@ -1,6 +1,6 @@
 # Conteneur E-User  en mode Production
 # Le repertoire "dist" doit être  créé avant par : gulp build
-FROM mhart/alpine-node:6
+FROM mhart/alpine-node:8
 RUN apk add --no-cache make g++  python  ;npm install -g node-gyp
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app

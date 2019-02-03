@@ -13,4 +13,5 @@ npm-debug.log
 coverage
 .vagrant
 package-lock.json
+yarn.lock
 ubuntu-xenial-16.04-cloudimg-console.log

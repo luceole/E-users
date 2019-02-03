@@ -11,29 +11,27 @@ Group Work App: Manage Users, Groups, Meetings, and Polls
       - ...
 
 
-
-
-This project was generated with the [Angular Full-Stack Generator](https://github.com/DaftMonk/generator-angular-fullstack)
-
 ## Getting Started
 
 Docker :
+
 https://hub.docker.com/r/luceole/e-user-prod/
 
 ### Prerequisites
 
 - [Git](https://git-scm.com/)
-- [Node.js and npm](nodejs.org) Node >= 4.x.x, npm >= 2.x.x
+- [Node.js and npm](nodejs.org) Node >= 8.x.x, npm >= 6.x.x
+- [Yarn](https://yarnpkg.com)  
 - [Gulp](http://gulpjs.com/) (`npm install --global gulp`)
 - [MongoDB](https://www.mongodb.org/) - Keep a running daemon with `mongod`
 
 ### Developing
 
-1. Run `npm install` to install server dependencies.
+1. Run `yarn install` to install server dependencies.
 
 2. Run `mongod` in a separate shell to keep an instance of the MongoDB Daemon running
 
-3. Run `gulp serve` to start the development server. It should automatically open the client in your browser when ready.
+3. Run `gulp go` to start the development server. It should automatically open the client in your browser when ready.
 
 ## Build & development
 
